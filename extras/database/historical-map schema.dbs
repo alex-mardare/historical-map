@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Historical Map.sql" id="Project-1d52" database="PostgreSQL" >
+	<schema name="public" >
+		<table name="Event" spec="" >
+			<column name="id" type="bigserial" jt="-5" mandatory="y" >
+				<comment><![CDATA[added]]></comment>
+				<comment_tag name="Added" value="1" />
+			</column>
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" >
+				<comment><![CDATA[added]]></comment>
+			</column>
+			<column name="presentCountryId" type="bigint" jt="-5" mandatory="y" />
+			<column name="historicalStateId" type="bigint" jt="-5" mandatory="y" />
+			<column name="date" type="date" jt="91" mandatory="y" >
+				<comment><![CDATA[added]]></comment>
+			</column>
+			<column name="time" type="time" jt="92" >
+				<comment><![CDATA[added]]></comment>
+			</column>
+			<column name="description" type="varchar" length="1000" jt="12" >
+				<comment><![CDATA[added]]></comment>
+			</column>
+			<column name="userId" type="uuid" jt="102" mandatory="y" />
+			<column name="latitude" type="decimal" length="9" decimal="6" jt="3" >
+				<comment><![CDATA[added]]></comment>
+			</column>
+			<column name="longitude" type="decimal" length="9" decimal="6" jt="3" >
+				<comment><![CDATA[added]]></comment>
+			</column>
+			<index name="pk_event" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="Event_fk0" to_schema="public" to_table="PresentCountry" options="" >
+				<fk_column name="presentCountryId" pk="id" />
+			</fk>
+			<fk name="Event_fk1" to_schema="public" to_table="HistoricalState" options="" >
+				<fk_column name="historicalStateId" pk="id" />
+			</fk>
+			<fk name="Event_fk2" to_schema="public" to_table="User" options="" >
+				<fk_column name="userId" pk="id" />
+			</fk>
+			<fk name="EventToHistoricalFigureToFigureRole_fk0" to_schema="public" to_table="EventToHistoricalFigureToFigureRole" options="" >
+				<fk_column name="id" pk="eventId" />
+			</fk>
+		</table>
+		<table name="EventGroup" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_eventgroup" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="EventToEventGroup" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="eventId" type="bigint" jt="-5" mandatory="y" />
+			<column name="eventGroupId" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_eventtoeventgroup" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="EventToEventGroup_fk0" to_schema="public" to_table="Event" options="" >
+				<fk_column name="eventId" pk="id" />
+			</fk>
+			<fk name="EventToEventGroup_fk1" to_schema="public" to_table="EventGroup" options="" >
+				<fk_column name="eventGroupId" pk="id" />
+			</fk>
+		</table>
+		<table name="EventToEventType" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="eventId" type="bigint" jt="-5" mandatory="y" />
+			<column name="eventTypeId" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_eventtoeventtype" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="EventToEventType_fk0" to_schema="public" to_table="Event" options="" >
+				<fk_column name="eventId" pk="id" />
+			</fk>
+			<fk name="EventToEventType_fk1" to_schema="public" to_table="EventType" options="" >
+				<fk_column name="eventTypeId" pk="id" />
+			</fk>
+		</table>
+		<table name="EventToHistoricalFigureToFigureRole" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="eventId" type="bigint" jt="-5" mandatory="y" />
+			<column name="historicalFigureToFigureRoleId" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_eventtohistoricalfiguretofigurerole" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="EventType" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_eventtype" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="FigureRole" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_figurerole" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="HistoricalFigure" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="historicalStateId" type="bigint" jt="-5" mandatory="y" />
+			<column name="presentCountryId" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_historicalfigure" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="HistoricalFigure_fk0" to_schema="public" to_table="HistoricalState" options="" >
+				<fk_column name="historicalStateId" pk="id" />
+			</fk>
+			<fk name="HistoricalFigure_fk1" to_schema="public" to_table="PresentCountry" options="" >
+				<fk_column name="presentCountryId" pk="id" />
+			</fk>
+		</table>
+		<table name="HistoricalFigureToFigureRole" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="historicalFigureId" type="bigint" jt="-5" mandatory="y" />
+			<column name="historicalFigureRoleId" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_historicalfiguretofigurerole" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="HistoricalFigureToFigureRole_fk0" to_schema="public" to_table="HistoricalFigure" options="" >
+				<fk_column name="historicalFigureId" pk="id" />
+			</fk>
+			<fk name="HistoricalFigureToFigureRole_fk1" to_schema="public" to_table="FigureRole" options="" >
+				<fk_column name="historicalFigureRoleId" pk="id" />
+			</fk>
+			<fk name="EventToHistoricalFigureToFigureRole_fk1" to_schema="public" to_table="EventToHistoricalFigureToFigureRole" options="" >
+				<fk_column name="id" pk="historicalFigureToFigureRoleId" />
+			</fk>
+		</table>
+		<table name="HistoricalState" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_historicalstate" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="PresentCountry" spec="" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="code" type="varchar" length="5" jt="12" mandatory="y" />
+			<index name="pk_presentcountry" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="unq_presentcountry_code" unique="UNIQUE_KEY" >
+				<column name="code" />
+			</index>
+		</table>
+		<table name="User" spec="" >
+			<column name="id" type="uuid" jt="102" mandatory="y" />
+			<column name="name" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="surname" type="varchar" length="50" jt="12" mandatory="y" />
+			<column name="email" type="varchar" length="255" jt="12" mandatory="y" />
+			<column name="password" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_user" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="test" prior="testtable" >
+			<column name="testid" type="bigint" jt="-5" mandatory="y" />
+			<index name="pk_test" unique="PRIMARY_KEY" >
+				<column name="testid" />
+			</index>
+		</table>
+	</schema>
+	<connector name="MyDb" database="MySql" host="localhost" port="3306" user="root" useSystemProxy="false" />
+	<layout name="Layout" id="Layout-e39" show_relation="columns" >
+		<entity schema="public" name="Event" color="FF00FF" x="240" y="48" />
+		<entity schema="public" name="EventGroup" color="C7F4BE" x="464" y="544" />
+		<entity schema="public" name="EventToEventGroup" color="C7F4BE" x="240" y="352" />
+		<entity schema="public" name="EventToEventType" color="C7F4BE" x="480" y="352" />
+		<entity schema="public" name="EventToHistoricalFigureToFigureRole" color="BED3F4" x="1040" y="240" />
+		<entity schema="public" name="EventType" color="C7F4BE" x="704" y="352" />
+		<entity schema="public" name="FigureRole" color="BED3F4" x="912" y="64" />
+		<entity schema="public" name="HistoricalFigure" color="BED3F4" x="1376" y="48" />
+		<entity schema="public" name="HistoricalFigureToFigureRole" color="BED3F4" x="1088" y="48" />
+		<entity schema="public" name="HistoricalState" color="C7F4BE" x="480" y="48" />
+		<entity schema="public" name="PresentCountry" color="BED3F4" x="1616" y="48" />
+		<entity schema="public" name="User" color="C7F4BE" x="48" y="352" />
+	</layout>
+</project>
