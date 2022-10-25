@@ -28,6 +28,10 @@
 				<comment><![CDATA[added]]></comment>
 			</column>
 			<column name="eventCategoryId" type="serial" jt="4" mandatory="y" />
+			<column name="createdAt" type="timestamp" jt="93" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="updatedAt" type="timestamp" jt="93" />
 			<index name="pk_event" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -175,17 +179,17 @@
 	<connector name="MyDb" database="MySql" host="localhost" port="3306" user="root" useSystemProxy="false" />
 	<layout name="Layout" id="Layout-e39" show_relation="columns" >
 		<entity schema="public" name="Event" color="C7F4BE" x="384" y="272" />
-		<entity schema="public" name="EventCategory" color="C7F4BE" x="176" y="416" />
-		<entity schema="public" name="EventGroup" color="C7F4BE" x="848" y="784" />
-		<entity schema="public" name="EventToEventGroup" color="C7F4BE" x="624" y="592" />
-		<entity schema="public" name="EventToEventType" color="C7F4BE" x="384" y="592" />
+		<entity schema="public" name="EventCategory" color="BED3F4" x="176" y="416" />
+		<entity schema="public" name="EventGroup" color="BED3F4" x="848" y="784" />
+		<entity schema="public" name="EventToEventGroup" color="BED3F4" x="624" y="592" />
+		<entity schema="public" name="EventToEventType" color="BED3F4" x="384" y="592" />
 		<entity schema="public" name="EventToHistoricalFigureToFigureRole" color="BED3F4" x="48" y="592" />
-		<entity schema="public" name="EventType" color="C7F4BE" x="608" y="784" />
+		<entity schema="public" name="EventType" color="BED3F4" x="608" y="784" />
 		<entity schema="public" name="FigureRole" color="BED3F4" x="1152" y="272" />
 		<entity schema="public" name="HistoricalFigure" color="BED3F4" x="624" y="272" />
 		<entity schema="public" name="HistoricalFigureToFigureRole" color="BED3F4" x="864" y="272" />
 		<entity schema="public" name="HistoricalState" color="BED3F4" x="864" y="480" />
 		<entity schema="public" name="PresentCountry" color="BED3F4" x="416" y="80" />
-		<entity schema="public" name="User" color="C7F4BE" x="192" y="48" />
+		<entity schema="public" name="User" color="BED3F4" x="192" y="48" />
 	</layout>
 </project>
