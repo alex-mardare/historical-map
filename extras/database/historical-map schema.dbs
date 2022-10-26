@@ -68,6 +68,24 @@
 				<column name="id" />
 			</index>
 		</table>
+		<table name="EventHistoricalFigure" prior="EventFigure" >
+			<column name="id" type="bigserial" jt="-5" mandatory="y" />
+			<column name="eventId" type="bigserial" jt="-5" mandatory="y" />
+			<column name="historicalFigureId" type="bigserial" jt="-5" mandatory="y" />
+			<column name="figureRoleId" type="serial" jt="4" mandatory="y" />
+			<index name="pk_EventFigure" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_EventFigure_Event" to_schema="public" to_table="Event" options="" >
+				<fk_column name="eventId" pk="id" />
+			</fk>
+			<fk name="fk_EventHistoricalFigure_HistoricalFigure" to_schema="public" to_table="HistoricalFigure" options="" >
+				<fk_column name="historicalFigureId" pk="id" />
+			</fk>
+			<fk name="fk_EventHistoricalFigure_FigureRole" to_schema="public" to_table="FigureRole" >
+				<fk_column name="figureRoleId" pk="id" />
+			</fk>
+		</table>
 		<table name="EventToEventGroup" spec="" >
 			<column name="id" type="serial" jt="4" mandatory="y" />
 			<column name="eventId" type="bigint" jt="-5" mandatory="y" />
@@ -92,22 +110,12 @@
 			<fk name="EventToEventType_fk0" to_schema="public" to_table="Event" options="" >
 				<fk_column name="eventId" pk="id" />
 			</fk>
-			<fk name="EventToEventType_fk1" to_schema="public" to_table="EventType" options="" >
-				<fk_column name="eventTypeId" pk="id" />
-			</fk>
 		</table>
 		<table name="EventToHistoricalFigureToFigureRole" spec="" >
 			<column name="id" type="serial" jt="4" mandatory="y" />
 			<column name="eventId" type="bigint" jt="-5" mandatory="y" />
 			<column name="historicalFigureToFigureRoleId" type="bigint" jt="-5" mandatory="y" />
 			<index name="pk_eventtohistoricalfiguretofigurerole" unique="PRIMARY_KEY" >
-				<column name="id" />
-			</index>
-		</table>
-		<table name="EventType" spec="" >
-			<column name="id" type="serial" jt="4" mandatory="y" />
-			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
-			<index name="pk_eventtype" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
 		</table>
@@ -119,7 +127,7 @@
 			</index>
 		</table>
 		<table name="HistoricalFigure" spec="" >
-			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="id" type="bigserial" jt="-5" mandatory="y" />
 			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
 			<column name="historicalStateId" type="bigint" jt="-5" mandatory="y" />
 			<column name="presentCountryId" type="bigint" jt="-5" mandatory="y" />
@@ -181,18 +189,16 @@
 	</schema>
 	<connector name="MyDb" database="MySql" host="localhost" port="3306" user="root" useSystemProxy="false" />
 	<layout name="Layout" id="Layout-e39" show_relation="columns" >
-		<entity schema="public" name="Event" color="C7F4BE" x="384" y="272" />
-		<entity schema="public" name="EventCategory" color="BED3F4" x="176" y="416" />
-		<entity schema="public" name="EventGroup" color="BED3F4" x="848" y="784" />
-		<entity schema="public" name="EventToEventGroup" color="BED3F4" x="624" y="592" />
-		<entity schema="public" name="EventToEventType" color="BED3F4" x="384" y="592" />
-		<entity schema="public" name="EventToHistoricalFigureToFigureRole" color="BED3F4" x="48" y="592" />
-		<entity schema="public" name="EventType" color="BED3F4" x="608" y="784" />
-		<entity schema="public" name="FigureRole" color="BED3F4" x="1152" y="272" />
-		<entity schema="public" name="HistoricalFigure" color="BED3F4" x="624" y="272" />
-		<entity schema="public" name="HistoricalFigureToFigureRole" color="BED3F4" x="864" y="272" />
-		<entity schema="public" name="HistoricalState" color="BED3F4" x="864" y="480" />
-		<entity schema="public" name="PresentCountry" color="BED3F4" x="416" y="80" />
-		<entity schema="public" name="User" color="BED3F4" x="192" y="48" />
+		<entity schema="public" name="Event" color="C7F4BE" x="256" y="240" />
+		<entity schema="public" name="EventCategory" color="BED3F4" x="48" y="592" />
+		<entity schema="public" name="EventGroup" color="BED3F4" x="256" y="784" />
+		<entity schema="public" name="EventHistoricalFigure" color="C1D8EE" x="496" y="592" />
+		<entity schema="public" name="EventToEventGroup" color="BED3F4" x="256" y="592" />
+		<entity schema="public" name="FigureRole" color="BED3F4" x="736" y="592" />
+		<entity schema="public" name="HistoricalFigure" color="BED3F4" x="496" y="240" />
+		<entity schema="public" name="HistoricalFigureToFigureRole" color="BED3F4" x="736" y="240" />
+		<entity schema="public" name="HistoricalState" color="BED3F4" x="288" y="64" />
+		<entity schema="public" name="PresentCountry" color="BED3F4" x="496" y="48" />
+		<entity schema="public" name="User" color="BED3F4" x="64" y="368" />
 	</layout>
 </project>
