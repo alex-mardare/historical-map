@@ -27,7 +27,9 @@
 			<column name="longitude" type="decimal" length="9" decimal="6" jt="3" >
 				<comment><![CDATA[added]]></comment>
 			</column>
-			<column name="eventCategoryId" type="serial" jt="4" mandatory="y" />
+			<column name="eventCategoryId" type="serial" jt="4" mandatory="y" >
+				<comment><![CDATA[added]]></comment>
+			</column>
 			<column name="createdAt" type="timestamp" jt="93" mandatory="y" >
 				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
 				<comment><![CDATA[added]]></comment>
@@ -60,6 +62,27 @@
 			<index name="pk_EventCategory" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
+		</table>
+		<table name="EventCategoryTag" prior="Tbl" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="255" jt="12" mandatory="y" />
+			<index name="pk_EventCategoryTag" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="EventCategoryToEventCategoryTag" prior="Tbl" >
+			<column name="id" type="serial" jt="4" mandatory="y" />
+			<column name="eventCategoryId" type="serial" jt="4" mandatory="y" />
+			<column name="eventCategoryTagId" type="serial" jt="4" mandatory="y" />
+			<index name="pk_EventCategoryToEventCategoryTag" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_EventCategoryToEventCategoryTag_EventCategory" to_schema="public" to_table="EventCategory" >
+				<fk_column name="eventCategoryId" pk="id" />
+			</fk>
+			<fk name="fk_EventCategoryToEventCategoryTag_EventCategoryTag" to_schema="public" to_table="EventCategoryTag" >
+				<fk_column name="eventCategoryTagId" pk="id" />
+			</fk>
 		</table>
 		<table name="EventGroup" spec="" >
 			<column name="id" type="serial" jt="4" mandatory="y" />
@@ -189,16 +212,18 @@
 	</schema>
 	<connector name="MyDb" database="MySql" host="localhost" port="3306" user="root" useSystemProxy="false" />
 	<layout name="Layout" id="Layout-e39" show_relation="columns" >
-		<entity schema="public" name="Event" color="C7F4BE" x="256" y="240" />
-		<entity schema="public" name="EventCategory" color="BED3F4" x="48" y="592" />
-		<entity schema="public" name="EventGroup" color="BED3F4" x="256" y="784" />
-		<entity schema="public" name="EventHistoricalFigure" color="C1D8EE" x="496" y="592" />
-		<entity schema="public" name="EventToEventGroup" color="BED3F4" x="256" y="592" />
-		<entity schema="public" name="FigureRole" color="BED3F4" x="736" y="592" />
-		<entity schema="public" name="HistoricalFigure" color="BED3F4" x="496" y="240" />
-		<entity schema="public" name="HistoricalFigureToFigureRole" color="BED3F4" x="736" y="240" />
-		<entity schema="public" name="HistoricalState" color="BED3F4" x="288" y="64" />
-		<entity schema="public" name="PresentCountry" color="BED3F4" x="496" y="48" />
-		<entity schema="public" name="User" color="BED3F4" x="64" y="368" />
+		<entity schema="public" name="Event" color="C7F4BE" x="272" y="272" />
+		<entity schema="public" name="EventCategory" color="BED3F4" x="272" y="624" />
+		<entity schema="public" name="EventCategoryTag" color="C1D8EE" x="480" y="992" />
+		<entity schema="public" name="EventCategoryToEventCategoryTag" color="C1D8EE" x="160" y="800" />
+		<entity schema="public" name="EventGroup" color="BED3F4" x="48" y="624" />
+		<entity schema="public" name="EventHistoricalFigure" color="C1D8EE" x="512" y="624" />
+		<entity schema="public" name="EventToEventGroup" color="BED3F4" x="48" y="432" />
+		<entity schema="public" name="FigureRole" color="BED3F4" x="752" y="624" />
+		<entity schema="public" name="HistoricalFigure" color="BED3F4" x="512" y="272" />
+		<entity schema="public" name="HistoricalFigureToFigureRole" color="BED3F4" x="752" y="272" />
+		<entity schema="public" name="HistoricalState" color="BED3F4" x="304" y="96" />
+		<entity schema="public" name="PresentCountry" color="BED3F4" x="512" y="80" />
+		<entity schema="public" name="User" color="BED3F4" x="80" y="48" />
 	</layout>
 </project>

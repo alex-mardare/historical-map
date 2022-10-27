@@ -1,6 +1,16 @@
+from tabnanny import verbose
 from django.db import models
 
-# Create your models here.
+class EventCategory(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "event categories"
+
 class HistoricalEvent(models.Model):
     name = models.CharField(max_length=255)
     date = models.DateField()
@@ -10,6 +20,7 @@ class HistoricalEvent(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+    eventCategoryId = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
