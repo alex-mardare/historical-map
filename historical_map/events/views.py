@@ -12,6 +12,6 @@ class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
 
-class HistoricalEventItem(generics.RetrieveAPIView):
+class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
