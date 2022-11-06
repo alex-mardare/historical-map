@@ -11,3 +11,7 @@ def test_home(request):
 class HistoricalEventList(generics.ListAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
+
+class HistoricalEventItem(generics.RetrieveAPIView):
+    queryset = HistoricalEvent.objects.all()
+    serializer_class = HistoricalEventSerializer
