@@ -8,7 +8,7 @@ from .serializers import HistoricalEventSerializer
 def test_home(request):
     return HttpResponse('Historical Map WIP')
 
-class HistoricalEventList(generics.ListAPIView):
+class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
 
