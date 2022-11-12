@@ -1,4 +1,4 @@
-from tabnanny import verbose
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 class EventCategory(models.Model):
@@ -16,8 +16,8 @@ class HistoricalEvent(models.Model):
     date = models.DateField()
     time = models.TimeField(null=True, blank=True)
     description = models.CharField(max_length=1000)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, validators=[MinValueValidator(-180), MaxValueValidator(180)])
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, validators=[MinValueValidator(-180), MaxValueValidator(180)])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
     eventCategoryId = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
