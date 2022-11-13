@@ -3,5 +3,5 @@ from .models import HistoricalEvent
 
 class HistoricalEventSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
         model = HistoricalEvent
+        fields = '__all__'

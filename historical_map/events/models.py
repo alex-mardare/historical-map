@@ -11,6 +11,19 @@ class EventCategory(models.Model):
         ordering = ["name"]
         verbose_name_plural = "event categories"
 
+
+class PresentCountry(models.Model):
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=5)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "present countries"
+
+
 class HistoricalEvent(models.Model):
     name = models.CharField(max_length=255)
     date = models.DateField()
@@ -21,6 +34,8 @@ class HistoricalEvent(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
     eventCategoryId = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
+    presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
+    approximateRealLocation = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
