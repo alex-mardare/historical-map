@@ -35,7 +35,7 @@ class HistoricalEvent(models.Model):
     updatedAt = models.DateTimeField(auto_now=True)
     eventCategoryId = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
     presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
-    approximateRealLocation = models.BooleanField(default=False)
+    approximateRealLocation = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
         return self.name
