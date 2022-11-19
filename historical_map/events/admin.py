@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(HistoricalEvent)
 admin.site.register(EventCategory)
 admin.site.register(PresentCountry)
+admin.site.register(HistoricalState)

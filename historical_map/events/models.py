@@ -12,6 +12,21 @@ class EventCategory(models.Model):
         verbose_name_plural = "event categories"
 
 
+class HistoricalState(models.Model):
+    name = models.CharField(max_length=255)
+    dateFrom = models.CharField(max_length=15, blank=True)
+    dateTo = models.CharField(max_length=15, blank=True)
+
+    def __str__(self):
+        displayName = self.name
+        if self.dateTo:
+            displayName += " (" + self.dateFrom.replace('-', '/') + " - " + self.dateTo.replace('-', '/') + ")"
+        return displayName
+
+    class Meta:
+        ordering = ["name"]
+
+
 class PresentCountry(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=5)
@@ -36,6 +51,7 @@ class HistoricalEvent(models.Model):
     eventCategoryId = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
     presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
     approximateRealLocation = models.BooleanField(default=False, editable=False)
+    historicalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
