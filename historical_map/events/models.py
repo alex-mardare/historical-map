@@ -1,6 +1,8 @@
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 
+from .validators import regexDateValidator
+
 class EventCategory(models.Model):
     name = models.CharField(max_length=255)
 
@@ -14,12 +16,8 @@ class EventCategory(models.Model):
 
 class HistoricalState(models.Model):
     name = models.CharField(max_length=255)
-    dateFrom = models.CharField(max_length=15, blank=True, 
-        validators=[RegexValidator('^-?\d{1,4}$|^-?\d{1,4}-\d{2}$|^-?\d{1,4}-\d{2}-\d{2}$', 
-            message="The date must have one of the following formats: YYYY, YYYY-MM, YYYY-MM-DD. Negative years are allowed.")])
-    dateTo = models.CharField(max_length=15, blank=True,
-        validators=[RegexValidator('^-?\d{1,4}$|^-?\d{1,4}-\d{2}$|^-?\d{1,4}-\d{2}-\d{2}$', 
-            message="The date must have one of the following formats: YYYY, YYYY-MM, YYYY-MM-DD. Negative years are allowed.")])
+    dateFrom = models.CharField(max_length=15, blank=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    dateTo = models.CharField(max_length=15, blank=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
 
     def __str__(self):
         displayName = self.name
@@ -45,7 +43,7 @@ class PresentCountry(models.Model):
 
 class HistoricalEvent(models.Model):
     name = models.CharField(max_length=255)
-    date = models.DateField()
+    date = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     time = models.TimeField(null=True, blank=True)
     description = models.CharField(max_length=1000)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, validators=[MinValueValidator(-180), MaxValueValidator(180)])
