@@ -41,6 +41,17 @@ class PresentCountry(models.Model):
         verbose_name_plural = "present countries"
 
 
+class HistoricalFigure(models.Model):
+    name = models.CharField(max_length=255)
+    birthHistoricalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE)
+    presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
+    birthDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    deathDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+
+    def __str__(self):
+        return self.name
+
+
 class HistoricalEvent(models.Model):
     name = models.CharField(max_length=255)
     date = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])

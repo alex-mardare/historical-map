@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from rest_framework import generics
 
-from .models import HistoricalEvent, HistoricalState
+from .models import HistoricalEvent, HistoricalFigure, HistoricalState
 from .serializers import *
 
 # Create your views here.
@@ -16,6 +16,17 @@ class HistoricalEventList(generics.ListCreateAPIView):
 class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
+
+
+# HISTORICAL FIGURE ENDPOINTS
+class HistoricalFigureList(generics.ListCreateAPIView):
+    queryset = HistoricalFigure.objects.all()
+    serializer_class = HistoricalFigureSerializer
+
+class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
+    queryset = HistoricalFigure.objects.all()
+    serializer_class = HistoricalFigureSerializer
+
 
 # HISTORICAL STATE ENDPOINTS
 class HistoricalStateList(generics.ListCreateAPIView):

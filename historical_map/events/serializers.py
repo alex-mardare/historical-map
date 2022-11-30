@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 
-from .models import HistoricalEvent, HistoricalState
+from .models import HistoricalEvent, HistoricalFigure, HistoricalState
 
 class HistoricalEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,6 +18,11 @@ class HistoricalEventSerializer(serializers.ModelSerializer):
             return historicalEvent
         except IntegrityError as e:
             raise serializers.ValidationError(e)
+
+class HistoricalFigureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalFigure
+        fields = '__all__'
 
 class HistoricalStateSerializer(serializers.ModelSerializer):
     class Meta:
