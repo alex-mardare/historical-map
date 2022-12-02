@@ -5,6 +5,8 @@ from .validators import regexDateValidator
 
 class EventCategory(models.Model):
     name = models.CharField(max_length=255)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -18,6 +20,8 @@ class HistoricalState(models.Model):
     name = models.CharField(max_length=255)
     dateFrom = models.CharField(max_length=15, blank=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     dateTo = models.CharField(max_length=15, blank=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         displayName = self.name
@@ -32,6 +36,8 @@ class HistoricalState(models.Model):
 class PresentCountry(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=5)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -47,6 +53,8 @@ class HistoricalFigure(models.Model):
     presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
     birthDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     deathDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -54,7 +62,9 @@ class HistoricalFigure(models.Model):
 
 class HistoricalFigureRole(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(blank=True, max_length=10000)
+    description = models.CharField(blank=True, max_length=1000)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
