@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 
-from .models import HistoricalEvent, HistoricalFigure, HistoricalState
+from .models import HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
 
 class HistoricalEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +22,11 @@ class HistoricalEventSerializer(serializers.ModelSerializer):
 class HistoricalFigureSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigure
+        fields = '__all__'
+
+class HistoricalFigureRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalFigureRole
         fields = '__all__'
 
 class HistoricalStateSerializer(serializers.ModelSerializer):

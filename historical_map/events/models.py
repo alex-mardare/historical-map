@@ -52,6 +52,14 @@ class HistoricalFigure(models.Model):
         return self.name
 
 
+class HistoricalFigureRole(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(blank=True, max_length=10000)
+
+    def __str__(self):
+        return self.name
+
+
 class HistoricalEvent(models.Model):
     name = models.CharField(max_length=255)
     date = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
