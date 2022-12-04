@@ -86,3 +86,11 @@ class HistoricalEvent(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class EventFigureRole(models.Model):
+    historicalEventId = models.ForeignKey(HistoricalEvent, on_delete=models.CASCADE)
+    historicalFigureId = models.ForeignKey(HistoricalFigure, on_delete=models.CASCADE)
+    historicalFigureRoleId = models.ForeignKey(HistoricalFigureRole, on_delete=models.CASCADE)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
