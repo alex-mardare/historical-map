@@ -10,50 +10,50 @@ def test_home(request):
 
 
 # EVENT FIGURE ROLE ENDPOINTS
-class EventFigureRoleList(generics.ListCreateAPIView):
+class EventFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = EventFigureRole.objects.all()
     serializer_class = EventFigureRoleSerializer
 
-class EventFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
+class EventFigureRoleList(generics.ListCreateAPIView):
     queryset = EventFigureRole.objects.all()
     serializer_class = EventFigureRoleSerializer
 
 
 # HISTORICAL EVENT ENDPOINTS
-class HistoricalEventList(generics.ListCreateAPIView):
+class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
 
-class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
+class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
 
 
 # HISTORICAL FIGURE ENDPOINTS
-class HistoricalFigureList(generics.ListCreateAPIView):
+class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureSerializer
 
-class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
+class HistoricalFigureList(generics.ListCreateAPIView):
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureSerializer
 
 
 # HISTORICAL FIGURE ROLE ENDPOINTS
-class HistoricalFigureRoleList(generics.ListCreateAPIView):
+class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
 
-class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
+class HistoricalFigureRoleList(generics.ListCreateAPIView):
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
 
 
 # HISTORICAL STATE ENDPOINTS
-class HistoricalStateList(generics.ListCreateAPIView):
+class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateSerializer
-
-class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
+    
+class HistoricalStateList(generics.ListCreateAPIView):
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateSerializer
