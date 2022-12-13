@@ -94,3 +94,6 @@ class EventFigureRole(models.Model):
     historicalFigureRoleId = models.ForeignKey(HistoricalFigureRole, on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['historicalEventId', 'historicalFigureId', 'historicalFigureRoleId'], name='unique_event_figure_role')]
