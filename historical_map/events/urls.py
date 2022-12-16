@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('links/', views.EventFigureRoleList.as_view()),
     path('links/<int:pk>', views.EventFigureRoleItem.as_view()),
+    path('links/create', views.EventFigureRoleCreate.as_view()),
 
     path('roles/', views.HistoricalFigureRoleList.as_view()),
     path('roles/<int:pk>', views.HistoricalFigureRoleItem.as_view()),

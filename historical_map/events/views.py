@@ -10,13 +10,17 @@ def test_home(request):
 
 
 # EVENT FIGURE ROLE ENDPOINTS
+class EventFigureRoleCreate(generics.CreateAPIView):
+    queryset = EventFigureRole.objects.all()
+    serializer_class = EventFigureRoleItemSerializer
+
 class EventFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = EventFigureRole.objects.all()
-    serializer_class = EventFigureRoleSerializer
+    serializer_class = EventFigureRoleItemSerializer
 
-class EventFigureRoleList(generics.ListCreateAPIView):
+class EventFigureRoleList(generics.ListAPIView):
     queryset = EventFigureRole.objects.all()
-    serializer_class = EventFigureRoleSerializer
+    serializer_class = EventFigureRoleListSerializer
 
 
 # HISTORICAL EVENT ENDPOINTS
@@ -44,7 +48,7 @@ class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
 
-class HistoricalFigureRoleList(generics.ListCreateAPIView):
+class HistoricalFigureRoleList(generics.ListAPIView):
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
 
