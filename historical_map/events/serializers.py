@@ -74,10 +74,10 @@ class EventFigureRoleItemSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(e)
 
 class EventFigureRoleListSerializer(serializers.ModelSerializer):
-    historicalEventId = HistoricalEventLinksSerializer(many=False)
-    historicalFigureId = HistoricalFigureLinksSerializer(many=False)
-    historicalFigureRoleId = HistoricalFigureRoleLinksSerializer(many=False)
+    historicalEvent = HistoricalEventLinksSerializer(many=False, source='historicalEventId')
+    historicalFigure = HistoricalFigureLinksSerializer(many=False, source='historicalFigureId')
+    historicalFigureRole = HistoricalFigureRoleLinksSerializer(many=False, source='historicalFigureRoleId')
 
     class Meta:
         model = EventFigureRole
-        fields = ['id', 'historicalEventId', 'historicalFigureId', 'historicalFigureRoleId']
+        fields = ['id', 'historicalEvent', 'historicalFigure', 'historicalFigureRole']
