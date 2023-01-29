@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'events.apps.EventsConfig',
-    'frontend.apps.FrontendConfig',
 ]
 
 MIDDLEWARE = [
