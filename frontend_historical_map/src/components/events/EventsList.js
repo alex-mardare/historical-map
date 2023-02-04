@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { Table } from 'antd';
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
 import { columnsConfig } from '../config/tables/EventsListColumnsConfig';
 import { DEV_API_EVENTS_APP_BASE_URL, EVENTS_ENDPOINT } from '../config/constants/endpoints';
@@ -19,7 +20,10 @@ export default function EventsList() {
     }, []);
 
     return(
-        <div style={{height: 350, width: '100%'}}>
-        </div>
+        <Table 
+            columns={columnsConfig}
+            dataSource={events}
+            rowKey={(event) => event.id}
+        />
     )
 }
