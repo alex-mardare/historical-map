@@ -1,7 +1,14 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 
-from .models import EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
+from .models import EventCategory, EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
+
+
+# EVENT CATEGORY SERIALIZERS
+class EventCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventCategory
+        fields = ['id', 'name']
 
 
 # HISTORICAL EVENT SERIALIZERS

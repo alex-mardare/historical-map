@@ -1,12 +1,13 @@
-from django.http import HttpResponse
 from rest_framework import generics
 
 from .models import EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
 from .serializers import *
 
-# Create your views here.
-def test_home(request):
-    return HttpResponse('Historical Map WIP')
+
+# EVENT CATEGORY ENDPOINTS
+class EventCategoryList(generics.ListAPIView):
+    queryset = EventCategory.objects.all().order_by('id')
+    serializer_class = EventCategorySerializer
 
 
 # EVENT FIGURE ROLE ENDPOINTS
