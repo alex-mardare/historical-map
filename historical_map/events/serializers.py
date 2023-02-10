@@ -62,7 +62,7 @@ class HistoricalFigureRoleLinksSerializer(serializers.ModelSerializer):
 class HistoricalStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState
-        fields = '__all__'
+        fields = ['id', 'dateFrom', 'dateTo', 'name']
 
 
 # EVENT FIGURE ROLE SERIALIZERS

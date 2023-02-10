@@ -5,7 +5,7 @@ urlpatterns = [
     path('', views.HistoricalEventList.as_view()),
     path('/<int:pk>', views.HistoricalEventItem.as_view()),
 
-    path('eventCategories/',views.EventCategoryList.as_view()),
+    path('event-categories/',views.EventCategoryList.as_view()),
 
     path('figures/', views.HistoricalFigureList.as_view()),
     path('figures/<int:pk>', views.HistoricalFigureItem.as_view()),
