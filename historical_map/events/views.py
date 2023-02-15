@@ -6,7 +6,7 @@ from .serializers import *
 
 # EVENT CATEGORY ENDPOINTS
 class EventCategoryList(generics.ListAPIView):
-    queryset = EventCategory.objects.all().order_by('id')
+    queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
 
 
@@ -62,3 +62,9 @@ class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
 class HistoricalStateList(generics.ListCreateAPIView):
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateSerializer
+
+
+# PRESENT COUNTRY ENDPOINTS
+class PresentCountryList(generics.ListAPIView):
+    queryset = PresentCountry.objects.all().order_by('name')
+    serializer_class = PresentCountryListSerializer
