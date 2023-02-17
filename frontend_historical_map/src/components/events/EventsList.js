@@ -1,16 +1,16 @@
 import { Table } from 'antd';
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { DEV_API_EVENTS_APP_BASE_URL } from '../config/constants/endpoints';
 import { columnsConfig } from '../config/tables/EventsListColumnsConfig';
-import { DEV_API_EVENTS_APP_BASE_URL, EVENTS_ENDPOINT } from '../config/constants/endpoints';
 
 
 export default function EventsList() {
     const [events, setEvents] = useState([])
 
     useEffect(() => {
-        axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_ENDPOINT)
+        axios.get(DEV_API_EVENTS_APP_BASE_URL)
             .then(res => {
                 setEvents(res.data);
             })
