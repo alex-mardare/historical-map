@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { DEV_API_EVENTS_APP_BASE_URL } from '../config/constants/endpoints';
+import { eventCreationError, eventsLoadingError } from '../config/notifications/events';
 import EventCreateForm from '../events/EventCreateForm';
 import EventsList from '../events/EventsList';
 
@@ -14,8 +15,8 @@ function Home() {
 
   useEffect(() => {
     axios.get(DEV_API_EVENTS_APP_BASE_URL)
-        .then(res => { setEvents(res.data); })
-        .catch(error => { console.log(error); })
+        .then(res => setEvents(res.data))
+        .catch(() => eventsLoadingError())
   }, []);
 
   const handleCancel = () => {
@@ -35,10 +36,10 @@ function Home() {
     axios.post(DEV_API_EVENTS_APP_BASE_URL, values)
       .then(() => {
         axios.get(DEV_API_EVENTS_APP_BASE_URL)
-          .then(res => { setEvents(res.data); })
-          .catch(error => { console.log(error); })
+          .then(res => setEvents(res.data))
+          .catch(() => eventsLoadingError())
       })
-      .catch(error => console.log(error));
+      .catch(() => eventCreationError());
   }
 
   return (

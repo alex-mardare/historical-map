@@ -9,6 +9,7 @@ import { DEV_API_EVENTS_APP_BASE_URL,
     EVENTS_APP_EVENT_CATEGORIES_ENDPOINT, 
     EVENTS_APP_HISTORICAL_STATES_ENDPOINT, 
     EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../config/constants/endpoints';
+import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../config/notifications/events';
 import { transformHistoricalStatesForSelector } from '../config/selectors/eventCategorySelector';
 
 
@@ -20,28 +21,16 @@ export default function EventCreateForm(props)
 
     useEffect(() => {
         axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_EVENT_CATEGORIES_ENDPOINT)
-            .then(res => {
-                setEventCategories(res.data);
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            .then(res => setEventCategories(res.data))
+            .catch(() => eventCategoriesLoadingError());
 
         axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_HISTORICAL_STATES_ENDPOINT)
-            .then(res => {
-                setHistoricalStates(transformHistoricalStatesForSelector(res.data))
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            .then(res => setHistoricalStates(transformHistoricalStatesForSelector(res.data)))
+            .catch(() => historicalStatesLoadingError())
 
         axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT)
-            .then(res => {
-                setPresentCountries(res.data)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            .then(res => setPresentCountries(res.data))
+            .catch(() => presentCountriesLoadingError())
     }, []);
 
     const dateFieldValidator = async (rule, value) => {
