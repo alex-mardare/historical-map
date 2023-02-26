@@ -17,13 +17,21 @@ function Home() {
         .catch(() => eventsLoadingError())
   }, []);
 
+  function createMarkerElement(event) {
+    if (event.approximateRealLocation !== undefined) {
+      return (
+        <Marker icon={customIcon} position={[event.latitude, event.longitude]}>
+          <Popup>A pretty CSS3 popup. <br /> Easily customizable.</Popup>
+        </Marker>
+      );
+    }
+  }
+
   return (
     <div className="App">
       <MapContainer center={[51.505, -0.09]} zoom={5} scrollWheelZoom={true} style={{ height: "100vh", width: "100vw" }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Marker icon={customIcon} position={[51.505, -0.09]}>
-            <Popup>A pretty CSS3 popup. <br /> Easily customizable.</Popup>
-          </Marker>
+          {events.forEach(event => createMarkerElement(event))}
         </MapContainer>
     </div>
   );
