@@ -1,19 +1,24 @@
+import { Layout, Menu } from 'antd';
 import axios from 'axios';
 import { LatLngExpression } from 'leaflet';
 import React, { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 
 import { DEV_API_EVENTS_APP_BASE_URL } from '../config/constants/endpoints';
+import { menuItems } from '../config/components/menu';
 import { eventsLoadingError } from '../config/notifications/events';
 import { HistoricalEvent } from '../config/types/historicalEvent';
 import { customIcon } from '../elements/customIconLeaflet';
 
 import "leaflet/dist/leaflet.css";
 
+
 type HistoricalEvents = HistoricalEvent[];
 
-function Home() {
+const { Content, Sider } = Layout;
 
+function Home() {
+  const [collapsed, setCollapsed] = useState(false);
   const [events, setEvents] = useState<HistoricalEvents>([])
 
   useEffect(() => {
@@ -34,10 +39,23 @@ function Home() {
 
   return (
     <div className="App">
-      <MapContainer center={[51.505, -0.09] as LatLngExpression} zoom={5} scrollWheelZoom={true} style={{ height: "100vh", width: "100vw" }}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {events.map(event => createMarkerElement(event))}
-        </MapContainer>
+        <Layout>
+          <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+            <Menu defaultSelectedKeys={['1']} items={menuItems} mode="inline" theme='dark' />
+          </Sider>
+          <Content>
+            <MapContainer 
+              center={[51.505, -0.09] as LatLngExpression}
+              scrollWheelZoom={true}
+              style={{ height: "100vh"}}
+              zoom={5}
+              zoomControl={false}>
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                {events.map(event => createMarkerElement(event))}
+              <ZoomControl position='topright'/>
+            </MapContainer>
+          </Content>
+        </Layout>
     </div>
   );
 }
