@@ -66,5 +66,5 @@ class HistoricalStateList(generics.ListCreateAPIView):
 
 # PRESENT COUNTRY ENDPOINTS
 class PresentCountryList(generics.ListAPIView):
-    queryset = PresentCountry.objects.all().order_by('name')
+    queryset = PresentCountry.objects.all()
     serializer_class = PresentCountryListSerializer
