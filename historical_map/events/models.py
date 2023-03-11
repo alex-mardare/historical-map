@@ -58,6 +58,9 @@ class HistoricalFigure(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ["name"]
 
 
 class HistoricalFigureRole(models.Model):
@@ -68,6 +71,9 @@ class HistoricalFigureRole(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ["name"]
 
 
 class HistoricalEvent(models.Model):
