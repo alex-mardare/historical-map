@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 
 import { DEV_API_EVENTS_APP_BASE_URL } from '../config/constants/endpoints';
-import { eventsLoadingError } from '../config/notifications/events';
+import { eventsLoadingError } from '../config/components/notifications';
 import { HistoricalEvent } from '../config/types/historicalEvent';
-import { customIcon } from '../elements/customIconLeaflet';
+import { mapPopupIcon } from '../config/components/mapPopupIcon';
 
 import "leaflet/dist/leaflet.css";
 
@@ -27,7 +27,7 @@ function Home() {
   function createMarkerElement(event: HistoricalEvent): JSX.Element | undefined {
     if (event.approximateRealLocation) {
       return (
-        <Marker icon={customIcon} position={[event.latitude, event.longitude]}>
+        <Marker icon={mapPopupIcon} position={[event.latitude, event.longitude]}>
           <Popup>
             <b>{event.name}</b> <br/> 
             {event.description}

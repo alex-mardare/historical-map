@@ -9,8 +9,8 @@ import { DEV_API_EVENTS_APP_BASE_URL,
     EVENTS_APP_EVENT_CATEGORIES_ENDPOINT, 
     EVENTS_APP_HISTORICAL_STATES_ENDPOINT, 
     EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../config/constants/endpoints';
-import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../config/notifications/events';
-import { transformHistoricalStatesForSelector } from '../config/transformers/eventCategorySelector';
+import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../config/components/notifications';
+import { transformHistoricalStatesForSelector } from '../config/forms/eventCategorySelector';
 
 
 export default function EventCreateForm(props)

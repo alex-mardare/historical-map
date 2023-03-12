@@ -1,4 +1,4 @@
-import { displayBooleanValues } from '../display/displayBooleanValues';
+import { displayBooleanValues } from '../constants/displayBooleanValues';
 
 export const columnsConfig = [
     {

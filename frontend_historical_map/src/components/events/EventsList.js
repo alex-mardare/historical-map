@@ -1,7 +1,7 @@
 import { Table } from 'antd';
 import React from 'react';
 
-import { columnsConfig } from '../config/tables/EventsListColumnsConfig';
+import { columnsConfig } from '../config/tables/eventsListColumnsConfig';
 
 
 export default function EventsList(props) {
