@@ -1,8 +1,7 @@
 import type { MenuProps } from 'antd';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import { FiguresMenuItem, MapMenuItem } from './menuItem';
+import { FiguresMenuItem, MapMenuItem, MapMenuListSubItem, MapMenuMapSubItem } from './menuItem';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -22,9 +21,9 @@ function getItem(
 
 export const menuItems: MenuItem[] = [
   getItem('Historical Events', '1', <MapMenuItem/>, [
-    getItem('Map', '1.1', <Link to="/" />),
+    getItem('Map', '1.1', <MapMenuMapSubItem />),
     getItem('Create Event', '1.2'),
-    getItem('Events List', '1.3', <Link to="/events-list" />)
+    getItem('Events List', '1.3', <MapMenuListSubItem />)
   ]),
   getItem('Historical Figures', '2', <FiguresMenuItem />)
 ];

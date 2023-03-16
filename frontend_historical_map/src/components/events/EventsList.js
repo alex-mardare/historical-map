@@ -6,10 +6,12 @@ import { columnsConfig } from '../config/tables/eventsListColumnsConfig';
 
 export default function EventsList(props) {
     return(
-        <Table 
-            columns={columnsConfig}
-            dataSource={props.events}
-            rowKey={(event) => event.id}
-        />
+        <div className='EventsList'>
+            <Table 
+                columns={columnsConfig}
+                dataSource={props.events}
+                rowKey={(event) => event.id}
+            />
+        </div>
     )
 }

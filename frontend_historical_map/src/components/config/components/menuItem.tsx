@@ -9,7 +9,13 @@ export const FiguresMenuItem = (props: Partial<CustomIconComponentProps>) => (
 )
 
 export const MapMenuItem = (props: Partial<CustomIconComponentProps>) => (
-    <Link to="/">
-        <Icon component={() => <img src={`${process.env.PUBLIC_URL}/world.png`} alt='Historical events map menu item'/>} {...props} />
-    </Link>
+    <Icon component={() => <img src={`${process.env.PUBLIC_URL}/world.png`} alt='Historical events map menu item'/>} {...props} />
+)
+
+export const MapMenuListSubItem = () => (
+    <Link to="/events-list" />
+)
+
+export const MapMenuMapSubItem = () => (
+    <Link to="/" />
 )

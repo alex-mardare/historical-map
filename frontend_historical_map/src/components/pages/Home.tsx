@@ -13,8 +13,6 @@ import "leaflet/dist/leaflet.css";
 
 type HistoricalEvents = HistoricalEvent[];
 
-
-
 function Home() {
   const [events, setEvents] = useState<HistoricalEvents>([])
 
