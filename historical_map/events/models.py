@@ -1,7 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 
-from .validators import regexDateValidator
+from .validators import dateFormatter, regexDateValidator
 
 class EventCategory(models.Model):
     name = models.CharField(max_length=255)
@@ -26,7 +26,7 @@ class HistoricalState(models.Model):
     def __str__(self):
         displayName = self.name
         if self.dateTo:
-            displayName += " (" + self.dateFrom.replace('-', '/') + " - " + self.dateTo.replace('-', '/') + ")"
+            displayName += " (" + dateFormatter(self.dateFrom) + " -> " + dateFormatter(self.dateTo) + ')'
         return displayName
 
     class Meta:
