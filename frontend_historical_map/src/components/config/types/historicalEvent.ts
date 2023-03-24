@@ -4,6 +4,7 @@ export interface HistoricalEvent {
     description: string,
     eventCategoryId: number,
     historicalStateId: number,
+    id: number,
     latitude: number,
     longitude: number,
     name: string,

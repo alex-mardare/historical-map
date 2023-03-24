@@ -5,12 +5,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { menuItems } from './components/config/components/menuItems';
 import EventsList from './components/events/EventsList';
+import { useFetchEvents } from './components/hooks/useFetchEvents';
 import Home from './components/pages/Home';
 
 const { Content, Sider } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
+  const events = useFetchEvents();
 
   return (
     <Router>
@@ -21,8 +23,8 @@ function App() {
           </Sider>
           <Content>
             <Routes>
-              <Route element={<Home />} path="/" />
-              <Route element={<EventsList />} path="/events-list" />
+              <Route element={<Home {...{events}} />} path="/" />
+              <Route element={<EventsList {...{events}} />} path="/events-list" />
             </Routes>
           </Content>
         </Layout>
