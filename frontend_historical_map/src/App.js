@@ -8,6 +8,7 @@ import EventsList from './components/events/EventsList';
 import { useFetchEvents } from './components/hooks/useFetchEvents';
 import Home from './components/pages/Home';
 
+
 const { Content, Sider } = Layout;
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-      <Layout>
+        <Layout>
           <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
             <Menu defaultSelectedKeys={['1']} items={menuItems} mode="inline" theme='dark' />
           </Sider>
