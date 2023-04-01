@@ -3,13 +3,13 @@ import TextArea from 'antd/es/input/TextArea';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-import { HistoricalStateDropdown } from '../config/components/HistoricalStateDropdown';
+import { HistoricalStateDropdown } from '../config/elements/HistoricalStateDropdown';
 import { DATE_FORMAT, TIME_FORMAT } from '../config/constants/constants';
 import { DEV_API_EVENTS_APP_BASE_URL, 
     EVENTS_APP_EVENT_CATEGORIES_ENDPOINT, 
     EVENTS_APP_HISTORICAL_STATES_ENDPOINT, 
     EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../config/constants/endpoints';
-import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../config/components/notifications';
+import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../config/elements/notifications';
 import { transformHistoricalStatesForSelector } from '../config/forms/eventCategorySelector';
 
 

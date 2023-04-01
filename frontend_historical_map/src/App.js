@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import './App.css';
-import { menuItems } from './components/config/components/menuItems';
+import { menuItems } from './components/config/elements/menuItems';
 import EventsList from './components/events/EventsList';
 import { useFetchEvents } from './components/hooks/useFetchEvents';
 import Home from './components/pages/Home';

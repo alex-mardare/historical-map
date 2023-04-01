@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { DEV_API_EVENTS_APP_BASE_URL } from '../config/constants/endpoints';
-import { eventsLoadingError } from '../config/components/notifications';
+import { eventsLoadingError } from '../config/elements/notifications';
 
 export function useFetchEvents() {
     const [events, setEvents] = useState(null)

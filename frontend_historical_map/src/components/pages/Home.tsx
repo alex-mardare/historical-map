@@ -3,7 +3,7 @@ import React from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 
 import { HistoricalEvent } from '../config/types/historicalEvent';
-import { mapPopupIcon } from '../config/components/mapPopupIcon';
+import { mapPopupIcon } from '../config/elements/mapPopupIcon';
 
 import "leaflet/dist/leaflet.css";
 
