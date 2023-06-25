@@ -1,7 +1,6 @@
 import { Input, Table } from 'antd';
 import React, { useState } from 'react';
 
-import { displayBooleanValues } from '../config/constants/displayBooleanValues';
 import { columnsConfig } from '../config/tables/eventsListColumnsConfig';
 import { HistoricalEvent } from '../config/types/historicalEvent';
 

@@ -1,5 +1,8 @@
+import { Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import React from 'react';
 
+import { EVENTS_LIST_URL } from '../constants/urls';
 import { displayBooleanValues } from '../constants/displayBooleanValues';
 import { HistoricalEvent } from '../types/historicalEvent';
 
@@ -10,6 +13,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         defaultSortOrder: 'ascend',
         key: 'name',
         sortDirections: ['ascend', 'descend', 'ascend'],
+        render: (text, event) => <a href={`${EVENTS_LIST_URL + '/' + event.id}`} style={{color:'#1e90ff'}}>{text}</a>,
         sorter: (a, b) => {
             if (a.name > b.name) {
                 return 1;
@@ -105,11 +109,6 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         title: 'Local Time'
     },
     {
-        dataIndex: 'description',
-        key: 'description', 
-        title: 'Description'
-    },
-    {
         dataIndex: 'latitude',
         key: 'latitude', 
         title: 'Latitude'
@@ -134,5 +133,17 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
             return 0;
         },
         title:'Real Location'
+    },
+    {
+        dataIndex: 'url',
+        key: 'url',
+        render: (text, event) => {
+            return (
+                <Button href={`${EVENTS_LIST_URL + '/' + event.id}`}>
+                    Details
+                </Button>
+            )
+        },
+        title: 'Details'
     }
 ]

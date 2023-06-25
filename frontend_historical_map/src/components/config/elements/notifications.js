@@ -7,6 +7,13 @@ export const eventCreationError = () => {
     });
 }
 
+export const eventLoadingError = () => {
+    notification.error({
+        description: 'There was an issue loading the historical event.',
+        message: 'Problems loading the event.'
+    });
+}
+
 export const eventsLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the list of historical events.',

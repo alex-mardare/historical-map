@@ -2,11 +2,14 @@ import { Layout, Menu } from 'antd';
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import './App.css';
+import { EVENTS_LIST_URL } from './components/config/constants/urls';
 import { menuItems } from './components/config/elements/menuItems';
 import EventsList from './components/events/EventsList';
 import { useFetchEvents } from './components/hooks/useFetchEvents';
 import Home from './components/pages/Home';
+
+import './App.css'; 
+import EventsDetails from './components/events/EventDetails';
 
 
 const { Content, Sider } = Layout;
@@ -25,7 +28,8 @@ function App() {
           <Content>
             <Routes>
               <Route element={<Home {...{events}} />} path="/" />
-              <Route element={<EventsList {...{events}} />} path="/events-list" />
+              <Route element={<EventsList {...{events}} />} path={EVENTS_LIST_URL} />
+              <Route element={<EventsDetails {...{}}/>} path={EVENTS_LIST_URL + "/:eventId"} />
             </Routes>
           </Content>
         </Layout>
