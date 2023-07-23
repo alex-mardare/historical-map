@@ -3,7 +3,8 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
 import { EVENTS_LIST_URL } from '../constants/urls';
-import { displayBooleanValues } from '../constants/displayBooleanValues';
+import { displayBooleanValues } from '../display/displayBooleanValues';
+import { displayLatitudeDMS, displayLongitudeDMS } from '../display/displayCoordinates';
 import { HistoricalEvent } from '../types/historicalEvent';
 
 
@@ -111,11 +112,13 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
     {
         dataIndex: 'latitude',
         key: 'latitude', 
+        render: (value) => displayLatitudeDMS(value),
         title: 'Latitude'
     },
     {
         dataIndex: 'longitude',
         key: 'longitude', 
+        render: (value) => displayLongitudeDMS(value),
         title: 'Longitude'
     },
     {
