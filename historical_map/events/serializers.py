@@ -11,6 +11,20 @@ class EventCategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+# PRESENT COUNTRY SERIALIZERS
+class PresentCountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PresentCountry
+        fields = ['id', 'name']
+
+
+# HISTORICAL STATE SERIALIZERS
+class HistoricalStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalState
+        fields = ['id', 'dateFrom', 'dateTo', 'name']
+
+
 # HISTORICAL EVENT SERIALIZERS
 class HistoricalEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,6 +41,15 @@ class HistoricalEventSerializer(serializers.ModelSerializer):
             return historicalEvent
         except IntegrityError as e:
             raise serializers.ValidationError(e)
+        
+class HistoricalEventRetrieveSerializer(serializers.ModelSerializer):
+    eventCategory = EventCategorySerializer(many=False, source='eventCategoryId')
+    presentCountry = PresentCountrySerializer(many=False, source='presentCountryId')
+    historicalState = HistoricalStateSerializer(many=False, source='historicalStateId')
+
+    class Meta:
+        model = HistoricalEvent
+        fields = ['id', 'name', 'description', 'date', 'time', 'latitude', 'longitude', 'approximateRealLocation', 'eventCategory', 'presentCountry', 'historicalState']
 
 class HistoricalEventLinksSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,13 +81,6 @@ class HistoricalFigureRoleLinksSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-# HISTORICAL STATE SERIALIZERS
-class HistoricalStateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalState
-        fields = ['id', 'dateFrom', 'dateTo', 'name']
-
-
 # EVENT FIGURE ROLE SERIALIZERS
 class EventFigureRoleItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,10 +104,3 @@ class EventFigureRoleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventFigureRole
         fields = ['id', 'historicalEvent', 'historicalFigure', 'historicalFigureRole']
-
-
-# PRESENT COUNTRY SERIALIZERS
-class PresentCountryListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PresentCountry
-        fields = ['id', 'name']

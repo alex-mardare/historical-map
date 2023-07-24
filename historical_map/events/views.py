@@ -25,13 +25,13 @@ class EventFigureRoleList(generics.ListAPIView):
 
 
 # HISTORICAL EVENT ENDPOINTS
-class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
-    queryset = HistoricalEvent.objects.all()
-    serializer_class = HistoricalEventSerializer
-
 class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
+
+class HistoricalEventRetrieve(generics.RetrieveAPIView):
+    queryset = HistoricalEvent.objects.all()
+    serializer_class = HistoricalEventRetrieveSerializer
 
 
 # HISTORICAL FIGURE ENDPOINTS
@@ -67,4 +67,4 @@ class HistoricalStateList(generics.ListCreateAPIView):
 # PRESENT COUNTRY ENDPOINTS
 class PresentCountryList(generics.ListAPIView):
     queryset = PresentCountry.objects.all()
-    serializer_class = PresentCountryListSerializer
+    serializer_class = PresentCountrySerializer

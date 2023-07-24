@@ -24,7 +24,10 @@ export default function EventDetails(){
           <p><b>Description:</b> {event?.description}</p>
           <p><b>Date & Local Time:</b> {event?.date} {event?.time?.toString()}</p>
           <p><b>Real Location:</b> {displayBooleanValues(event?.approximateRealLocation)}</p>
-          {displayCoordinates(event)}
+          <p><b>Coordinates:</b> {displayCoordinates(event)}</p>
+          <p><b>Event Category:</b> {event?.eventCategory.name}</p>
+          <p><b>Present Country:</b> {event?.presentCountry.name}</p>
+          <p><b>Historical State:</b> {event?.historicalState.name}</p>
       </Card>
     </>
   )
@@ -33,7 +36,7 @@ export default function EventDetails(){
   {
     if (event?.approximateRealLocation)
     {
-      return <p><b>Coordinates:</b> {displayLatitudeDMS(event.latitude * 1)}, {displayLongitudeDMS(event.longitude * 1)}</p>
+      return displayLatitudeDMS(event.latitude * 1) + displayLongitudeDMS(event.longitude * 1)
     }
   }
 }
