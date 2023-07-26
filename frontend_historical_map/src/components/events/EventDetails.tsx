@@ -1,12 +1,15 @@
-import { Card } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import { Card } from 'antd';
+import { LatLngExpression } from 'leaflet';
 import React from 'react';
+import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 import { useParams } from 'react-router';
 
-import { useFetchEvent } from '../hooks/useFetchEvents';
 import { displayBooleanValues } from '../config/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../config/display/displayCoordinates';
+import { mapPopupIcon } from '../config/elements/mapPopupIcon';
 import { HistoricalEvent } from '../config/types/historicalEvent';
+import { useFetchEvent } from '../hooks/useFetchEvents';
 
 
 export default function EventDetails(){
@@ -19,7 +22,7 @@ export default function EventDetails(){
       <Card 
         actions={[<EditOutlined key="edit"/>]} 
         loading={event == null} 
-        style={{width: 450}}
+        style={{margin: "auto", minWidth: 250}}
         title={event?.name}>
           <p><b>Description:</b> {event?.description}</p>
           <p><b>Date & Local Time:</b> {event?.date} {event?.time?.toString()}</p>
@@ -29,6 +32,9 @@ export default function EventDetails(){
           <p><b>Present Country:</b> {event?.presentCountry.name}</p>
           <p><b>Historical State:</b> {event?.historicalState.name}</p>
       </Card>
+      <div>
+        {returnMap(event)}
+      </div>
     </>
   )
 
@@ -37,6 +43,29 @@ export default function EventDetails(){
     if (event?.approximateRealLocation)
     {
       return displayLatitudeDMS(event.latitude * 1) + displayLongitudeDMS(event.longitude * 1)
+    }
+  }
+
+  function returnMap(event: HistoricalEvent | null)
+  {
+    if (event) {
+      return (
+        <div className="eventLocation">
+          <MapContainer 
+            center={[event.latitude, event.longitude] as LatLngExpression}
+            style={{ height: "52vh"}}
+            zoom={13}
+            zoomControl={false}>
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <Marker key={event?.id} icon={mapPopupIcon} position={[event.latitude, event.longitude]}>
+                <Popup>
+                  <b>{event?.name}</b> <br/> {event?.description}
+                </Popup>
+              </Marker>
+            <ZoomControl position='topright'/>
+          </MapContainer>
+      </div>
+      );
     }
   }
 }
