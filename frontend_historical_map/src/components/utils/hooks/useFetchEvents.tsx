@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { DEV_API_EVENTS_APP_BASE_URL } from '../config/constants/urls';
-import { eventLoadingError, eventsLoadingError } from '../config/elements/notifications';
-import { HistoricalEvent } from '../config/types/historicalEvent';
+import { DEV_API_EVENTS_APP_BASE_URL } from '../../models/constants/urls';
+import { eventLoadingError, eventsLoadingError } from '../../partials/notifications';
+import { HistoricalEvent } from '../../models/types/historicalEvent';
 
 export function useFetchEvents(): HistoricalEvent[] | null {
     const [events, setEvents] = useState(null)

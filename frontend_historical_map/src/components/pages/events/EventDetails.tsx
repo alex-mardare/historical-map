@@ -5,11 +5,11 @@ import React from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 import { useParams } from 'react-router';
 
-import { displayBooleanValues } from '../config/display/displayBooleanValues';
-import { displayLatitudeDMS, displayLongitudeDMS } from '../config/display/displayCoordinates';
-import { mapPopupIcon } from '../config/elements/mapPopupIcon';
-import { HistoricalEvent } from '../config/types/historicalEvent';
-import { useFetchEvent } from '../hooks/useFetchEvents';
+import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
+import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
+import { mapPopupIcon } from '../../partials/leafletMapPartials';
+import { HistoricalEvent } from '../../models/types/historicalEvent';
+import { useFetchEvent } from '../../utils/hooks/useFetchEvents';
 
 
 export default function EventDetails(){

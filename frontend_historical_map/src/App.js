@@ -2,14 +2,14 @@ import { Layout, Menu } from 'antd';
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import { EVENTS_LIST_URL } from './components/config/constants/urls';
-import { menuItems } from './components/config/elements/menuItems';
-import EventsList from './components/events/EventsList';
-import { useFetchEvents } from './components/hooks/useFetchEvents';
+import { EVENTS_LIST_URL } from './components/models/constants/urls';
+import { menuItems } from './components/config/menu/menuConfig';
+import EventsList from './components/pages/events/EventsList';
+import { useFetchEvents } from './components/utils/hooks/useFetchEvents';
 import Home from './components/pages/Home';
 
 import './App.css'; 
-import EventsDetails from './components/events/EventDetails';
+import EventsDetails from './components/pages/events/EventDetails';
 
 
 const { Content, Sider } = Layout;

@@ -1,9 +1,9 @@
 import { LatLngExpression } from 'leaflet';
 import React from 'react';
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
+import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 
-import { HistoricalEvent } from '../config/types/historicalEvent';
-import { mapPopupIcon } from '../config/elements/mapPopupIcon';
+import { createMarkerElement } from '../partials/leafletMapPartials';
+import { HistoricalEvent } from '../models/types/historicalEvent';
 
 import "leaflet/dist/leaflet.css";
 
@@ -14,19 +14,6 @@ type props = {
 }
 
 function Home(props: props) {
-  function createMarkerElement(event: HistoricalEvent): JSX.Element | undefined {
-    if (event.approximateRealLocation) {
-      return (
-        <Marker key={event.id} icon={mapPopupIcon} position={[event.latitude, event.longitude]}>
-          <Popup>
-            <b>{event.name}</b> <br/> 
-            {event.description}
-          </Popup>
-        </Marker>
-      );
-    }
-  }
-
   return (
     <div className="Home">
         <MapContainer 

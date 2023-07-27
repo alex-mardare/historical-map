@@ -1,8 +1,8 @@
 import { Input, Table } from 'antd';
 import React, { useState } from 'react';
 
-import { columnsConfig } from '../config/tables/eventsListColumnsConfig';
-import { HistoricalEvent } from '../config/types/historicalEvent';
+import { columnsConfig } from '../../config/tables/eventsListColumnsConfig';
+import { HistoricalEvent } from '../../models/types/historicalEvent';
 
 
 const { Search } = Input;

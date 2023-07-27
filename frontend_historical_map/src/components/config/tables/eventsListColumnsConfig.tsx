@@ -2,10 +2,10 @@ import { Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
-import { EVENTS_LIST_URL } from '../constants/urls';
-import { displayBooleanValues } from '../display/displayBooleanValues';
-import { displayLatitudeDMS, displayLongitudeDMS } from '../display/displayCoordinates';
-import { HistoricalEvent } from '../types/historicalEvent';
+import { EVENTS_LIST_URL } from '../../models/constants/urls';
+import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
+import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
+import { HistoricalEvent } from '../../models/types/historicalEvent';
 
 
 export const columnsConfig : ColumnsType<HistoricalEvent> = [

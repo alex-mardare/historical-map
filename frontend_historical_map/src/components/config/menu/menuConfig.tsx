@@ -1,7 +1,7 @@
 import type { MenuProps } from 'antd';
 import React from 'react';
 
-import { FiguresMenuItem, MapMenuItem, MapMenuListSubItem, MapMenuMapSubItem } from './menuItem';
+import { FiguresMenuItem, MapMenuItem, MapMenuListSubItem, MapMenuMapSubItem } from '../../partials/menuItems';
 
 type MenuItem = Required<MenuProps>['items'][number];
 

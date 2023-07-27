@@ -3,14 +3,14 @@ import TextArea from 'antd/es/input/TextArea';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-import { HistoricalStateDropdown } from '../config/elements/HistoricalStateDropdown';
-import { DATE_FORMAT, TIME_FORMAT } from '../config/constants/constants';
+import { HistoricalStateDropdown } from '../../partials/HistoricalStateDropdown';
+import { DATE_FORMAT, TIME_FORMAT } from '../../models/constants/constants';
 import { DEV_API_EVENTS_APP_BASE_URL, 
     EVENTS_APP_EVENT_CATEGORIES_ENDPOINT, 
     EVENTS_APP_HISTORICAL_STATES_ENDPOINT, 
-    EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../config/constants/urls';
-import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../config/elements/notifications';
-import { transformHistoricalStatesForSelector } from '../config/forms/eventCategorySelector';
+    EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../../models/constants/urls';
+import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../../partials/notifications';
+import { transformHistoricalStatesForSelector } from '../../utils/selectors/eventCategorySelector';
 
 
 export default function EventCreateForm(props)
