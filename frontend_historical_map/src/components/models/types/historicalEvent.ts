@@ -15,3 +15,5 @@ export interface HistoricalEvent {
     presentCountry: PresentCountry,
     time: Date
 }
+
+export type HistoricalEvents = HistoricalEvent[];
