@@ -4,28 +4,31 @@ from rest_framework import serializers
 from .models import EventCategory, EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 
 
-# EVENT CATEGORY SERIALIZERS
+#region EVENT CATEGORY SERIALIZERS
 class EventCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = EventCategory
         fields = ['id', 'name']
+#endregion
 
 
-# PRESENT COUNTRY SERIALIZERS
+#region PRESENT COUNTRY SERIALIZERS
 class PresentCountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
         fields = ['id', 'name']
+#endregion
 
 
-# HISTORICAL STATE SERIALIZERS
+#region HISTORICAL STATE SERIALIZERS
 class HistoricalStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState
         fields = ['id', 'dateFrom', 'dateTo', 'name']
+#endregion
 
 
-# HISTORICAL EVENT SERIALIZERS
+#region HISTORICAL EVENT SERIALIZERS
 class HistoricalEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEvent
@@ -55,9 +58,10 @@ class HistoricalEventLinksSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEvent
         fields =  ['id', 'name', 'description', 'date', 'time', 'latitude', 'longitude']
+#endregion
 
 
-# HISTORICAL FIGURE SERIALIZERS
+#region HISTORICAL FIGURE SERIALIZERS
 class HistoricalFigureSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigure
@@ -67,9 +71,10 @@ class HistoricalFigureLinksSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigure
         fields = ['id', 'name']
+#endregion
 
 
-# HISTORICAL FIGURE ROLE SERIALIZERS
+#region HISTORICAL FIGURE ROLE SERIALIZERS
 class HistoricalFigureRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigureRole
@@ -79,9 +84,10 @@ class HistoricalFigureRoleLinksSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigureRole
         fields = ['id', 'name']
+#endregion
 
 
-# EVENT FIGURE ROLE SERIALIZERS
+#region EVENT FIGURE ROLE SERIALIZERS
 class EventFigureRoleItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventFigureRole
@@ -104,3 +110,4 @@ class EventFigureRoleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventFigureRole
         fields = ['id', 'historicalEvent', 'historicalFigure', 'historicalFigureRole']
+#endregion

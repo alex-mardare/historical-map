@@ -3,14 +3,14 @@ from rest_framework import generics
 from .models import EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
 from .serializers import *
 
-
-# EVENT CATEGORY ENDPOINTS
+#region EVENT CATEGORY ENDPOINTS
 class EventCategoryList(generics.ListAPIView):
     queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
+#endregion
 
 
-# EVENT FIGURE ROLE ENDPOINTS
+#region EVENT FIGURE ROLE ENDPOINTS
 class EventFigureRoleCreate(generics.CreateAPIView):
     queryset = EventFigureRole.objects.all()
     serializer_class = EventFigureRoleItemSerializer
@@ -22,9 +22,9 @@ class EventFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
 class EventFigureRoleList(generics.ListAPIView):
     queryset = EventFigureRole.objects.all()
     serializer_class = EventFigureRoleListSerializer
+#endregion
 
-
-# HISTORICAL EVENT ENDPOINTS
+#region HISTORICAL EVENT ENDPOINTS
 class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
@@ -32,9 +32,10 @@ class HistoricalEventList(generics.ListCreateAPIView):
 class HistoricalEventRetrieve(generics.RetrieveAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventRetrieveSerializer
+#endregion
 
 
-# HISTORICAL FIGURE ENDPOINTS
+#region HISTORICAL FIGURE ENDPOINTS
 class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureSerializer
@@ -42,9 +43,10 @@ class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
 class HistoricalFigureList(generics.ListCreateAPIView):
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureSerializer
+#endregion
 
 
-# HISTORICAL FIGURE ROLE ENDPOINTS
+#region HISTORICAL FIGURE ROLE ENDPOINTS
 class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
@@ -52,9 +54,10 @@ class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
 class HistoricalFigureRoleList(generics.ListAPIView):
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
+#endregion
 
 
-# HISTORICAL STATE ENDPOINTS
+#region HISTORICAL STATE ENDPOINTS
 class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateSerializer
@@ -62,9 +65,11 @@ class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
 class HistoricalStateList(generics.ListCreateAPIView):
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateSerializer
+#endregion
 
 
-# PRESENT COUNTRY ENDPOINTS
+#region PRESENT COUNTRY ENDPOINTS
 class PresentCountryList(generics.ListAPIView):
     queryset = PresentCountry.objects.all()
     serializer_class = PresentCountrySerializer
+#endregion
