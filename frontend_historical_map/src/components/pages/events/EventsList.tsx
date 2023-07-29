@@ -8,11 +8,11 @@ import { HistoricalEvent } from '../../models/types/historicalEvent';
 const { Search } = Input;
 
 type HistoricalEvents = HistoricalEvent[];
-type props = {
+type EventsListProps = {
   events: HistoricalEvents
 }
 
-export default function EventsList(props:props) {
+export default function EventsList(props:EventsListProps) {
   const [searchText, setSearchText] = useState('');
 
   const handleSearch = (value:string) => {

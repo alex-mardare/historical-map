@@ -4,3 +4,5 @@ export interface HistoricalState {
     dateFrom: string,
     dateTo: string
 }
+
+export type HistoricalStates = HistoricalState[]
