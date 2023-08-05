@@ -1,11 +1,5 @@
-import { HistoricalStates } from "../../models/types/historicalState";
+import { HistoricalStates, HistoricalStateOptions } from "../../models/types/historicalState";
 
-
-type HistoricalStateOption = {
-    label: string,
-    value: number
-}
-type HistoricalStateOptions = HistoricalStateOption[]
 
 export function transformHistoricalStatesForSelector(historicalStates : HistoricalStates) {
     let historicalStateOptions: HistoricalStateOptions = [];

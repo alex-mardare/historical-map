@@ -1,0 +1,17 @@
+#eventsList {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.tableContainer {
+    flex: 1;
+    padding: 10px;
+}
+
+.topBar {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}

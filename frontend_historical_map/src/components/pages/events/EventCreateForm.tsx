@@ -9,9 +9,8 @@ import { DEV_API_EVENTS_APP_BASE_URL,
     EVENTS_APP_HISTORICAL_STATES_ENDPOINT, 
     EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../../models/constants/urls';
     import { EventCategories } from '../../models/types/eventCategory';
-import { HistoricalStates } from '../../models/types/historicalState';
+import { HistoricalStateOptions } from '../../models/types/historicalState';
 import { PresentCountries } from '../../models/types/presentCountry';
-import { HistoricalStateDropdown } from '../../partials/HistoricalStateDropdown';
 import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../../partials/notifications';
 import { transformHistoricalStatesForSelector } from '../../utils/selectors/eventCategorySelector';
 
@@ -25,7 +24,7 @@ export default function EventCreateForm(props:EventCreateFormProps)
 {
     const [eventCategories, setEventCategories] = useState<EventCategories>([])
     const [presentCountries, setPresentCountries] = useState<PresentCountries>([])
-    const [historicalStates, setHistoricalStates] = useState<any>([])
+    const [historicalStates, setHistoricalStates] = useState<HistoricalStateOptions>([])
 
     useEffect(() => {
         axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_EVENT_CATEGORIES_ENDPOINT)
@@ -94,7 +93,20 @@ export default function EventCreateForm(props:EventCreateFormProps)
                 />
             </Form.Item>
             <Form.Item label='Historical State' name='historicalStateId' rules={[{ required: true }]}>
-                <HistoricalStateDropdown options={historicalStates} />
+                <Select
+                    dropdownRender={(menu) => (
+                        <div style={{ maxHeight: "300px" }}>
+                            {menu}
+                        </div>
+                    )}
+                    placeholder='Please select a historical state.'
+                    showSearch>
+                        {historicalStates.map(option => (
+                            <Select.Option key={option.value} value={option.value}>
+                                <div style={{ whiteSpace: "pre-wrap" }}>{option.label}</div>
+                            </Select.Option>
+                        ))}
+                </Select>
             </Form.Item>
         </Form>
       </div>  

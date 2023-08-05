@@ -1,8 +1,10 @@
-import { Input, Table } from 'antd';
+import { Button, Input, Table } from 'antd';
 import React, { useState } from 'react';
 
 import { columnsConfig } from '../../config/tables/eventsListColumnsConfig';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
+
+import '../../../assets/styling/events/eventsList.css';
 
 
 const { Search } = Input;
@@ -32,21 +34,25 @@ export default function EventsList(props:EventsListProps) {
   });
 
   return(
-      <div className='EventsList' style={{height: '100vh'}}>
+      <div id='eventsList'>
+        <div className='topBar'>
           <Search
-            allowClear
-            enterButton
-            onChange={(e) => handleSearch(e.target.value)} 
-            placeholder='Search' 
-            style={{ maxWidth: 400, paddingTop: '10px' }}
-          />
+              allowClear
+              enterButton
+              onChange={(e) => handleSearch(e.target.value)} 
+              placeholder='Search' 
+              style={{ maxWidth: 400, paddingRight: '5px' }}
+            />
+          <Button type='primary'>Create Event</Button>
+        </div>
+        <div className='tableContainer'>
           <Table 
-              columns={columnsConfig}
-              dataSource={filteredEvents}
-              pagination={{ hideOnSinglePage:true }}
-              rowKey={(event) => event.id}
-              style={{ padding:'10px 10px 0px 10px' }}
-          />
+                columns={columnsConfig}
+                dataSource={filteredEvents}
+                pagination={{ hideOnSinglePage:true }}
+                rowKey={(event) => event.id}
+            />
+        </div>
       </div>
   )
 }

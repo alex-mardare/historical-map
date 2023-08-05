@@ -9,7 +9,7 @@ import { createMapContainer } from '../../partials/leafletMapPartials';
 import { HistoricalEvent, HistoricalEvents } from '../../models/types/historicalEvent';
 import { useFetchEvent } from '../../utils/hooks/useFetchEvents';
 
-import '../../../assets/styling/eventDetails.css';
+import '../../../assets/styling/events/eventDetails.css';
 
 
 export default function EventDetails(){
