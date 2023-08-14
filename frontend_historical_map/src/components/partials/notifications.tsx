@@ -7,6 +7,13 @@ export const eventCreationError = () => {
     });
 }
 
+export const eventCreationSuccess = (title: string) => {
+    notification.success({
+        description: 'Event ' + title + ' was created successfully.',
+        message: 'Event created.'
+    });
+}
+
 export const eventLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the historical event.',

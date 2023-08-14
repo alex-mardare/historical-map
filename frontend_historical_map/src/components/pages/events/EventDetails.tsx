@@ -7,7 +7,7 @@ import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
 import { createMapContainer } from '../../partials/leafletMapPartials';
 import { HistoricalEvent, HistoricalEvents } from '../../models/types/historicalEvent';
-import { useFetchEvent } from '../../utils/hooks/useFetchEvents';
+import { useFetchEvent } from '../../utils/hooks/eventsHooks';
 
 import '../../../assets/styling/events/eventDetails.css';
 
