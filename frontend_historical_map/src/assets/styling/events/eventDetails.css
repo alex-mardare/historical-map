@@ -1,7 +1,21 @@
 #eventDetailsMap {
-    height: 55vh;
+    height: 54vh;
 }
 
 .ant-card {
-    height: 45vh;
+    height: 46vh;
+}
+
+.card-header {
+    align-items: center;
+    display: flex;
+}
+
+.card-title-div {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.card-title-header {
+    margin-left: -100px;
 }
