@@ -10,7 +10,7 @@ import Home from './components/pages/Home';
 
 import './App.css'; 
 import EventsDetails from './components/pages/events/EventDetails';
-import EventCreateForm from './components/pages/events/EventCreateForm';
+import EventCreateForm from './components/pages/events/EventModalForm';
 
 
 const { Content, Sider } = Layout;
@@ -30,7 +30,7 @@ function App() {
             <Routes>
               <Route element={<Home {...{events}} />} path="/" />
               <Route element={<EventsList events={events} onRefreshEvents={refreshEvents} />} path={EVENTS_LIST_URL} />
-              <Route element={<EventsDetails {...{}}/>} path={EVENTS_LIST_URL + "/:eventId"} />
+              <Route element={<EventsDetails />} path={EVENTS_LIST_URL + "/:eventId"} />
               <Route element={<EventCreateForm />} path={EVENTS_LIST_URL} />
             </Routes>
           </Content>

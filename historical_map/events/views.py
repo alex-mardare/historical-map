@@ -29,9 +29,15 @@ class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
 
-class HistoricalEventRetrieve(generics.RetrieveAPIView):
+class HistoricalEventRetrieveUpdate(generics.RetrieveUpdateAPIView):
     queryset = HistoricalEvent.objects.all()
-    serializer_class = HistoricalEventRetrieveSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return HistoricalEventRetrieveSerializer
+        elif self.request.method in ['PATCH', 'PUT']:
+            return HistoricalEventSerializer
+        return super().get_serializer_class()
 #endregion
 
 

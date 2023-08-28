@@ -14,6 +14,20 @@ export const eventCreationSuccess = (title: string) => {
     });
 }
 
+export const eventEditError = (title: string) => {
+    notification.error({
+        description: 'There was an issue editing ' + title + ' historical event.',
+        message: 'Problems editing the event.'
+    });
+}
+
+export const eventEditSuccess = (title: string) => {
+    notification.success({
+        description: 'Event ' + title + ' was updated successfully.',
+        message: 'Event updated.'
+    });
+}
+
 export const eventLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the historical event.',

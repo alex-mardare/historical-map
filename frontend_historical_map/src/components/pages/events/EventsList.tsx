@@ -1,7 +1,7 @@
 import { Button, Form, Input, Modal, Table } from 'antd';
 import React, { useState } from 'react';
 
-import EventCreateForm from './EventCreateForm';
+import EventCreateForm from './EventModalForm';
 import { columnsConfig } from '../../config/tables/eventsListColumnsConfig';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { useEventPost } from '../../utils/hooks/eventsHooks';
@@ -23,7 +23,7 @@ export default function EventsList(props:EventsListProps) {
   const [searchText, setSearchText] = useState('');
 
   const [form] = Form.useForm();
-  const { postData } = useEventPost();
+  const { submitData } = useEventPost();
 
   let filteredEvents = props.events?.filter((event) => {
     return Object.values(event).some((value) => {
@@ -59,7 +59,7 @@ export default function EventsList(props:EventsListProps) {
 
   const onFinish = async (values: any) => {
     try {
-      await postData(values, setConfirmLoading, setOpen);
+      await submitData(values, setConfirmLoading, setOpen);
       props.onRefreshEvents();
     }
     catch(error) {
@@ -91,7 +91,7 @@ export default function EventsList(props:EventsListProps) {
             open={open}
             title='Create Historical Event'
           >
-            <EventCreateForm {...{form, onFinish}} />
+            <EventCreateForm event={null} form={form} onFinish={onFinish} />
           </Modal>
         </div>
         <div className='tableContainer'>
