@@ -1,4 +1,5 @@
 import L, { LatLngExpression } from 'leaflet';
+import { OpenStreetMapProvider } from 'leaflet-geosearch'; 
 import React from 'react';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 
@@ -29,11 +30,13 @@ function createMarkerElement(event: HistoricalEvent): JSX.Element | undefined {
   }
 }
 
-export function createMapContainer(idName: string, events: HistoricalEvents, zoomLevel: number) {
-  if (events != null && events.length > 0) {
+export function createMultiMarkerMapContainer(events: HistoricalEvents, idName: string, zoomLevel: number) {
+  if (events && events.length > 0) {
+    const event = events[0];
+
     return (
       <MapContainer
-        center={[events[0].latitude, events[0].longitude] as LatLngExpression}
+        center={[event.latitude, event.longitude] as LatLngExpression}
         id={idName} 
         zoom={zoomLevel}
         zoomControl={false}>
@@ -43,4 +46,29 @@ export function createMapContainer(idName: string, events: HistoricalEvents, zoo
       </MapContainer>
     );
   }
+}
+
+export function createSinglePointMapContainer(coordinates: number[] | null, event: HistoricalEvent, idName: string, zoomLevel: number) {
+  if (coordinates) {
+    return (
+      <MapContainer
+        center={[coordinates[0], coordinates[1]] as LatLngExpression}
+        id={idName} 
+        zoom={zoomLevel}
+        zoomControl={false}>
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          {event.approximateRealLocation && createMarkerElement(event)}
+        <ZoomControl position='topright'/>
+      </MapContainer>
+    );
+  }
+  else {
+    return <div>Loading...</div>
+  }
+}
+
+export async function returnMapCoordinatesByPresentCountryName(event: HistoricalEvent) {
+  const provider = new OpenStreetMapProvider();
+  const mapResult = await provider.search({ query: event.presentCountry.name });
+  return mapResult;
 }

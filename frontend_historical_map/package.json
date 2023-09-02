@@ -9,6 +9,7 @@
     "antd": "^5.1.7",
     "axios": "^1.2.6",
     "leaflet": "^1.9.3",
+    "leaflet-geosearch": "^3.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.0",

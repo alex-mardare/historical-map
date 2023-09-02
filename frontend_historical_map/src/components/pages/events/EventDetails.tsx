@@ -5,12 +5,12 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 
 import EventCreateForm from './EventModalForm';
+import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { antCardHeader } from '../../partials/antdCardHeader';
-import { createMapContainer } from '../../partials/leafletMapPartials';
-import { HistoricalEvent, HistoricalEvents } from '../../models/types/historicalEvent';
+import { createSinglePointMapContainer } from '../../partials/leafletMapPartials';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
-import { useEventPut, useFetchEvent } from '../../utils/hooks/eventsHooks';
+import { useEventCoordinates, useEventPut, useFetchEvent } from '../../utils/hooks/eventsHooks';
 
 import '../../../assets/styling/events/eventDetails.css';
 
@@ -25,6 +25,7 @@ export default function EventDetails(){
 
   const { eventId } = useParams();
   let event = useFetchEvent(eventId);
+  const coordinates = useEventCoordinates(event);
 
 
   //#region DISPLAY FUNCTIONALITY
@@ -37,8 +38,7 @@ export default function EventDetails(){
 
   const displayMap = (event: HistoricalEvent | null) => {
     if (event) {
-      const events: HistoricalEvents = [event];
-      return (createMapContainer('eventDetailsMap', events, 13));
+      return (createSinglePointMapContainer(coordinates, event, 'eventDetailsMap', 13));
     }
   }
 

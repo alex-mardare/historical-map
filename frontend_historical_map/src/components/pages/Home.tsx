@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createMapContainer } from '../partials/leafletMapPartials';
+import { createMultiMarkerMapContainer } from '../partials/leafletMapPartials';
 import { HistoricalEvents } from '../models/types/historicalEvent';
 
 import "leaflet/dist/leaflet.css";
@@ -15,7 +15,7 @@ type props = {
 function Home(props: props) {
   return (
     <div className="Home">
-      {createMapContainer('homeMap', props.events, 5)}
+      {createMultiMarkerMapContainer(props.events, 'homeMap', 5)}
     </div>
   );
 }

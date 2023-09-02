@@ -5,48 +5,28 @@ import { DEV_API_EVENTS_APP_BASE_URL } from '../../models/constants/urls';
 import { eventCreationError, eventCreationSuccess, eventEditError, eventEditSuccess, eventLoadingError, eventsLoadingError } from '../../partials/notifications';
 import { DataCreateUpdate, DataGetEvents } from '../../models/types/hooksDataTypes';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
+import { returnMapCoordinatesByPresentCountryName } from '../../partials/leafletMapPartials';
+ 
 
-export function useFetchEvents(): DataGetEvents<HistoricalEvent> {
-    const [events, setEvents] = useState(null);
-
-    const fetchEvents = async () => {
-        try {
-            const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL);
-            setEvents(response.data);
-        } catch (error) {
-            eventsLoadingError();
-        }
-    };
+export function useEventCoordinates(event: HistoricalEvent | null) {
+    const [coordinates, setCoordinates] = useState<null | number[]>(null);
 
     useEffect(() => {
-        fetchEvents();
-    }, []);
-
-    return {
-        events,
-        refreshEvents: fetchEvents,
-    };
-}
-  
-
-export function useFetchEvent(eventId: string | undefined): HistoricalEvent | null {
-    const [event, setEvent] = useState(null)
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL + eventId);
-                setEvent(response.data);
-            }
-            catch(error) {
-                eventLoadingError();
+        if (event) {
+            if (event.approximateRealLocation) {
+                setCoordinates([event.latitude, event.longitude]);
+            } 
+            else {
+                returnMapCoordinatesByPresentCountryName(event).then((arrResult) => {
+                    if (arrResult.length > 0) {
+                        setCoordinates([arrResult[0].y, arrResult[0].x]);
+                    }
+                });
             }
         }
+    }, [event]);
 
-        fetchData();
-    }, [eventId]);
-
-    return event;
+    return coordinates;
 }
 
 export function useEventPost<T>(): DataCreateUpdate<T> {
@@ -116,3 +96,45 @@ export function useEventPut<T>(): DataCreateUpdate<T> {
 
     return { submitData, error };
 };
+
+export function useFetchEvent(eventId: string | undefined): HistoricalEvent | null {
+    const [event, setEvent] = useState(null)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL + eventId);
+                setEvent(response.data);
+            }
+            catch(error) {
+                eventLoadingError();
+            }
+        }
+
+        fetchData();
+    }, [eventId]);
+
+    return event;
+}
+
+export function useFetchEvents(): DataGetEvents<HistoricalEvent> {
+    const [events, setEvents] = useState(null);
+
+    const fetchEvents = async () => {
+        try {
+            const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL);
+            setEvents(response.data);
+        } catch (error) {
+            eventsLoadingError();
+        }
+    };
+
+    useEffect(() => {
+        fetchEvents();
+    }, []);
+
+    return {
+        events,
+        refreshEvents: fetchEvents,
+    };
+}
