@@ -48,13 +48,13 @@ export function createMultiMarkerMapContainer(events: HistoricalEvents, idName: 
   }
 }
 
-export function createSinglePointMapContainer(coordinates: number[] | null, event: HistoricalEvent, idName: string, zoomLevel: number) {
+export function createSinglePointMapContainer(coordinates: number[] | null, event: HistoricalEvent, idName: string) {
   if (coordinates) {
     return (
       <MapContainer
         center={[coordinates[0], coordinates[1]] as LatLngExpression}
         id={idName} 
-        zoom={zoomLevel}
+        zoom={event.approximateRealLocation ? 13 : 7}
         zoomControl={false}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           {event.approximateRealLocation && createMarkerElement(event)}

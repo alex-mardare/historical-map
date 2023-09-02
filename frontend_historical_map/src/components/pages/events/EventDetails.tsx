@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import EventCreateForm from './EventModalForm';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
-import { antCardHeader } from '../../partials/antdCardHeader';
+import { antCardHeaderEvent } from '../../partials/antdCardHeader';
 import { createSinglePointMapContainer } from '../../partials/leafletMapPartials';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
@@ -30,20 +30,22 @@ export default function EventDetails(){
 
   //#region DISPLAY FUNCTIONALITY
   const displayCoordinates = (event: HistoricalEvent | null) => {
-    if (event?.approximateRealLocation)
-    {
+    if (event?.approximateRealLocation) {
       return displayLatitudeDMS(event.latitude * 1) + displayLongitudeDMS(event.longitude * 1)
+    }
+    else {
+      return <i>Currently no exact location.</i>
     }
   }
 
   const displayMap = (event: HistoricalEvent | null) => {
     if (event) {
-      return (createSinglePointMapContainer(coordinates, event, 'eventDetailsMap', 13));
+      return (createSinglePointMapContainer(coordinates, event, 'eventDetailsMap'));
     }
   }
 
-  const displayTitleSection = (eventName: string | undefined) => {
-    return antCardHeader(eventName, handleGoBack);
+  const displayTitleSection = (event: HistoricalEvent | null) => {
+    return antCardHeaderEvent(event, handleGoBack);
   }
   //#endregion
 
@@ -86,7 +88,7 @@ export default function EventDetails(){
       <Card 
         actions={[<EditOutlined key='edit' onClick={handleEditEvent} />]} 
         loading={event == null} 
-        title={displayTitleSection(event?.name)}>
+        title={displayTitleSection(event)}>
           <p><b>Description:</b> {event?.description}</p>
           <p><b>Date & Local Time:</b> {event?.date} {event?.time?.toString()}</p>
           <p><b>Real Location:</b> {displayBooleanValues(event?.approximateRealLocation)}</p>
