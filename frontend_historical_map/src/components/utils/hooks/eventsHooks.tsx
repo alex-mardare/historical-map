@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 
 import { DEV_API_EVENTS_APP_BASE_URL } from '../../models/constants/urls';
-import { eventCreationError, eventCreationSuccess, eventEditError, eventEditSuccess, eventLoadingError, eventsLoadingError } from '../../partials/notifications';
+import { eventCreationError, eventCreationSuccess, eventDeletionError, eventDeletionSuccess, eventEditError, eventEditSuccess, eventLoadingError, eventsLoadingError } from '../../partials/notifications';
 import { DataCreateUpdate, DataGetEvents } from '../../models/types/hooksDataTypes';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { returnMapCoordinatesByPresentCountryName } from '../../partials/leafletMapPartials';
@@ -27,6 +27,16 @@ export function useEventCoordinates(event: HistoricalEvent | null) {
     }, [event]);
 
     return coordinates;
+}
+
+export async function eventDelete(event: HistoricalEvent | null) {
+    try {
+        await axios.delete(DEV_API_EVENTS_APP_BASE_URL + event?.id);
+        eventDeletionSuccess(event?.name);
+    }
+    catch(error) {
+        eventDeletionError(event?.name);
+    }
 }
 
 export function useEventPost<T>(): DataCreateUpdate<T> {

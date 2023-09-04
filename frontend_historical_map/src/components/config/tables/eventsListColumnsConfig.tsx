@@ -146,7 +146,6 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
                     Details
                 </Button>
             )
-        },
-        title: 'Details'
+        }
     }
 ]

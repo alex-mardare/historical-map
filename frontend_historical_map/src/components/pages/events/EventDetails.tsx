@@ -1,4 +1,4 @@
-import { EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Card, Form, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
@@ -10,14 +10,16 @@ import { antCardHeaderEvent } from '../../partials/antdCardHeader';
 import { createSinglePointMapContainer } from '../../partials/leafletMapPartials';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
-import { useEventCoordinates, useEventPut, useFetchEvent } from '../../utils/hooks/eventsHooks';
+import { eventDelete, useEventCoordinates, useEventPut, useFetchEvent } from '../../utils/hooks/eventsHooks';
 
 import '../../../assets/styling/events/eventDetails.css';
 
 
 export default function EventDetails(){
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
+  const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const [form] = Form.useForm();
   const { submitData } = useEventPut();
@@ -49,32 +51,62 @@ export default function EventDetails(){
   }
   //#endregion
 
-
-  //#region HANDLERS
-  const handleCancel = () => {
-    setOpen(false);
-  }
-
-  const handleEditEvent = () => {
-    setOpen(true);
-  }
-
+  //#region HANDLERS PAGE
   const handleGoBack = () => {
     navigate(-1);
   }
+  //#endregion
 
-  const handleOk = () => {
-    setConfirmLoading(true);
+
+  //#region HANDLERS DELETE
+  const handleCancelDelete = () => {
+    setOpenDelete(false);  
+  }
+
+  const handleEventDelete = () => {
+    setOpenDelete(true);
+  }
+
+  const handleOkDelete = () => {
+    try {
+      setConfirmLoadingDelete(true);
+      eventDelete(event);
+      setOpenDelete(false);
+
+      setTimeout(() => {
+        handleGoBack();
+      }, 1250);
+    }
+    catch(error) {
+      setConfirmLoadingDelete(false);
+      setOpenDelete(true);
+      console.log(error);
+    }
+    
+  }
+  //#endregion
+
+  //#region HANDLERS EDIT
+  const handleCancelEdit = () => {
+    setOpenEdit(false);
+  }
+
+  const handleEventEdit = () => {
+    setOpenEdit(true);
+  }
+
+  const handleOkEdit = () => {
+    setConfirmLoadingEdit(true);
     form.validateFields()
       .then((values) => {
         form.resetFields();
-        onFinish(values);
+        onFinishEdit(values);
       })
   }
 
-  const onFinish = async (values: any) => {
+  const onFinishEdit = async (values: any) => {
     try {
-      await submitData(values, setConfirmLoading, setOpen);
+      await submitData(values, setConfirmLoadingEdit, setOpenEdit);
       window.location.reload()
     }
     catch(error) {
@@ -86,7 +118,10 @@ export default function EventDetails(){
   return(
     <>
       <Card 
-        actions={[<EditOutlined key='edit' onClick={handleEditEvent} />]} 
+        actions={[
+          <EditOutlined key='edit' onClick={handleEventEdit} />,
+          <DeleteOutlined key='delete' onClick={handleEventDelete} />
+        ]} 
         loading={event == null} 
         title={displayTitleSection(event)}>
           <p><b>Description:</b> {event?.description}</p>
@@ -101,14 +136,25 @@ export default function EventDetails(){
         {displayMap(event)}
       </div>
       <Modal
-        confirmLoading={confirmLoading}
+        confirmLoading={confirmLoadingEdit}
         okText='Save'
-        onCancel={handleCancel}
-        onOk={handleOk}
-        open={open}
-        title='Edit Historical Event'
+        onCancel={handleCancelEdit}
+        onOk={handleOkEdit}
+        open={openEdit}
+        title='Edit Event'
       >
-        <EventCreateForm event={event} form={form} onFinish={onFinish} />
+        <EventCreateForm event={event} form={form} onFinish={onFinishEdit} />
+      </Modal>
+      <Modal
+        confirmLoading={confirmLoadingDelete}
+        okButtonProps={{danger:true}}
+        okText='Delete'
+        onCancel={handleCancelDelete}
+        onOk={handleOkDelete}
+        open={openDelete}
+        title='Delete Event'
+      >
+        <h2>Are you sure you want to remove this historical event?</h2>
       </Modal>
     </>
   )

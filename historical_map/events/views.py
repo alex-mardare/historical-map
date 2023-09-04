@@ -29,13 +29,13 @@ class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventSerializer
 
-class HistoricalEventRetrieveUpdate(generics.RetrieveUpdateAPIView):
+class HistoricalEventRetrieveUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalEvent.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return HistoricalEventRetrieveSerializer
-        elif self.request.method in ['PATCH', 'PUT']:
+        elif self.request.method in ['DELETE', 'PATCH', 'PUT']:
             return HistoricalEventSerializer
         return super().get_serializer_class()
 #endregion

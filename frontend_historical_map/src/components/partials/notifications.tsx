@@ -14,6 +14,20 @@ export const eventCreationSuccess = (title: string) => {
     });
 }
 
+export const eventDeletionError = (title: string | undefined) => {
+    notification.error({
+        description: 'There was an issue deleting ' + title + ' historical event.',
+        message: 'Problems deleting the event.'
+    });
+}
+
+export const eventDeletionSuccess = (title: string | undefined) => {
+    notification.success({
+        description: 'Event ' + title + ' was deleted successfully.',
+        message: 'Event deleted.'
+    });
+}
+
 export const eventEditError = (title: string) => {
     notification.error({
         description: 'There was an issue editing ' + title + ' historical event.',
