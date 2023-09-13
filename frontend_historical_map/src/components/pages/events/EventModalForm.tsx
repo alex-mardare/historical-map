@@ -79,7 +79,7 @@ export default function EventModalForm(props:EventCreateFormProps)
             <Form.Item initialValue={props.event?.date} label='Date' name='date' rules={[{ required: true }, { validator: dateFieldValidator}]}>
                 <Input />
             </Form.Item>
-            <Form.Item initialValue={dayjs(props.event?.time, 'HH:mm:ss')} label='Time' name='time'>
+            <Form.Item initialValue={props.event?.time ? dayjs(props.event?.time, 'HH:mm:ss') : null} label='Time' name='time'>
                 <TimePicker format={TIME_FORMAT} />
             </Form.Item>
             <Form.Item initialValue={props.event?.latitude} label='Latitude' name='latitude'>

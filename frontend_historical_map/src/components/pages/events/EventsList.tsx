@@ -49,9 +49,9 @@ export default function EventsList(props:EventsListProps) {
   }
 
   const handleOk = () => {
-    setConfirmLoading(true);
     form.validateFields()
       .then((values) => {
+        setConfirmLoading(true);
         form.resetFields();
         onFinish(values);
       })
