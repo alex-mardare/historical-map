@@ -133,7 +133,7 @@ export function useFetchEvents(): DataGetEvents<HistoricalEvent> {
     const fetchEvents = async () => {
         try {
             const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL);
-            setEvents(response.data);
+            setEvents(response.data.results);
         } catch (error) {
             eventsLoadingError();
         }
