@@ -16,7 +16,7 @@ class EventCategorySerializer(serializers.ModelSerializer):
 class PresentCountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'code', 'flagUrl']
 #endregion
 
 
@@ -24,7 +24,7 @@ class PresentCountrySerializer(serializers.ModelSerializer):
 class HistoricalStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState
-        fields = ['id', 'dateFrom', 'dateTo', 'name']
+        fields = ['id', 'dateFrom', 'dateTo', 'name', 'flagUrl']
 #endregion
 
 

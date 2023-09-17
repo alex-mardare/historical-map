@@ -22,6 +22,7 @@ class HistoricalState(models.Model):
     dateTo = models.CharField(max_length=15, blank=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+    flagUrl = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         displayName = self.name
@@ -38,6 +39,7 @@ class PresentCountry(models.Model):
     code = models.CharField(max_length=5)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+    flagUrl = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.name
