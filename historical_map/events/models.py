@@ -23,6 +23,7 @@ class HistoricalState(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
     flagUrl = models.CharField(max_length=255, blank=True)
+    presentCountries = models.ManyToManyField('events.PresentCountry', related_name='presentCountries')
 
     def __str__(self):
         displayName = self.name

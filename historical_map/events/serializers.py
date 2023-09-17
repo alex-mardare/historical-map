@@ -22,9 +22,11 @@ class PresentCountrySerializer(serializers.ModelSerializer):
 
 #region HISTORICAL STATE SERIALIZERS
 class HistoricalStateSerializer(serializers.ModelSerializer):
+    presentCountries = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = HistoricalState
-        fields = ['id', 'dateFrom', 'dateTo', 'name', 'flagUrl']
+        fields = ['id', 'dateFrom', 'dateTo', 'name', 'flagUrl', 'presentCountries']
 #endregion
 
 
