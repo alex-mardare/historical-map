@@ -3,7 +3,7 @@ import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { EVENTS_LIST_URL } from '../models/constants/urls';
+import { EVENTS_LIST_AREA, FIGURES_LIST_AREA } from '../models/constants/urls';
 
 
 //#region EVENTS MENU
@@ -16,12 +16,16 @@ export const EventsMenuSubItemMap = () => (
 )
 
 export const EventsMenuSubItemList = () => (
-    <Link to={EVENTS_LIST_URL} />
+    <Link to={EVENTS_LIST_AREA} />
 )
 //#endregion
 
 //#region FIGURES MENU
 export const FiguresMenuItem = (props: Partial<CustomIconComponentProps>) => (
     <Icon component={() => <img src={`${process.env.PUBLIC_URL}/figures.png`} alt='Historical figures menu item'/>} {...props} />
+)
+
+export const FiguresMenuSubItemList = () => (
+    <Link to={FIGURES_LIST_AREA} />
 )
 //#endregion

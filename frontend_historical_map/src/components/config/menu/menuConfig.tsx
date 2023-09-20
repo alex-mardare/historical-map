@@ -1,7 +1,7 @@
 import type { MenuProps } from 'antd';
 import React from 'react';
 
-import { EventsMenuItem, EventsMenuSubItemList, EventsMenuSubItemMap, FiguresMenuItem } from '../../partials/menuItems';
+import { EventsMenuItem, EventsMenuSubItemList, EventsMenuSubItemMap, FiguresMenuItem, FiguresMenuSubItemList } from '../../partials/menuItems';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -24,5 +24,7 @@ export const menuItems: MenuItem[] = [
     getItem('Map', '1.1', <EventsMenuSubItemMap />),
     getItem('Events List', '1.2', <EventsMenuSubItemList />)
   ]),
-  getItem('Historical Figures', '2', <FiguresMenuItem />)
+  getItem('Historical Figures', '2', <FiguresMenuItem />, [
+    getItem('Figures List', '2.1', <FiguresMenuSubItemList />),
+  ])
 ];
