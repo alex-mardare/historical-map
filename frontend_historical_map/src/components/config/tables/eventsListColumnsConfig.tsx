@@ -2,10 +2,12 @@ import { Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
+import { dateColumnSort } from './dateColumnSort';
 import { EVENTS_LIST_AREA } from '../../models/constants/urls';
+import { HistoricalDateObject } from '../../models/types/historicalDateObject';
+import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
-import { HistoricalEvent } from '../../models/types/historicalEvent';
 
 
 export const columnsConfig : ColumnsType<HistoricalEvent> = [
@@ -27,9 +29,18 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         title: 'Name',
     },
     {
-        dataIndex: 'date',
-        key: 'date',
+        dataIndex: 'dateTime',
+        key: 'dateTime',
         sortDirections: ['ascend', 'descend', 'ascend'],
+        render(text, event) {
+          return (
+            <div>
+              {event.date}
+              <br/>
+              {event.time !== null ? event.time.toString() : ""}
+            </div>
+          )
+        },
         sorter: (a, b) => {
             // For negative dates the order is reversed
             const firstDateArr = a.date[0] === '-' ? a.date.substring(1).split('-') : a.date.split('-');
@@ -37,89 +48,32 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
             const firstDate = new Date(Number(firstDateArr[0]), Number(firstDateArr[1]) - 1, Number(firstDateArr[2]));
             const secondDate = new Date(Number(secondDateArr[0]), Number(secondDateArr[1]) - 1, Number(secondDateArr[2]));
 
-            if (a.date[0] === '-') {
-                if (b.date[0] !== '-') {
-                    return -1;
-                }
-                else {
-                    if (firstDate > secondDate) {
-                        return -1;
-                    }
-                    else if (firstDate < secondDate) {
-                        return 1;
-                    }
-                    else {
-                        if (a.time === null) {
-                            return b.time === null ? 0 : 1;
-                        }
-                        else {
-                            if (b.time === null) {
-                                return -1;
-                            }
-                            else {
-                                if (a.time > b.time) {
-                                    return -1;
-                                }
-                                else if (a.time < b.time) {
-                                    return 1;
-                                }
-                                return 0;
-                            }
-                        }
-                    }
-                }
+            const firstDateObject: HistoricalDateObject = {
+                date: a.date,
+                time: null
             }
-            else {
-                if (b.date[0] === '-') {
-                    return 1;
-                }
-                else {
-                    if (firstDate > secondDate) {
-                        return 1;
-                    }
-                    else if (firstDate < secondDate) {
-                        return -1;
-                    }
-                    else {
-                        if (a.time === null) {
-                            return b.time === null ? 0 : -1;
-                        }
-                        else {
-                            if (b.time === null) {
-                                return 1;
-                            }
-                            else {
-                                if (a.time > b.time) {
-                                    return 1;
-                                }
-                                else if (a.time < b.time) {
-                                    return -1;
-                                }
-                                return 0;
-                            }
-                        }
-                    }
-                }
+            const secondDateObject: HistoricalDateObject = {
+                date: b.date,
+                time: null
             }
+
+            return dateColumnSort(firstDateObject, secondDateObject, firstDate, secondDate);
         },
-        title: 'Date'
+        title: 'Date & Local Time'
     },
     {
-        dataIndex: 'time',
-        key: 'time', 
-        title: 'Local Time'
-    },
-    {
-        dataIndex: 'latitude',
-        key: 'latitude', 
-        render: (value) => displayLatitudeDMS(value),
-        title: 'Latitude'
-    },
-    {
-        dataIndex: 'longitude',
-        key: 'longitude', 
-        render: (value) => displayLongitudeDMS(value),
-        title: 'Longitude'
+        dataIndex: 'coordinates',
+        key: 'coordinates', 
+        render(text, event) {
+            return (
+              <div>
+                {displayLongitudeDMS(event.latitude)}
+                <br/>
+                {displayLongitudeDMS(event.longitude)}
+              </div>
+            )
+          },
+        title: 'Coordinates'
     },
     {
         dataIndex: 'approximateRealLocation',

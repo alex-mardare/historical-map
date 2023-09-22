@@ -37,12 +37,6 @@ export default function EventsList(props:EventsListProps) {
     })
   });
 
-//#region SEARCH BAR
-  const handleSearch = (value:string) => {
-    setSearchText(value);
-  };
-//#endregion
-
 //#region MODAL
   const handleCancel = () => {
     setOpen(false);
@@ -70,6 +64,12 @@ export default function EventsList(props:EventsListProps) {
   const showModal = () => {
     setOpen(true);
   }
+//#endregion
+
+//#region SEARCH BAR
+  const handleSearch = (value:string) => {
+    setSearchText(value);
+  };
 //#endregion
 
   return(
