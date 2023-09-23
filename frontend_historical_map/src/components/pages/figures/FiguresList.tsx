@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import FiguresCreateForm from './FiguresCreateForm';
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig';
 import { useFetchFigures } from '../../utils/hooks/figuresHooks';
-import { HistoricalState } from '../../models/types/historicalState';
 
 
 const { Search } = Input;
