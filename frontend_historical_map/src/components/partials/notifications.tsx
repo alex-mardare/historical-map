@@ -58,6 +58,14 @@ export const eventsLoadingError = () => {
 }
 //#endregion
 
+//#region HISTORICAL FIGURES NOTIFICATIONS
+export const figureLoadingError = () => {
+    notification.error({
+        description: 'There was an issue loading the list of historical figures.',
+        message: 'Problems loading the data.'
+    });
+}
+//#endregion
 export const eventCategoriesLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the list of event categories.',

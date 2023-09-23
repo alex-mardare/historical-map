@@ -17,6 +17,11 @@ class PresentCountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
         fields = ['id', 'name', 'code', 'flagUrl']
+
+class PresentCountryPropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PresentCountry
+        fields = ['name']
 #endregion
 
 
@@ -27,6 +32,11 @@ class HistoricalStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState
         fields = ['id', 'dateFrom', 'dateTo', 'name', 'flagUrl', 'presentCountries']
+
+class HistoricalStatePropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalState
+        fields = ['name']
 #endregion
 
 
@@ -49,8 +59,8 @@ class HistoricalEventSerializer(serializers.ModelSerializer):
         
 class HistoricalEventRetrieveSerializer(serializers.ModelSerializer):
     eventCategory = EventCategorySerializer(many=False, source='eventCategoryId')
-    presentCountry = PresentCountrySerializer(many=False, source='presentCountryId')
-    historicalState = HistoricalStateSerializer(many=False, source='historicalStateId')
+    historicalState = HistoricalStatePropertySerializer(many=False, source='historicalStateId')
+    presentCountry = PresentCountryPropertySerializer(many=False, source='presentCountryId')
 
     class Meta:
         model = HistoricalEvent
@@ -65,9 +75,12 @@ class HistoricalEventLinksSerializer(serializers.ModelSerializer):
 
 #region HISTORICAL FIGURE SERIALIZERS
 class HistoricalFigureSerializer(serializers.ModelSerializer):
+    birthHistoricalState = HistoricalStatePropertySerializer(many=False, source='birthHistoricalStateId')
+    presentCountry = PresentCountryPropertySerializer(many=False, source='presentCountryId')
+
     class Meta:
         model = HistoricalFigure
-        fields = '__all__'
+        fields = ['id', 'name', 'birthDate', 'deathDate', 'birthHistoricalState', 'presentCountry']
 
 class HistoricalFigureLinksSerializer(serializers.ModelSerializer):
     class Meta:

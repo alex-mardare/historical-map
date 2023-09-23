@@ -14,3 +14,7 @@ export type DataGetEvents<HistoricalEvent> = {
   refreshFunction: () => void;
 };
 
+export type DataGetFigures<HistoricalFigure> = {
+  figures: HistoricalFigure[] | null;
+  refreshFunction: () => void;
+}
