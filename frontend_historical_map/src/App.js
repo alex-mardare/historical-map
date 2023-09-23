@@ -17,7 +17,7 @@ const { Content, Sider } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
-  const { events, refreshEvents } = useFetchEvents();
+  const { events, refreshFunction } = useFetchEvents();
 
   return (
     <Router>
@@ -29,7 +29,7 @@ function App() {
           <Content>
             <Routes>
               <Route element={<Home {...{events}} />} path="/" />
-              <Route element={<EventsList events={events} onRefreshEvents={refreshEvents} />} path={EVENTS_LIST_AREA} />
+              <Route element={<EventsList events={events} onRefreshEvents={refreshFunction} />} path={EVENTS_LIST_AREA} />
               <Route element={<EventDetails />} path={EVENTS_LIST_AREA + "/:eventId"} />
               <Route element={<FiguresList />} path={FIGURES_LIST_AREA} />
             </Routes>

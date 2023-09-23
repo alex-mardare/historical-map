@@ -145,6 +145,6 @@ export function useFetchEvents(): DataGetEvents<HistoricalEvent> {
 
     return {
         events,
-        refreshEvents: fetchEvents,
+        refreshFunction: fetchEvents,
     };
 }

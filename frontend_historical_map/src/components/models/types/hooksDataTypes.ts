@@ -11,5 +11,6 @@ export type DataCreateUpdate<T> = {
 
 export type DataGetEvents<HistoricalEvent> = {
   events: HistoricalEvent[] | null;
-  refreshEvents: () => void;
+  refreshFunction: () => void;
 };
+

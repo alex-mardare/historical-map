@@ -1,5 +1,6 @@
 import { notification } from 'antd';
 
+//#region HISTORICAL EVENTS NOTIFICATIONS
 export const eventCreationError = () => {
     notification.error({
         description: 'There was an issue creating the historical event.',
@@ -52,9 +53,10 @@ export const eventLoadingError = () => {
 export const eventsLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the list of historical events.',
-        message: 'Problems loading the data.'
+        message: 'Problems loading the events.'
     });
 }
+//#endregion
 
 export const eventCategoriesLoadingError = () => {
     notification.error({
