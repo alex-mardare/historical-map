@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 
-import EventCreateForm from './EventModalForm';
+import EventModalForm from './EventModalForm';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { antCardHeaderEvent } from '../../partials/antdCardHeader';
 import { createSinglePointMapContainer } from '../../partials/leafletMapPartials';
@@ -143,7 +143,7 @@ export default function EventDetails(){
         open={openEdit}
         title='Edit Event'
       >
-        <EventCreateForm event={event} form={form} onFinish={onFinishEdit} />
+        <EventModalForm event={event} form={form} onFinish={onFinishEdit} />
       </Modal>
       <Modal
         confirmLoading={confirmLoadingDelete}
