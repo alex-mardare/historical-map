@@ -59,6 +59,20 @@ export const eventsLoadingError = () => {
 //#endregion
 
 //#region HISTORICAL FIGURES NOTIFICATIONS
+export const figureCreationError = () => {
+    notification.error({
+        description: 'There was an issue creating the historical figure.',
+        message: 'Problems creating the figure.'
+    });
+}
+
+export const figureCreationSuccess = (title: string) => {
+    notification.success({
+        description: 'Figure ' + title + ' was created successfully.',
+        message: 'Figure created.'
+    });
+}
+
 export const figureLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the list of historical figures.',
@@ -66,6 +80,7 @@ export const figureLoadingError = () => {
     });
 }
 //#endregion
+
 export const eventCategoriesLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the list of event categories.',

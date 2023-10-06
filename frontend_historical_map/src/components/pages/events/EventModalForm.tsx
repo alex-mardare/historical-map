@@ -4,17 +4,14 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
-import { DATE_FORMAT, TIME_FORMAT } from '../../models/constants/constants';
+import { TIME_FORMAT } from '../../models/constants/constants';
 import { DEV_API_EVENTS_APP_BASE_URL, 
-    EVENTS_APP_EVENT_CATEGORIES_ENDPOINT, 
-    EVENTS_APP_HISTORICAL_STATES_ENDPOINT, 
-    EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../../models/constants/urls';
+    EVENTS_APP_EVENT_CATEGORIES_ENDPOINT } from '../../models/constants/urls';
 import { EventCategories } from '../../models/types/eventCategory';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
-import { HistoricalStateOptions } from '../../models/types/historicalState';
-import { PresentCountries } from '../../models/types/presentCountry';
-import { eventCategoriesLoadingError, historicalStatesLoadingError, presentCountriesLoadingError } from '../../partials/notifications';
-import { transformHistoricalStatesForSelector } from '../../utils/selectors/eventCategorySelector';
+import { eventCategoriesLoadingError } from '../../partials/notifications';
+import { useFetchHistoricalStates, useFetchPresentCountries } from '../../utils/hooks/countriesHooks';
+import { dateFieldValidator } from '../../utils/validators/dateValidator';
 
 
 type EventCreateFormProps = {
@@ -25,30 +22,16 @@ type EventCreateFormProps = {
 
 export default function EventModalForm(props:EventCreateFormProps)
 {
+    const { historicalStates } = useFetchHistoricalStates();
+    const { presentCountries } = useFetchPresentCountries();
+
     const [eventCategories, setEventCategories] = useState<EventCategories>([])
-    const [presentCountries, setPresentCountries] = useState<PresentCountries>([])
-    const [historicalStates, setHistoricalStates] = useState<HistoricalStateOptions>([])
 
     useEffect(() => {
         axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_EVENT_CATEGORIES_ENDPOINT)
             .then(res => setEventCategories(res.data))
             .catch(() => eventCategoriesLoadingError());
-
-        axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_HISTORICAL_STATES_ENDPOINT)
-            .then(res => setHistoricalStates(transformHistoricalStatesForSelector(res.data)))
-            .catch(() => historicalStatesLoadingError())
-
-        axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT)
-            .then(res => setPresentCountries(res.data))
-            .catch(() => presentCountriesLoadingError())
     }, []);
-
-    const dateFieldValidator = async (rule: any, value: string) => {
-        if (!DATE_FORMAT.test(value)) {
-            return Promise.reject('The date must have one of the following formats: YYYY, YYYY-MM, YYYY-MM-DD. Negative years are allowed.');
-        }
-        return Promise.resolve();
-    }
 
     const displayIdFormItem = (event: HistoricalEvent | null) => {
         if (event !== null) {

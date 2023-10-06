@@ -53,9 +53,9 @@ class PresentCountry(models.Model):
 class HistoricalFigure(models.Model):
     name = models.CharField(max_length=255)
     birthHistoricalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE)
-    presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
+    birthPresentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
     birthDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
-    deathDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    deathDate = models.CharField(blank=True, max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 

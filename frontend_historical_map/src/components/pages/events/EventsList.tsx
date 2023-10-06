@@ -49,6 +49,10 @@ export default function EventsList(props:EventsListProps) {
         form.resetFields();
         onFinish(values);
       })
+      .catch((error) => {
+        console.log('There was an issue submitting the historical event form.');
+        console.log(error.errorFields);
+    })
   }
 
   const onFinish = async (values: any) => {

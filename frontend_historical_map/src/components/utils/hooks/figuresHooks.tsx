@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 
 import { DEV_API_EVENTS_APP_BASE_URL, EVENTS_APP_HISTORICAL_FIGURES_ENDPOINT } from '../../models/constants/urls';
-import { DataGetFigures } from '../../models/types/hooksDataTypes';
-import { figureLoadingError } from '../../partials/notifications';
 import { HistoricalFigure } from '../../models/types/historicalFigure';
+import { DataCreateUpdate, DataGetFigures } from '../../models/types/hooksDataTypes';
+import { figureCreationError, figureCreationSuccess, figureLoadingError } from '../../partials/notifications';
 
 
 export function useFetchFigures(): DataGetFigures<HistoricalFigure> {
@@ -28,3 +28,36 @@ export function useFetchFigures(): DataGetFigures<HistoricalFigure> {
         refreshFunction: fetchFigures,
     };
 }
+
+
+export function useFigurePost<T>(): DataCreateUpdate<T> {
+    const [error, setError] = useState<AxiosError | null>(null);
+
+    const submitData = async (
+        formData: any,
+        setConfirmLoading: (loading: boolean) => void,
+        setOpen: (open: boolean) => void
+      ): Promise<any> => {
+        setError(null);
+
+        try {
+            setConfirmLoading(true);
+            const response = await axios.post(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_HISTORICAL_FIGURES_ENDPOINT, formData);
+
+            setConfirmLoading(false);
+            setOpen(false);
+
+            figureCreationSuccess(formData.name);
+            return response.data;
+        } catch (error) {
+            setConfirmLoading(false);
+            setOpen(true);
+
+            setError(error as AxiosError<any>);
+            figureCreationError();
+            throw error;
+        }
+    }
+
+    return { submitData, error };
+};

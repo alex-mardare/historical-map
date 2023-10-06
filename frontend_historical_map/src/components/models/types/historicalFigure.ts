@@ -4,9 +4,8 @@ import { PresentCountry } from "./presentCountry";
 export interface HistoricalFigure {
     birthDate: string,
     birthHistoricalState: HistoricalState,
+    birthPresentCountry: PresentCountry
     deathDate: string,
-    description: string,
     id: number,
-    name: string,
-    presentCountry: PresentCountry
+    name: string
 }

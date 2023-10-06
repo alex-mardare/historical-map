@@ -1,10 +1,12 @@
 from rest_framework import generics
 
 from .models import EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
+from .paginations import NoPagination
 from .serializers import *
 
 #region EVENT CATEGORY ENDPOINTS
 class EventCategoryList(generics.ListAPIView):
+    pagination_class = NoPagination
     queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
 #endregion
@@ -23,6 +25,7 @@ class EventFigureRoleList(generics.ListAPIView):
     queryset = EventFigureRole.objects.all()
     serializer_class = EventFigureRoleListSerializer
 #endregion
+
 
 #region HISTORICAL EVENT ENDPOINTS
 class HistoricalEventList(generics.ListCreateAPIView):
@@ -49,6 +52,11 @@ class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
 class HistoricalFigureList(generics.ListCreateAPIView):
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return HistoricalFigureCreateSerializer
+        return super().get_serializer_class()
 #endregion
 
 
@@ -69,6 +77,7 @@ class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HistoricalStateSerializer
     
 class HistoricalStateList(generics.ListCreateAPIView):
+    pagination_class = NoPagination
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateSerializer
 #endregion
@@ -76,6 +85,7 @@ class HistoricalStateList(generics.ListCreateAPIView):
 
 #region PRESENT COUNTRY ENDPOINTS
 class PresentCountryList(generics.ListAPIView):
+    pagination_class = NoPagination
     queryset = PresentCountry.objects.all()
     serializer_class = PresentCountrySerializer
 #endregion

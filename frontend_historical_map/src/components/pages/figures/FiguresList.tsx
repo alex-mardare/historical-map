@@ -1,9 +1,9 @@
 import { Button, Form, Input, Modal, Table } from 'antd';
 import React, { useState } from 'react';
 
-import FiguresCreateForm from './FiguresCreateForm';
+import FiguresModalForm from './FiguresModalForm';
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig';
-import { useFetchFigures } from '../../utils/hooks/figuresHooks';
+import { useFetchFigures, useFigurePost } from '../../utils/hooks/figuresHooks';
 
 
 const { Search } = Input;
@@ -15,6 +15,7 @@ export default function FiguresList() {
 
     const { figures, refreshFunction } = useFetchFigures();
     const [form] = Form.useForm();
+    const { submitData } = useFigurePost();
 
     let filteredFigures = figures?.filter((figure) => {
         return Object.values(figure).some((value) => {
@@ -40,12 +41,16 @@ export default function FiguresList() {
                 form.resetFields();
                 onFinish(values);
             })
+            .catch((error) => {
+                console.log('There was an issue submitting the historical figure form.');
+                console.log(error.errorFields);
+            })
     }
 
     const onFinish = async (values: any) => {
         try {
-            //await submitData(values, setConfirmLoading, setOpen);
-            //onRefreshFigures();
+            await submitData(values, setConfirmLoading, setOpen);
+            refreshFunction();
         }
         catch(error) {
             console.log(error);
@@ -80,9 +85,9 @@ export default function FiguresList() {
               onCancel={handleCancel}
               onOk={handleOk}
               open={open}
-              title='Create Historical Figure'
+              title="Create Historical Figure"
             >
-              <FiguresCreateForm />
+              <FiguresModalForm figure={null} form={form} onFinish={onFinish} />
             </Modal>
           </div>
           <div className='tableContainer'>

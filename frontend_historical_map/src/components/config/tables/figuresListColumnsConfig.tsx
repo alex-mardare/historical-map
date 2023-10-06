@@ -93,13 +93,13 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         dataIndex: 'birthPresentCountry',
         defaultSortOrder: 'ascend',
         key: 'birthPresentCountry',
-        render: (text, historicalFigure) => historicalFigure.presentCountry.name,
+        render: (text, historicalFigure) => historicalFigure.birthPresentCountry.name,
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => {
-            if (a.presentCountry.name > b.presentCountry.name) {
+            if (a.birthPresentCountry.name > b.birthPresentCountry.name) {
                 return 1;
             }
-            else if (a.presentCountry.name < b.presentCountry.name) {
+            else if (a.birthPresentCountry.name < b.birthPresentCountry.name) {
                 return -1;
             }
             return 0;
