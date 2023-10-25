@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import FiguresModalForm from './FiguresModalForm';
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig';
-import { useFetchFigures, useFigurePost } from '../../utils/hooks/figuresHooks';
+import { useFiguresGet, useFigurePost } from '../../utils/hooks/figuresHooks';
 
 
 const { Search } = Input;
@@ -13,7 +13,7 @@ export default function FiguresList() {
     const [open, setOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
 
-    const { figures, refreshFunction } = useFetchFigures();
+    const { figures, refreshFunction } = useFiguresGet();
     const [form] = Form.useForm();
     const { submitData } = useFigurePost();
 

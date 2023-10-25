@@ -39,6 +39,48 @@ export async function eventDelete(event: HistoricalEvent | null) {
     }
 }
 
+export function useEventGet(eventId: string | undefined): HistoricalEvent | null {
+    const [event, setEvent] = useState(null)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL + eventId);
+                setEvent(response.data);
+            }
+            catch(error) {
+                eventLoadingError();
+            }
+        }
+
+        fetchData();
+    }, [eventId]);
+
+    return event;
+}
+
+export function useEventsGet(): DataGetEvents<HistoricalEvent> {
+    const [events, setEvents] = useState(null);
+
+    const fetchEvents = async () => {
+        try {
+            const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL);
+            setEvents(response.data.results);
+        } catch (error) {
+            eventsLoadingError();
+        }
+    };
+
+    useEffect(() => {
+        fetchEvents();
+    }, []);
+
+    return {
+        events,
+        refreshFunction: fetchEvents,
+    };
+}
+
 export function useEventPost<T>(): DataCreateUpdate<T> {
     const [error, setError] = useState<AxiosError | null>(null);
 
@@ -106,45 +148,3 @@ export function useEventPut<T>(): DataCreateUpdate<T> {
 
     return { submitData, error };
 };
-
-export function useFetchEvent(eventId: string | undefined): HistoricalEvent | null {
-    const [event, setEvent] = useState(null)
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL + eventId);
-                setEvent(response.data);
-            }
-            catch(error) {
-                eventLoadingError();
-            }
-        }
-
-        fetchData();
-    }, [eventId]);
-
-    return event;
-}
-
-export function useFetchEvents(): DataGetEvents<HistoricalEvent> {
-    const [events, setEvents] = useState(null);
-
-    const fetchEvents = async () => {
-        try {
-            const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL);
-            setEvents(response.data.results);
-        } catch (error) {
-            eventsLoadingError();
-        }
-    };
-
-    useEffect(() => {
-        fetchEvents();
-    }, []);
-
-    return {
-        events,
-        refreshFunction: fetchEvents,
-    };
-}

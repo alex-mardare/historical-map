@@ -9,7 +9,7 @@ import EventDetails from './components/pages/events/EventDetails';
 import EventsList from './components/pages/events/EventsList';
 import FigureDetails from './components/pages/figures/FigureDetails';
 import FiguresList from './components/pages/figures/FiguresList';
-import { useFetchEvents } from './components/utils/hooks/eventsHooks';
+import { useEventsGet } from './components/utils/hooks/eventsHooks';
 
 import './App.css'; 
 
@@ -18,7 +18,7 @@ const { Content, Sider } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
-  const { events, refreshFunction } = useFetchEvents();
+  const { events, refreshFunction } = useEventsGet();
 
   return (
     <Router>

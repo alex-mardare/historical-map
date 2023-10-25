@@ -7,7 +7,7 @@ import { DataCreateUpdate, DataGetFigures } from '../../models/types/hooksDataTy
 import { figureCreationError, figureCreationSuccess, figureLoadingError } from '../../partials/notifications';
 
 
-export function useFetchFigure(figureId: string | undefined): HistoricalFigure | null {
+export function useFigureGet(figureId: string | undefined): HistoricalFigure | null {
     const [figure, setFigure] = useState(null)
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export function useFetchFigure(figureId: string | undefined): HistoricalFigure |
     return figure;
 }
 
-export function useFetchFigures(): DataGetFigures<HistoricalFigure> {
+export function useFiguresGet(): DataGetFigures<HistoricalFigure> {
     const [figures, setFigures] = useState(null);
 
     const fetchFigures = async () => {

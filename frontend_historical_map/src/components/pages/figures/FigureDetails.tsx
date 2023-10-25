@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import FiguresModalForm from './FiguresModalForm';
 import { HistoricalFigure } from "../../models/types/historicalFigure";
 import { antCardHeaderFigure } from "../../partials/antdCardHeader";
-import { useFetchFigure } from '../../utils/hooks/figuresHooks';
+import { useFigureGet } from '../../utils/hooks/figuresHooks';
 
 export default function FigureDetails(){
     const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
@@ -20,7 +20,7 @@ export default function FigureDetails(){
     const navigate = useNavigate();
   
     const { figureId } = useParams();
-    let figure = useFetchFigure(figureId);  
+    let figure = useFigureGet(figureId);  
   
     //#region DISPLAY FUNCTIONALITY    
     const displayTitleSection = (figure: HistoricalFigure | null) => {

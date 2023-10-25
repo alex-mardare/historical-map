@@ -10,7 +10,7 @@ import { antCardHeaderEvent } from '../../partials/antdCardHeader';
 import { createSinglePointMapContainer } from '../../partials/leafletMapPartials';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
-import { eventDelete, useEventCoordinates, useEventPut, useFetchEvent } from '../../utils/hooks/eventsHooks';
+import { eventDelete, useEventCoordinates, useEventGet, useEventPut } from '../../utils/hooks/eventsHooks';
 
 import '../../../assets/styling/events/eventDetails.css';
 
@@ -26,7 +26,7 @@ export default function EventDetails(){
   const navigate = useNavigate();
 
   const { eventId } = useParams();
-  let event = useFetchEvent(eventId);
+  let event = useEventGet(eventId);
   const coordinates = useEventCoordinates(event);
 
 
