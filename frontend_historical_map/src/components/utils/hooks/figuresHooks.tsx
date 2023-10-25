@@ -7,6 +7,26 @@ import { DataCreateUpdate, DataGetFigures } from '../../models/types/hooksDataTy
 import { figureCreationError, figureCreationSuccess, figureLoadingError } from '../../partials/notifications';
 
 
+export function useFetchFigure(figureId: string | undefined): HistoricalFigure | null {
+    const [figure, setFigure] = useState(null)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_HISTORICAL_FIGURES_ENDPOINT + figureId);
+                setFigure(response.data);
+            }
+            catch(error) {
+                figureLoadingError();
+            }
+        }
+
+        fetchData();
+    }, [figureId]);
+
+    return figure;
+}
+
 export function useFetchFigures(): DataGetFigures<HistoricalFigure> {
     const [figures, setFigures] = useState(null);
 

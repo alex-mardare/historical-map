@@ -4,17 +4,7 @@ import React from 'react';
 
 import { EVENT_TOOLTIP_TEXT } from '../models/constants/constants';
 import { HistoricalEvent } from '../models/types/historicalEvent';
-
-
-function returnToolTip(tooltipText: string) {
-    return (
-        <Tooltip placement='right' title={tooltipText}>
-            <span style={{marginLeft: '5px'}}>
-                <InfoCircleOutlined />
-            </span>
-        </Tooltip>
-    );
-}
+import { HistoricalFigure } from '../models/types/historicalFigure';
 
 
 export function antCardHeaderEvent(event: HistoricalEvent | null, handleGoBack: () => void) {
@@ -28,5 +18,28 @@ export function antCardHeaderEvent(event: HistoricalEvent | null, handleGoBack: 
                 </h3>
             </div>
         </div>
+    );
+}
+
+export function antCardHeaderFigure(figure: HistoricalFigure | null, handleGoBack: () => void) {
+    return (
+        <div className='card-header'>
+            <Button onClick={handleGoBack} type="primary">Go Back</Button>
+            <div className='card-title-div'>
+                <h3 className='card-title-header'>
+                    {figure?.name}
+                </h3>
+            </div>
+        </div>
+    );
+}
+
+function returnToolTip(tooltipText: string) {
+    return (
+        <Tooltip placement='right' title={tooltipText}>
+            <span style={{marginLeft: '5px'}}>
+                <InfoCircleOutlined />
+            </span>
+        </Tooltip>
     );
 }
