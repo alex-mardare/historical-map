@@ -1,10 +1,11 @@
+import { Button } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React from 'react';
 
 import { dateColumnSort } from "./dateColumnSort";
-import { HistoricalFigure } from "../../models/types/historicalFigure";
 import { FIGURES_LIST_AREA } from "../../models/constants/urls";
 import { HistoricalDateObject } from "../../models/types/historicalDateObject";
+import { HistoricalFigure } from "../../models/types/historicalFigure";
 
 export const columnsConfig: ColumnsType<HistoricalFigure> = [
     {
@@ -105,5 +106,16 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
             return 0;
         },
         title: 'Birth Present Country',
+    },
+    {
+        dataIndex: 'url',
+        key: 'url',
+        render: (text, figure) => {
+            return (
+                <Button href={`${FIGURES_LIST_AREA + '/' + figure.id}`}>
+                    Details
+                </Button>
+            )
+        }
     }
 ]
