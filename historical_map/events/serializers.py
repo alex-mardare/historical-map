@@ -21,7 +21,7 @@ class PresentCountrySerializer(serializers.ModelSerializer):
 class PresentCountryPropertySerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
-        fields = ['name']
+        fields = ['id', 'name']
 #endregion
 
 
@@ -36,7 +36,7 @@ class HistoricalStateSerializer(serializers.ModelSerializer):
 class HistoricalStatePropertySerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState
-        fields = ['name']
+        fields = ['id', 'name']
 #endregion
 
 

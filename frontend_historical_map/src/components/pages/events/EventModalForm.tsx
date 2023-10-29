@@ -1,16 +1,12 @@
 import { Form, Input, InputNumber, Select, TimePicker } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import axios from 'axios';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { TIME_FORMAT } from '../../models/constants/constants';
-import { DEV_API_EVENTS_APP_BASE_URL, 
-    EVENTS_APP_EVENT_CATEGORIES_ENDPOINT } from '../../models/constants/urls';
-import { EventCategories } from '../../models/types/eventCategory';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
-import { eventCategoriesLoadingError } from '../../partials/notifications';
 import { useFetchHistoricalStates, useFetchPresentCountries } from '../../utils/hooks/countriesHooks';
+import { useFetchEventCategories } from '../../utils/hooks/eventPropertiesHooks';
 import { dateFieldValidator } from '../../utils/validators/dateValidator';
 
 
@@ -22,16 +18,9 @@ type EventCreateFormProps = {
 
 export default function EventModalForm(props:EventCreateFormProps)
 {
+    const { eventCategories } = useFetchEventCategories();
     const { historicalStates } = useFetchHistoricalStates();
     const { presentCountries } = useFetchPresentCountries();
-
-    const [eventCategories, setEventCategories] = useState<EventCategories>([])
-
-    useEffect(() => {
-        axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_EVENT_CATEGORIES_ENDPOINT)
-            .then(res => setEventCategories(res.data))
-            .catch(() => eventCategoriesLoadingError());
-    }, []);
 
     const displayIdFormItem = (event: HistoricalEvent | null) => {
         if (event !== null) {
