@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import FiguresModalForm from './FiguresModalForm';
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig';
+import { handleFormSubmission } from '../../utils/forms/formSubmission';
 import { useFiguresGet, useFigurePost } from '../../utils/hooks/figuresHooks';
 
 
@@ -35,16 +36,7 @@ export default function FiguresList() {
     }
 
     const handleOk = () => {
-        form.validateFields()
-            .then((values) => {
-                setConfirmLoading(true);
-                form.resetFields();
-                onFinish(values);
-            })
-            .catch((error) => {
-                console.log('There was an issue submitting the historical figure form.');
-                console.log(error.errorFields);
-            })
+        handleFormSubmission(form, onFinish, setConfirmLoading);
     }
 
     const onFinish = async (values: any) => {

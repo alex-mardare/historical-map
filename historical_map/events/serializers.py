@@ -74,7 +74,7 @@ class HistoricalEventLinksSerializer(serializers.ModelSerializer):
 
 
 #region HISTORICAL FIGURE SERIALIZERS
-class HistoricalFigureSerializer(serializers.ModelSerializer):
+class HistoricalFigureGetSerializer(serializers.ModelSerializer):
     birthHistoricalState = HistoricalStatePropertySerializer(many=False, source='birthHistoricalStateId')
     birthPresentCountry = PresentCountryPropertySerializer(many=False, source='birthPresentCountryId')
 
@@ -82,7 +82,7 @@ class HistoricalFigureSerializer(serializers.ModelSerializer):
         model = HistoricalFigure
         fields = ['id', 'name', 'birthDate', 'deathDate', 'birthHistoricalState', 'birthPresentCountry']
 
-class HistoricalFigureCreateSerializer(serializers.ModelSerializer):
+class HistoricalFigureSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigure
         fields = ['name', 'birthDate', 'deathDate', 'birthHistoricalStateId', 'birthPresentCountryId']

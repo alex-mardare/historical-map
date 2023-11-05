@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import EventCreateForm from './EventModalForm';
 import { columnsConfig } from '../../config/tables/eventsListColumnsConfig';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
+import { handleFormSubmission } from '../../utils/forms/formSubmission';
 import { useEventPost } from '../../utils/hooks/eventsHooks';
 
 import '../../../assets/styling/events/eventsList.css';
@@ -43,16 +44,7 @@ export default function EventsList(props:EventsListProps) {
   }
 
   const handleOk = () => {
-    form.validateFields()
-      .then((values) => {
-        setConfirmLoading(true);
-        form.resetFields();
-        onFinish(values);
-      })
-      .catch((error) => {
-        console.log('There was an issue submitting the historical event form.');
-        console.log(error.errorFields);
-    })
+    handleFormSubmission(form, onFinish, setConfirmLoading);
   }
 
   const onFinish = async (values: any) => {

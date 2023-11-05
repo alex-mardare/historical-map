@@ -28,11 +28,7 @@ class EventFigureRoleList(generics.ListAPIView):
 
 
 #region HISTORICAL EVENT ENDPOINTS
-class HistoricalEventList(generics.ListCreateAPIView):
-    queryset = HistoricalEvent.objects.all()
-    serializer_class = HistoricalEventSerializer
-
-class HistoricalEventRetrieveUpdate(generics.RetrieveUpdateDestroyAPIView):
+class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalEvent.objects.all()
 
     def get_serializer_class(self):
@@ -41,6 +37,10 @@ class HistoricalEventRetrieveUpdate(generics.RetrieveUpdateDestroyAPIView):
         elif self.request.method in ['DELETE', 'PATCH', 'PUT']:
             return HistoricalEventSerializer
         return super().get_serializer_class()
+
+class HistoricalEventList(generics.ListCreateAPIView):
+    queryset = HistoricalEvent.objects.all()
+    serializer_class = HistoricalEventSerializer
 #endregion
 
 
@@ -49,13 +49,18 @@ class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureSerializer
 
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return HistoricalFigureGetSerializer
+        return super().get_serializer_class()
+
 class HistoricalFigureList(generics.ListCreateAPIView):
     queryset = HistoricalFigure.objects.all()
-    serializer_class = HistoricalFigureSerializer
+    serializer_class = HistoricalFigureGetSerializer
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return HistoricalFigureCreateSerializer
+            return HistoricalFigureSerializer
         return super().get_serializer_class()
 #endregion
 

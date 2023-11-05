@@ -10,6 +10,7 @@ import { antCardHeaderEvent } from '../../partials/antdCardHeader';
 import { createSinglePointMapContainer } from '../../partials/leafletMapPartials';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
+import { handleFormSubmission } from '../../utils/forms/formSubmission';
 import { eventDelete, useEventCoordinates, useEventGet, useEventPut } from '../../utils/hooks/eventsHooks';
 
 import '../../../assets/styling/events/eventDetails.css';
@@ -96,12 +97,7 @@ export default function EventDetails(){
   }
 
   const handleOkEdit = () => {
-    setConfirmLoadingEdit(true);
-    form.validateFields()
-      .then((values) => {
-        form.resetFields();
-        onFinishEdit(values);
-      })
+    handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit);
   }
 
   const onFinishEdit = async (values: any) => {

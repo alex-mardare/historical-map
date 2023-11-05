@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.HistoricalEventList.as_view()),
-    path('<int:pk>', views.HistoricalEventRetrieveUpdate.as_view()),
+    path('<int:pk>', views.HistoricalEventItem.as_view()),
 
     path('event-categories/',views.EventCategoryList.as_view()),
 

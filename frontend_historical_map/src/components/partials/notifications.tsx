@@ -73,6 +73,20 @@ export const figureCreationSuccess = (title: string) => {
     });
 }
 
+export const figureEditError = (title: string) => {
+    notification.error({
+        description: 'There was an issue editing ' + title + ' historical figure.',
+        message: 'Problems editing the figure.'
+    });
+}
+
+export const figureEditSuccess = (title: string) => {
+    notification.success({
+        description: 'Figure ' + title + ' was updated successfully.',
+        message: 'Figure updated.'
+    });
+}
+
 export const figureLoadingError = () => {
     notification.error({
         description: 'There was an issue loading the list of historical figures.',

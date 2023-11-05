@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import FiguresModalForm from './FiguresModalForm';
 import { HistoricalFigure } from "../../models/types/historicalFigure";
 import { antCardHeaderFigure } from "../../partials/antdCardHeader";
-import { useFigureGet } from '../../utils/hooks/figuresHooks';
+import { handleFormSubmission } from '../../utils/forms/formSubmission';
+import { useFigureGet, useFigurePut } from '../../utils/hooks/figuresHooks';
 
 export default function FigureDetails(){
     const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
@@ -16,7 +17,7 @@ export default function FigureDetails(){
     const [openEdit, setOpenEdit] = useState(false);
 
     const [form] = Form.useForm();
-    //const { submitData } = useEventPut();
+    const { submitData } = useFigurePut();
     const navigate = useNavigate();
   
     const { figureId } = useParams();
@@ -40,7 +41,7 @@ export default function FigureDetails(){
       setOpenDelete(false);  
     }
   
-    const handleEventDelete = () => {
+    const handleFigureDelete = () => {
       setOpenDelete(true);
     }
   
@@ -68,22 +69,17 @@ export default function FigureDetails(){
       setOpenEdit(false);
     }
   
-    const handleEventEdit = () => {
+    const handleFigureEdit = () => {
       setOpenEdit(true);
     }
   
     const handleOkEdit = () => {
-      setConfirmLoadingEdit(true);
-      form.validateFields()
-        .then((values) => {
-          form.resetFields();
-          onFinishEdit(values);
-        })
+      handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit);
     }
   
     const onFinishEdit = async (values: any) => {
       try {
-        //await submitData(values, setConfirmLoadingEdit, setOpenEdit);
+        await submitData(values, setConfirmLoadingEdit, setOpenEdit);
         window.location.reload()
       }
       catch(error) {
@@ -96,8 +92,8 @@ export default function FigureDetails(){
       <>
         <Card 
           actions={[
-            <EditOutlined key='edit' onClick={handleEventEdit} />,
-            <DeleteOutlined key='delete' onClick={handleEventDelete} />
+            <EditOutlined key='edit' onClick={handleFigureEdit} />,
+            <DeleteOutlined key='delete' onClick={handleFigureDelete} />
           ]} 
           loading={figure == null} 
           title={displayTitleSection(figure)}
@@ -115,7 +111,7 @@ export default function FigureDetails(){
           open={openEdit}
           title='Edit Figure'
         >
-          <FiguresModalForm figure={null} form={form} onFinish={onFinishEdit} />
+          <FiguresModalForm figure={figure} form={form} onFinish={onFinishEdit} />
         </Modal>
         <Modal
           confirmLoading={confirmLoadingDelete}
