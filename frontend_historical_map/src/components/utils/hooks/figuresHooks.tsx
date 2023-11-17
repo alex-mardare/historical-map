@@ -4,8 +4,18 @@ import { useEffect, useState } from 'react';
 import { FIGURES_FULL_URL } from '../../models/constants/urls';
 import { HistoricalFigure } from '../../models/types/historicalFigure';
 import { DataCreateUpdate, DataGetFigures } from '../../models/types/hooksDataTypes';
-import { figureCreationError, figureCreationSuccess, figureEditError, figureEditSuccess, figureLoadingError } from '../../partials/notifications';
+import { figureCreationError, figureCreationSuccess, figureDeletionError, figureDeletionSuccess, figureEditError, figureEditSuccess, figureLoadingError } from '../../partials/notifications';
 
+
+export async function figureDelete(figure: HistoricalFigure | null) {
+    try {
+        await axios.delete(FIGURES_FULL_URL + figure?.id);
+        figureDeletionSuccess(figure?.name);
+    }
+    catch(error) {
+        figureDeletionError(figure?.name);
+    }
+}
 
 export function useFigureGet(figureId: string | undefined): HistoricalFigure | null {
     const [figure, setFigure] = useState(null)

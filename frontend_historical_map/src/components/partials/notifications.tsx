@@ -73,6 +73,20 @@ export const figureCreationSuccess = (title: string) => {
     });
 }
 
+export const figureDeletionError = (title: string | undefined) => {
+    notification.error({
+        description: 'There was an issue deleting ' + title + ' historical figure.',
+        message: 'Problems deleting the figure.'
+    });
+}
+
+export const figureDeletionSuccess = (title: string | undefined) => {
+    notification.success({
+        description: 'Figure ' + title + ' was deleted successfully.',
+        message: 'Figure deleted.'
+    });
+}
+
 export const figureEditError = (title: string) => {
     notification.error({
         description: 'There was an issue editing ' + title + ' historical figure.',

@@ -8,7 +8,7 @@ import FiguresModalForm from './FiguresModalForm';
 import { HistoricalFigure } from "../../models/types/historicalFigure";
 import { antCardHeaderFigure } from "../../partials/antdCardHeader";
 import { handleFormSubmission } from '../../utils/forms/formSubmission';
-import { useFigureGet, useFigurePut } from '../../utils/hooks/figuresHooks';
+import { figureDelete, useFigureGet, useFigurePut } from '../../utils/hooks/figuresHooks';
 
 export default function FigureDetails(){
     const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
@@ -48,7 +48,7 @@ export default function FigureDetails(){
     const handleOkDelete = () => {
       try {
         setConfirmLoadingDelete(true);
-        //eventDelete(event);
+        figureDelete(figure);
         setOpenDelete(false);
   
         setTimeout(() => {
