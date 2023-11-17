@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { DEV_API_EVENTS_APP_BASE_URL, EVENTS_APP_EVENT_CATEGORIES_ENDPOINT } from '../../models/constants/urls';
+import { EVENT_CATEGORIES_FULL_URL } from '../../models/constants/urls';
 import { EventCategories } from '../../models/types/eventCategory';
 import { eventCategoriesLoadingError } from '../../partials/notifications';
 
@@ -12,7 +12,7 @@ export const useFetchEventCategories = () => {
 
     useEffect(() => {
         setLoadingDataEventCategories(true);
-        axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_EVENT_CATEGORIES_ENDPOINT)
+        axios.get(EVENT_CATEGORIES_FULL_URL)
             .then(res => {
                 setEventCategories(res.data);
                 setLoadingDataEventCategories(false);

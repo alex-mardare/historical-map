@@ -3,7 +3,7 @@ import { ColumnsType } from "antd/es/table";
 import React from 'react';
 
 import { dateColumnSort } from "./dateColumnSort";
-import { FIGURES_LIST_AREA } from "../../models/constants/urls";
+import { HISTORICAL_FIGURES_ENDPOINT } from "../../models/constants/urls";
 import { HistoricalDateObject } from "../../models/types/historicalDateObject";
 import { HistoricalFigure } from "../../models/types/historicalFigure";
 
@@ -13,7 +13,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         defaultSortOrder: 'ascend',
         key: 'name',
         sortDirections: ['ascend', 'descend', 'ascend'],
-        render: (text, figure) => <a href={`${FIGURES_LIST_AREA + '/' + figure.id}`} style={{color:'#1e90ff'}}>{text}</a>,
+        render: (text, figure) => <a href={`${HISTORICAL_FIGURES_ENDPOINT + figure.id}`} style={{color:'#1e90ff'}}>{text}</a>,
         sorter: (a, b) => {
             if (a.name > b.name) {
                 return 1;
@@ -112,7 +112,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         key: 'url',
         render: (text, figure) => {
             return (
-                <Button href={`${FIGURES_LIST_AREA + '/' + figure.id}`}>
+                <Button href={`${HISTORICAL_FIGURES_ENDPOINT + figure.id}`}>
                     Details
                 </Button>
             )

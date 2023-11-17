@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { DEV_API_EVENTS_APP_BASE_URL, EVENTS_APP_HISTORICAL_STATES_ENDPOINT, EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT } from '../../models/constants/urls';
+import { HISTORICAL_STATES_FULL_URL, PRESENT_COUNTRIES_FULL_URL } from '../../models/constants/urls';
 import { PresentCountries } from '../../models/types/presentCountry';
 import { HistoricalStateOptions } from '../../models/types/historicalState';
 import { historicalStatesLoadingError, presentCountriesLoadingError } from '../../partials/notifications';
@@ -15,7 +15,7 @@ export const useFetchHistoricalStates = () => {
 
     useEffect(() => {
         setLoadingDataHistoricalStates(true);
-        axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_HISTORICAL_STATES_ENDPOINT)
+        axios.get(HISTORICAL_STATES_FULL_URL)
             .then(res => {
                 setHistoricalStates(transformHistoricalStatesForSelector(res.data));
                 setLoadingDataHistoricalStates(false);
@@ -37,7 +37,7 @@ export const useFetchPresentCountries = () => {
 
     useEffect(() => {
         setLoadingDataPresentCountries(true);
-        axios.get(DEV_API_EVENTS_APP_BASE_URL + EVENTS_APP_PRESENT_COUNTRIES_ENDPOINT)
+        axios.get(PRESENT_COUNTRIES_FULL_URL)
             .then(res => {
                 setPresentCountries(res.data);
                 setLoadingDataPresentCountries(false);

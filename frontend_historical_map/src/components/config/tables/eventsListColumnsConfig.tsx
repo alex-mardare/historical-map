@@ -3,7 +3,7 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
 import { dateColumnSort } from './dateColumnSort';
-import { EVENTS_LIST_AREA } from '../../models/constants/urls';
+import { HISTORICAL_EVENTS_ENDPOINT } from '../../models/constants/urls';
 import { HistoricalDateObject } from '../../models/types/historicalDateObject';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
@@ -16,7 +16,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         defaultSortOrder: 'ascend',
         key: 'name',
         sortDirections: ['ascend', 'descend', 'ascend'],
-        render: (text, event) => <a href={`${EVENTS_LIST_AREA + '/' + event.id}`} style={{color:'#1e90ff'}}>{text}</a>,
+        render: (text, event) => <a href={`${HISTORICAL_EVENTS_ENDPOINT + event.id}`} style={{color:'#1e90ff'}}>{text}</a>,
         sorter: (a, b) => {
             if (a.name > b.name) {
                 return 1;
@@ -67,7 +67,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         render(text, event) {
             return (
               <div>
-                {displayLongitudeDMS(event.latitude)}
+                {displayLatitudeDMS(event.latitude)}
                 <br/>
                 {displayLongitudeDMS(event.longitude)}
               </div>
@@ -96,7 +96,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         key: 'url',
         render: (text, event) => {
             return (
-                <Button href={`${EVENTS_LIST_AREA + '/' + event.id}`}>
+                <Button href={`${HISTORICAL_EVENTS_ENDPOINT + event.id}`}>
                     Details
                 </Button>
             )
