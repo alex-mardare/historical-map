@@ -2,7 +2,7 @@ import { Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
-import { dateColumnSort } from './dateColumnSort';
+import { convertDateToString, dateColumnSort } from "./dateFunctions";
 import { HISTORICAL_EVENTS_ENDPOINT } from '../../models/constants/urls';
 import { HistoricalDateObject } from '../../models/types/historicalDateObject';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
@@ -42,11 +42,8 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
           )
         },
         sorter: (a, b) => {
-            // For negative dates the order is reversed
-            const firstDateArr = a.date[0] === '-' ? a.date.substring(1).split('-') : a.date.split('-');
-            const secondDateArr = b.date[0] === '-' ? b.date.substring(1).split('-') : b.date.split('-');
-            const firstDate = new Date(Number(firstDateArr[0]), Number(firstDateArr[1]) - 1, Number(firstDateArr[2]));
-            const secondDate = new Date(Number(secondDateArr[0]), Number(secondDateArr[1]) - 1, Number(secondDateArr[2]));
+            const firstDate = convertDateToString(a.date);
+            const secondDate = convertDateToString(b.date);
 
             const firstDateObject: HistoricalDateObject = {
                 date: a.date,

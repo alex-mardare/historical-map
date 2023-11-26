@@ -2,7 +2,7 @@ import { Button } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React from 'react';
 
-import { dateColumnSort } from "./dateColumnSort";
+import { convertDateToString, dateColumnSort } from "./dateFunctions";
 import { HISTORICAL_FIGURES_ENDPOINT } from "../../models/constants/urls";
 import { HistoricalDateObject } from "../../models/types/historicalDateObject";
 import { HistoricalFigure } from "../../models/types/historicalFigure";
@@ -30,11 +30,8 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         key: 'birthDate',
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => {
-            // For negative dates the order is reversed
-            const firstDateArr = a.birthDate[0] === '-' ? a.birthDate.substring(1).split('-') : a.birthDate.split('-');
-            const secondDateArr = b.birthDate[0] === '-' ? b.birthDate.substring(1).split('-') : b.birthDate.split('-');
-            const firstDate = new Date(Number(firstDateArr[0]), Number(firstDateArr[1]) - 1, Number(firstDateArr[2]));
-            const secondDate = new Date(Number(secondDateArr[0]), Number(secondDateArr[1]) - 1, Number(secondDateArr[2]));
+            const firstDate = convertDateToString(a.birthDate);
+            const secondDate = convertDateToString(b.birthDate);
 
             const firstDateObject: HistoricalDateObject = {
                 date: a.birthDate,
@@ -54,11 +51,8 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         key: 'deathDate',
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => {
-            // For negative dates the order is reversed
-            const firstDateArr = a.deathDate[0] === '-' ? a.deathDate.substring(1).split('-') : a.deathDate.split('-');
-            const secondDateArr = b.deathDate[0] === '-' ? b.deathDate.substring(1).split('-') : b.deathDate.split('-');
-            const firstDate = new Date(Number(firstDateArr[0]), Number(firstDateArr[1]) - 1, Number(firstDateArr[2]));
-            const secondDate = new Date(Number(secondDateArr[0]), Number(secondDateArr[1]) - 1, Number(secondDateArr[2]));
+            const firstDate = convertDateToString(a.deathDate);
+            const secondDate = convertDateToString(b.deathDate);
 
             const firstDateObject: HistoricalDateObject = {
                 date: a.deathDate,
