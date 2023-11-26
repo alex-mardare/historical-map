@@ -18,13 +18,28 @@ const { Content, Sider } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
+  const [width, setWidth] = useState(205);
+
   const { events, refreshFunction } = useEventsGet();
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+
+    if (!collapsed) {
+      setWidth(width);
+    }
+  }
 
   return (
     <Router>
       <div className="App">
         <Layout>
-          <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width='auto'>
+          <Sider
+            collapsible 
+            collapsed={collapsed} 
+            onCollapse={toggleCollapsed} 
+            width={width}
+          >
             <Menu defaultSelectedKeys={['1']} items={menuItems} mode="inline" theme='dark' />
           </Sider>
           <Content>
