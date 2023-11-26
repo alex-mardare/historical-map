@@ -24,7 +24,7 @@ function App() {
     <Router>
       <div className="App">
         <Layout>
-          <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+          <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width='auto'>
             <Menu defaultSelectedKeys={['1']} items={menuItems} mode="inline" theme='dark' />
           </Sider>
           <Content>
