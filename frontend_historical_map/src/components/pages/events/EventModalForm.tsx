@@ -8,6 +8,7 @@ import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { useFetchHistoricalStates, useFetchPresentCountries } from '../../utils/hooks/countriesHooks';
 import { useFetchEventCategories } from '../../utils/hooks/eventPropertiesHooks';
 import { dateFieldValidator } from '../../utils/validators/dateValidator';
+import { DefaultOptionType } from 'antd/es/select';
 
 
 type EventCreateFormProps = {
@@ -36,6 +37,11 @@ export default function EventModalForm(props:EventCreateFormProps)
         if (props.onFinish) {
             props.onFinish(values);
         }
+    }
+
+    const searchHistoricalStatesDropdown = (input: string, option: DefaultOptionType | undefined) => {
+        const historicalState = historicalStates.filter(hs => hs.value === option?.value).at(0);
+        return historicalState?.label.toLocaleLowerCase().includes(input.toLocaleLowerCase()) || false;
     }
 
     return (
@@ -85,6 +91,7 @@ export default function EventModalForm(props:EventCreateFormProps)
                             {menu}
                         </div>
                     )}
+                    filterOption={(input, option) => searchHistoricalStatesDropdown(input, option)}
                     placeholder='Please select a historical state.'
                     showSearch>
                         {historicalStates.map(option => (
