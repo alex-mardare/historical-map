@@ -3,7 +3,7 @@ import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { HISTORICAL_EVENTS_ENDPOINT, HISTORICAL_FIGURES_ENDPOINT } from '../models/constants/urls';
+import { HISTORICAL_EVENTS_SECTION, HISTORICAL_FIGURES_SECTION } from '../models/constants/urls';
 
 
 //#region EVENTS MENU
@@ -16,7 +16,7 @@ export const EventsMenuSubItemMap = () => (
 )
 
 export const EventsMenuSubItemList = () => (
-    <Link to={HISTORICAL_EVENTS_ENDPOINT} />
+    <Link to={HISTORICAL_EVENTS_SECTION} />
 )
 //#endregion
 
@@ -26,6 +26,6 @@ export const FiguresMenuItem = (props: Partial<CustomIconComponentProps>) => (
 )
 
 export const FiguresMenuSubItemList = () => (
-    <Link to={HISTORICAL_FIGURES_ENDPOINT} />
+    <Link to={HISTORICAL_FIGURES_SECTION} />
 )
 //#endregion

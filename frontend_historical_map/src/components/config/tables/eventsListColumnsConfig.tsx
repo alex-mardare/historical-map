@@ -3,7 +3,7 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
 import { convertDateToString, dateColumnSort } from "./dateFunctions";
-import { HISTORICAL_EVENTS_ENDPOINT } from '../../models/constants/urls';
+import { HISTORICAL_EVENTS_SECTION } from '../../models/constants/urls';
 import { HistoricalDateObject } from '../../models/types/historicalDateObject';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
@@ -16,7 +16,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         defaultSortOrder: 'ascend',
         key: 'name',
         sortDirections: ['ascend', 'descend', 'ascend'],
-        render: (text, event) => <a href={`${HISTORICAL_EVENTS_ENDPOINT + event.id}`} style={{color:'#1e90ff'}}>{text}</a>,
+        render: (text, event) => <a href={`${HISTORICAL_EVENTS_SECTION + '/' + event.id}`} style={{color:'#1e90ff'}}>{text}</a>,
         sorter: (a, b) => {
             if (a.name > b.name) {
                 return 1;
@@ -93,7 +93,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         key: 'url',
         render: (text, event) => {
             return (
-                <Button href={`${HISTORICAL_EVENTS_ENDPOINT + event.id}`}>
+                <Button href={`${HISTORICAL_EVENTS_SECTION + '/' + event.id}`}>
                     Details
                 </Button>
             )

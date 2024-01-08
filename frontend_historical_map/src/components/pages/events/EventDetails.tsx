@@ -54,7 +54,7 @@ export default function EventDetails(){
 
   //#region HANDLERS PAGE
   const handleGoBack = () => {
-    navigate(-1);
+    navigate('/events');
   }
   //#endregion
 

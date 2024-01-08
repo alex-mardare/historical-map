@@ -31,7 +31,7 @@ export default function FigureDetails(){
   
     //#region HANDLERS PAGE
     const handleGoBack = () => {
-      navigate(-1);
+      navigate('/figures');
     }
     //#endregion
   

@@ -1,10 +1,11 @@
 export const DEV_API_EVENTS_APP_BASE_URL = "http://localhost:8000/api/events/"
 
 
-export const HISTORICAL_EVENTS_ENDPOINT = "events/"
-export const HISTORICAL_FIGURES_ENDPOINT = "figures/"
+export const HISTORICAL_EVENTS_SECTION = "/events"
+export const HISTORICAL_FIGURES_SECTION = "/figures"
 
 const EVENT_CATEGORIES_ENDPOINT = "event-categories/"
+const HISTORICAL_FIGURES_ENDPOINT = "figures/"
 const HISTORICAL_STATES_ENDPOINT = "historical-states/"
 const PRESENT_COUNTRIES_ENDPOINT = "present-countries/"
 
