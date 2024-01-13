@@ -4,6 +4,7 @@ import React from "react";
 import { HistoricalFigure } from "../../models/types/historicalFigure";
 import { useFetchHistoricalStates, useFetchPresentCountries } from "../../utils/hooks/countriesHooks";
 import { dateFieldValidator } from "../../utils/validators/dateValidator";
+import { formValidationMessages } from '../../utils/validators/formValidator';
 
 
 type FigureModalFormProps = {
@@ -34,7 +35,7 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
     
     return (
         <div>
-          <Form form={props.form} labelCol={{span: 6}} onFinish={handleSubmit} wrapperCol={{span: 16}}>
+          <Form form={props.form} labelCol={{span: 6}} onFinish={handleSubmit} validateMessages={formValidationMessages} wrapperCol={{span: 16}}>
               {displayIdFormItem(props.figure)}
               <Form.Item initialValue={props.figure?.name} label='Name' name='name' rules={[{ required: true }]}>
                   <Input />

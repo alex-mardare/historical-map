@@ -1,5 +1,6 @@
 import { Form, Input, InputNumber, Select, TimePicker } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import { DefaultOptionType } from 'antd/es/select';
 import dayjs from 'dayjs';
 import React from 'react';
 
@@ -8,7 +9,7 @@ import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { useFetchHistoricalStates, useFetchPresentCountries } from '../../utils/hooks/countriesHooks';
 import { useFetchEventCategories } from '../../utils/hooks/eventPropertiesHooks';
 import { dateFieldValidator } from '../../utils/validators/dateValidator';
-import { DefaultOptionType } from 'antd/es/select';
+import { formValidationMessages } from '../../utils/validators/formValidator';
 
 
 type EventCreateFormProps = {
@@ -46,7 +47,7 @@ export default function EventModalForm(props:EventCreateFormProps)
 
     return (
       <div>
-        <Form form={props.form} labelCol={{span: 6}} onFinish={handleSubmit} wrapperCol={{span: 16}}>
+        <Form form={props.form} labelCol={{span: 6}} onFinish={handleSubmit} validateMessages={formValidationMessages} wrapperCol={{span: 16}}>
             {displayIdFormItem(props.event)}
             <Form.Item initialValue={props.event?.name} label='Name' name='name' rules={[{ required: true }]}>
                 <Input />
