@@ -5,7 +5,6 @@ export function handleFormSubmission(form: FormInstance<any>, onFinish: (arg0: a
     form.validateFields()
       .then((values) => {
         setConfirmLoading(true);
-        form.resetFields();
         onFinish(values);
       })
       .catch((error) => {
