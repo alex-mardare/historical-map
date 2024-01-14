@@ -9,7 +9,7 @@ import "../../assets/styling/home.css";
 
 
 type props = {
-  events: HistoricalEvents
+  events: HistoricalEvents | null
 }
 
 function Home(props: props) {

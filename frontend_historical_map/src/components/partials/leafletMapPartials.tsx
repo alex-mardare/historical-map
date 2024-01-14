@@ -30,7 +30,7 @@ function createMarkerElement(event: HistoricalEvent): JSX.Element | undefined {
   }
 }
 
-export function createMultiMarkerMapContainer(events: HistoricalEvents, idName: string, zoomLevel: number) {
+export function createMultiMarkerMapContainer(events: HistoricalEvents | null, idName: string, zoomLevel: number) {
   if (events && events.length > 0) {
     const event = events[0];
 

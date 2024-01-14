@@ -14,7 +14,7 @@ const { Search } = Input;
 
 type HistoricalEvents = HistoricalEvent[];
 type EventsListProps = {
-  events: HistoricalEvents,
+  events: HistoricalEvents | null,
   onRefreshEvents: () => void
 }
 
