@@ -32,7 +32,13 @@ export default function EventsList(props:EventsListProps) {
         return false;
       }
       if (value === event.approximateRealLocation) {
-        return searchText === 'yes' ? value : !value;
+        if (searchText === 'yes') {
+          return value
+        }
+        else if (searchText === 'no') {
+          return !value
+        }
+        return false
       }
       return value.toString().toLowerCase().includes(searchText.toLowerCase());
     })
