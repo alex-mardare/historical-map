@@ -10,6 +10,7 @@ import { antCardHeaderFigure } from "../../partials/antdCardHeader";
 import { handleFormSubmission } from '../../utils/forms/formSubmission';
 import { figureDelete, useFigureGet, useFigurePut } from '../../utils/hooks/figuresHooks';
 
+
 export default function FigureDetails(){
     const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
     const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
@@ -26,6 +27,22 @@ export default function FigureDetails(){
     //#region DISPLAY FUNCTIONALITY    
     const displayTitleSection = (figure: HistoricalFigure | null) => {
       return antCardHeaderFigure(figure, handleGoBack);
+    }
+
+    const displayDeathSection = (figure: HistoricalFigure | null) => {
+      if (figure) {
+        return (
+          <>
+            <h2>Death</h2>
+            <div>
+              {figure.deathDate && <p><b>Date:</b> {figure?.deathDate}</p>}
+              {figure.deathHistoricalState && <p><b>Historical State:</b> {figure?.deathHistoricalState.name}</p>}
+              {figure.deathPresentCountry && <p><b>Present Country:</b> {figure?.deathPresentCountry.name}</p>}
+            </div>
+          </>
+        )
+          
+      }
     }
     //#endregion
   
@@ -98,10 +115,11 @@ export default function FigureDetails(){
           loading={figure == null} 
           title={displayTitleSection(figure)}
           >
-            <p><b>Birth Date:</b> {figure?.birthDate}</p>
-            <p><b>Death Date:</b> {figure?.deathDate}</p>
-            <p><b>Birth Present Country:</b> {figure?.birthPresentCountry.name}</p>
-            <p><b>Birth Historical State:</b> {figure?.birthHistoricalState.name}</p>
+            <h2>Birth</h2>
+            <p><b>Date:</b> {figure?.birthDate}</p>
+            <p><b>Historical State:</b> {figure?.birthHistoricalState.name}</p>
+            <p><b>Present Country:</b> {figure?.birthPresentCountry.name}</p>
+            {displayDeathSection(figure)}
         </Card>
         <Modal
           confirmLoading={confirmLoadingEdit}

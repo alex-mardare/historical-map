@@ -52,12 +52,14 @@ class PresentCountry(models.Model):
 
 class HistoricalFigure(models.Model):
     name = models.CharField(max_length=255)
-    birthHistoricalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE)
-    birthPresentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
+    birthHistoricalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE, related_name='birthHistoricalState')
+    birthPresentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE, related_name='birthPresentCountry')
     birthDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     deathDate = models.CharField(blank=True, max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+    deathHistoricalStateId = models.ForeignKey(HistoricalState, blank=True, null=True, on_delete=models.CASCADE, related_name='deathHistoricalState')
+    deathPresentCountryId = models.ForeignKey(PresentCountry, blank=True, null=True, on_delete=models.CASCADE, related_name='deathPresentCountry')
 
     def __str__(self):
         return self.name

@@ -40,6 +40,7 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
               <Form.Item initialValue={props.figure?.name} label='Name' name='name' rules={[{ required: true }]}>
                   <Input />
               </Form.Item>
+
               <h4 style={{paddingLeft:'75px'}}>Birth</h4>
               <Form.Item initialValue={props.figure?.birthDate} label='Date' name='birthDate' rules={[{ required: true }, { validator: dateFieldValidator}]}>
                   <Input />
@@ -69,9 +70,35 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
                       showSearch
                   />
               </Form.Item>
-              <h4 style={{paddingLeft:'67px'}}>Death</h4>
+
+              <h4 style={{paddingLeft:'75px'}}>Death</h4>
               <Form.Item initialValue={props.figure?.deathDate} label='Death Date' name='deathDate' rules={[{ validator: dateFieldValidator}]}>
                   <Input />
+              </Form.Item>
+              <Form.Item initialValue={props.figure?.deathHistoricalState?.id} label='Historical State' name='deathHistoricalStateId'>
+                  <Select
+                      dropdownRender={(menu) => (
+                          <div style={{ maxHeight: "300px" }}>
+                              {menu}
+                          </div>
+                      )}
+                      placeholder='Please select a historical state.'
+                      showSearch>
+                          {historicalStates.map(option => (
+                              <Select.Option key={option.value} value={option.value}>
+                                  <div style={{ whiteSpace: "pre-wrap" }}>{option.label}</div>
+                              </Select.Option>
+                          ))}
+                  </Select>
+              </Form.Item>
+              <Form.Item initialValue={props.figure?.deathPresentCountry?.id} label='Present Country' name='deathPresentCountryId'>
+                  <Select 
+                      fieldNames={{ label: 'name', value:'id'}}
+                      filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())} 
+                      options={presentCountries} 
+                      placeholder='Please select a country.'
+                      showSearch
+                  />
               </Form.Item>
           </Form>
         </div>  

@@ -3,6 +3,7 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
 import { convertDateToString, dateColumnSort } from "./dateFunctions";
+import { sortRowsByNameProperty } from './sortFunctions';
 import { HISTORICAL_EVENTS_SECTION } from '../../models/constants/urls';
 import { HistoricalDateObject } from '../../models/types/historicalDateObject';
 import { HistoricalEvent } from '../../models/types/historicalEvent';
@@ -17,15 +18,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         key: 'name',
         sortDirections: ['ascend', 'descend', 'ascend'],
         render: (text, event) => <a href={`${HISTORICAL_EVENTS_SECTION + '/' + event.id}`} style={{color:'#1e90ff'}}>{text}</a>,
-        sorter: (a, b) => {
-            if (a.name > b.name) {
-                return 1;
-            }
-            else if (a.name < b.name) {
-                return -1;
-            }
-            return 0;
-        },
+        sorter: (a, b) => sortRowsByNameProperty(a, b),
         title: 'Name',
     },
     {

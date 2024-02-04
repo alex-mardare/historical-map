@@ -3,6 +3,7 @@ import { ColumnsType } from "antd/es/table";
 import React from 'react';
 
 import { convertDateToString, dateColumnSort } from "./dateFunctions";
+import { sortRowsByNameProperty } from "./sortFunctions";
 import { HISTORICAL_FIGURES_SECTION } from '../../models/constants/urls';
 import { HistoricalDateObject } from "../../models/types/historicalDateObject";
 import { HistoricalFigure } from "../../models/types/historicalFigure";
@@ -14,15 +15,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         key: 'name',
         sortDirections: ['ascend', 'descend', 'ascend'],
         render: (text, figure) => <a href={`${HISTORICAL_FIGURES_SECTION + '/' + figure.id}`} style={{color:'#1e90ff'}}>{text}</a>,
-        sorter: (a, b) => {
-            if (a.name > b.name) {
-                return 1;
-            }
-            else if (a.name < b.name) {
-                return -1;
-            }
-            return 0;
-        },
+        sorter: (a, b) => sortRowsByNameProperty(a, b),
         title: 'Name',
     },
     {
@@ -73,15 +66,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         key: 'birthHistoricalState',
         render: (text, historicalFigure) => historicalFigure.birthHistoricalState.name,
         sortDirections: ['ascend', 'descend', 'ascend'],
-        sorter: (a, b) => {
-            if (a.birthHistoricalState.name > b.birthHistoricalState.name) {
-                return 1;
-            }
-            else if (a.birthHistoricalState.name < b.birthHistoricalState.name) {
-                return -1;
-            }
-            return 0;
-        },
+        sorter: (a, b) => sortRowsByNameProperty(a.birthHistoricalState, b.birthHistoricalState),
         title: 'Birth Historical State',
     },
     {
@@ -90,16 +75,26 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         key: 'birthPresentCountry',
         render: (text, historicalFigure) => historicalFigure.birthPresentCountry.name,
         sortDirections: ['ascend', 'descend', 'ascend'],
-        sorter: (a, b) => {
-            if (a.birthPresentCountry.name > b.birthPresentCountry.name) {
-                return 1;
-            }
-            else if (a.birthPresentCountry.name < b.birthPresentCountry.name) {
-                return -1;
-            }
-            return 0;
-        },
+        sorter: (a, b) => sortRowsByNameProperty(a.birthPresentCountry, b.birthPresentCountry),
         title: 'Birth Present Country',
+    },
+    {
+        dataIndex: 'deathHistoricalState',
+        defaultSortOrder: 'ascend',
+        key: 'deathHistoricalState',
+        render: (text, historicalFigure) => historicalFigure.deathHistoricalState?.name,
+        sortDirections: ['ascend', 'descend', 'ascend'],
+        sorter: (a, b) => sortRowsByNameProperty(a.deathHistoricalState, b.deathHistoricalState),
+        title: 'Death Historical State',
+    },
+    {
+        dataIndex: 'deathPresentCountry',
+        defaultSortOrder: 'ascend',
+        key: 'deathPresentCountry',
+        render: (text, historicalFigure) => historicalFigure.deathPresentCountry?.name,
+        sortDirections: ['ascend', 'descend', 'ascend'],
+        sorter: (a, b) => sortRowsByNameProperty(a.deathPresentCountry, b.deathPresentCountry),
+        title: 'Death Present Country',
     },
     {
         dataIndex: 'url',

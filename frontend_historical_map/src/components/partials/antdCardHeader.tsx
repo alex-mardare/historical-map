@@ -12,10 +12,10 @@ export function antCardHeaderEvent(event: HistoricalEvent | null, handleGoBack: 
         <div className='card-header'>
             <Button onClick={handleGoBack} type="primary">Go Back</Button>
             <div className='card-title-div'>
-                <h3 className='card-title-header'>
+                <h1 className='card-title-header'>
                     {event?.name}
                     {!event?.approximateRealLocation && returnToolTip(EVENT_TOOLTIP_TEXT)}
-                </h3>
+                </h1>
             </div>
         </div>
     );
@@ -26,9 +26,9 @@ export function antCardHeaderFigure(figure: HistoricalFigure | null, handleGoBac
         <div className='card-header'>
             <Button onClick={handleGoBack} type="primary">Go Back</Button>
             <div className='card-title-div'>
-                <h3 className='card-title-header'>
+                <h1 className='card-title-header'>
                     {figure?.name}
-                </h3>
+                </h1>
             </div>
         </div>
     );
