@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from .models import EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
+from .models import HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
 from .paginations import NoPagination
 from .serializers import *
 
@@ -8,46 +8,35 @@ from .serializers import *
 class EventCategoryList(generics.ListAPIView):
     pagination_class = NoPagination
     queryset = EventCategory.objects.all()
-    serializer_class = EventCategorySerializer
-#endregion
-
-
-#region EVENT FIGURE ROLE ENDPOINTS
-class EventFigureRoleCreate(generics.CreateAPIView):
-    queryset = EventFigureRole.objects.all()
-    serializer_class = EventFigureRoleItemSerializer
-
-class EventFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
-    queryset = EventFigureRole.objects.all()
-    serializer_class = EventFigureRoleItemSerializer
-
-class EventFigureRoleList(generics.ListAPIView):
-    queryset = EventFigureRole.objects.all()
-    serializer_class = EventFigureRoleListSerializer
+    serializer_class = EventCategoryGetAllSerializer
 #endregion
 
 
 #region HISTORICAL EVENT ENDPOINTS
 class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalEvent.objects.all()
+    serializer_class = HistoricalEventDeletePostUpdateSerializer
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return HistoricalEventRetrieveSerializer
-        elif self.request.method in ['DELETE', 'PATCH', 'PUT']:
-            return HistoricalEventSerializer
+            return HistoricalEventGetSerializer
         return super().get_serializer_class()
 
 class HistoricalEventList(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
-    serializer_class = HistoricalEventSerializer
+    serializer_class = HistoricalEventDeletePostUpdateSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return HistoricalEventGetSerializer
+        return super().get_serializer_class()
 #endregion
 
 
 #region HISTORICAL FIGURE ENDPOINTS
 class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
     queryset = HistoricalFigure.objects.all()
-    serializer_class = HistoricalFigureSerializer
+    serializer_class = HistoricalFigureDeletePostUpdateSerializer
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -56,35 +45,20 @@ class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
 
 class HistoricalFigureList(generics.ListCreateAPIView):
     queryset = HistoricalFigure.objects.all()
-    serializer_class = HistoricalFigureGetSerializer
+    serializer_class = HistoricalFigureDeletePostUpdateSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return HistoricalFigureSerializer
+        if self.request.method == 'GET':
+            return HistoricalFigureGetSerializer
         return super().get_serializer_class()
 #endregion
 
 
-#region HISTORICAL FIGURE ROLE ENDPOINTS
-class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
-    queryset = HistoricalFigureRole.objects.all()
-    serializer_class = HistoricalFigureRoleSerializer
-
-class HistoricalFigureRoleList(generics.ListAPIView):
-    queryset = HistoricalFigureRole.objects.all()
-    serializer_class = HistoricalFigureRoleSerializer
-#endregion
-
-
-#region HISTORICAL STATE ENDPOINTS
-class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
-    queryset = HistoricalState.objects.all()
-    serializer_class = HistoricalStateSerializer
-    
-class HistoricalStateList(generics.ListCreateAPIView):
+#region HISTORICAL STATE ENDPOINTS 
+class HistoricalStateList(generics.ListAPIView):
     pagination_class = NoPagination
     queryset = HistoricalState.objects.all()
-    serializer_class = HistoricalStateSerializer
+    serializer_class = HistoricalStateGetAllSerializer
 #endregion
 
 
@@ -92,5 +66,5 @@ class HistoricalStateList(generics.ListCreateAPIView):
 class PresentCountryList(generics.ListAPIView):
     pagination_class = NoPagination
     queryset = PresentCountry.objects.all()
-    serializer_class = PresentCountrySerializer
+    serializer_class = PresentCountryGetAllSerializer
 #endregion

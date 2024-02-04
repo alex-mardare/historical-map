@@ -1,19 +1,32 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 
-from .models import EventCategory, EventFigureRole, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
+from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalState, PresentCountry
 
 
 #region EVENT CATEGORY SERIALIZERS
-class EventCategorySerializer(serializers.ModelSerializer):
+class EventCategoryGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventCategory
         fields = ['id', 'name']
 #endregion
 
 
+#region HISTORICAL STATE SERIALIZERS
+class HistoricalStateGetAllSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalState
+        fields = ['id', 'dateFrom', 'dateTo', 'name']
+
+class HistoricalStatePropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalState
+        fields = ['id', 'name']
+#endregion
+
+
 #region PRESENT COUNTRY SERIALIZERS
-class PresentCountrySerializer(serializers.ModelSerializer):
+class PresentCountryGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
         fields = ['id', 'name', 'code', 'flagUrl']
@@ -25,23 +38,8 @@ class PresentCountryPropertySerializer(serializers.ModelSerializer):
 #endregion
 
 
-#region HISTORICAL STATE SERIALIZERS
-class HistoricalStateSerializer(serializers.ModelSerializer):
-    presentCountries = serializers.StringRelatedField(many=True)
-
-    class Meta:
-        model = HistoricalState
-        fields = ['id', 'dateFrom', 'dateTo', 'name', 'flagUrl', 'presentCountries']
-
-class HistoricalStatePropertySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalState
-        fields = ['id', 'name']
-#endregion
-
-
 #region HISTORICAL EVENT SERIALIZERS
-class HistoricalEventSerializer(serializers.ModelSerializer):
+class HistoricalEventDeletePostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEvent
         fields = '__all__'
@@ -57,23 +55,23 @@ class HistoricalEventSerializer(serializers.ModelSerializer):
         except IntegrityError as e:
             raise serializers.ValidationError(e)
         
-class HistoricalEventRetrieveSerializer(serializers.ModelSerializer):
-    eventCategory = EventCategorySerializer(many=False, source='eventCategoryId')
+class HistoricalEventGetSerializer(serializers.ModelSerializer):
+    eventCategory = EventCategoryGetAllSerializer(many=False, source='eventCategoryId')
     historicalState = HistoricalStatePropertySerializer(many=False, source='historicalStateId')
     presentCountry = PresentCountryPropertySerializer(many=False, source='presentCountryId')
 
     class Meta:
         model = HistoricalEvent
         fields = ['id', 'name', 'description', 'date', 'time', 'latitude', 'longitude', 'approximateRealLocation', 'eventCategory', 'presentCountry', 'historicalState']
-
-class HistoricalEventLinksSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalEvent
-        fields =  ['id', 'name', 'description', 'date', 'time', 'latitude', 'longitude']
 #endregion
 
 
 #region HISTORICAL FIGURE SERIALIZERS
+class HistoricalFigureDeletePostUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalFigure
+        fields = ['name', 'birthDate', 'deathDate', 'birthHistoricalStateId', 'birthPresentCountryId', 'deathHistoricalStateId', 'deathPresentCountryId']
+
 class HistoricalFigureGetSerializer(serializers.ModelSerializer):
     birthHistoricalState = HistoricalStatePropertySerializer(many=False, source='birthHistoricalStateId')
     birthPresentCountry = PresentCountryPropertySerializer(many=False, source='birthPresentCountryId')
@@ -83,53 +81,4 @@ class HistoricalFigureGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigure
         fields = ['id', 'name', 'birthDate', 'deathDate', 'birthHistoricalState', 'birthPresentCountry', 'deathHistoricalState', 'deathPresentCountry']
-
-class HistoricalFigureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalFigure
-        fields = ['name', 'birthDate', 'deathDate', 'birthHistoricalStateId', 'birthPresentCountryId', 'deathHistoricalStateId', 'deathPresentCountryId']
-
-class HistoricalFigureLinksSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalFigure
-        fields = ['id', 'name']
-#endregion
-
-
-#region HISTORICAL FIGURE ROLE SERIALIZERS
-class HistoricalFigureRoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalFigureRole
-        fields = '__all__'
-
-class HistoricalFigureRoleLinksSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalFigureRole
-        fields = ['id', 'name']
-#endregion
-
-
-#region EVENT FIGURE ROLE SERIALIZERS
-class EventFigureRoleItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EventFigureRole
-        fields = '__all__'
-
-    def create(self, data):
-        try:
-            eventFigureRole = EventFigureRole.objects.create(**data)
-            eventFigureRole.save()
-
-            return eventFigureRole
-        except IntegrityError as e:
-            raise serializers.ValidationError(e)
-
-class EventFigureRoleListSerializer(serializers.ModelSerializer):
-    historicalEvent = HistoricalEventLinksSerializer(many=False, source='historicalEventId')
-    historicalFigure = HistoricalFigureLinksSerializer(many=False, source='historicalFigureId')
-    historicalFigureRole = HistoricalFigureRoleLinksSerializer(many=False, source='historicalFigureRoleId')
-
-    class Meta:
-        model = EventFigureRole
-        fields = ['id', 'historicalEvent', 'historicalFigure', 'historicalFigureRole']
 #endregion
