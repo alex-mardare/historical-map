@@ -16,7 +16,7 @@ class EventCategoryGetAllSerializer(serializers.ModelSerializer):
 class HistoricalStateGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState
-        fields = ['id', 'dateFrom', 'dateTo', 'name']
+        fields = ['dateFrom', 'dateTo', 'id', 'name']
 
 class HistoricalStatePropertySerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +29,7 @@ class HistoricalStatePropertySerializer(serializers.ModelSerializer):
 class PresentCountryGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
-        fields = ['id', 'name', 'code', 'flagUrl']
+        fields = ['id', 'name']
 
 class PresentCountryPropertySerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,7 +62,7 @@ class HistoricalEventGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HistoricalEvent
-        fields = ['id', 'name', 'description', 'date', 'time', 'latitude', 'longitude', 'approximateRealLocation', 'eventCategory', 'presentCountry', 'historicalState']
+        fields = ['approximateRealLocation', 'date', 'description', 'eventCategory', 'historicalState', 'id', 'latitude', 'longitude', 'name', 'presentCountry', 'time']
 #endregion
 
 
@@ -70,7 +70,7 @@ class HistoricalEventGetSerializer(serializers.ModelSerializer):
 class HistoricalFigureDeletePostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigure
-        fields = ['name', 'birthDate', 'deathDate', 'birthHistoricalStateId', 'birthPresentCountryId', 'deathHistoricalStateId', 'deathPresentCountryId']
+        fields = ['birthDate', 'birthHistoricalStateId', 'birthPresentCountryId', 'deathDate', 'deathHistoricalStateId', 'deathPresentCountryId', 'name']
 
 class HistoricalFigureGetSerializer(serializers.ModelSerializer):
     birthHistoricalState = HistoricalStatePropertySerializer(many=False, source='birthHistoricalStateId')
@@ -80,5 +80,5 @@ class HistoricalFigureGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HistoricalFigure
-        fields = ['id', 'name', 'birthDate', 'deathDate', 'birthHistoricalState', 'birthPresentCountry', 'deathHistoricalState', 'deathPresentCountry']
+        fields = ['birthDate', 'birthHistoricalState', 'birthPresentCountry', 'deathDate', 'deathHistoricalState', 'deathPresentCountry', 'id', 'name']
 #endregion
