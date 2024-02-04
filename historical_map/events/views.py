@@ -22,7 +22,7 @@ class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
             return HistoricalEventGetSerializer
         return super().get_serializer_class()
 
-class HistoricalEventList(generics.ListCreateAPIView):
+class HistoricalEventListPost(generics.ListCreateAPIView):
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventDeletePostUpdateSerializer
     
@@ -43,7 +43,7 @@ class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
             return HistoricalFigureGetSerializer
         return super().get_serializer_class()
 
-class HistoricalFigureList(generics.ListCreateAPIView):
+class HistoricalFigureListPost(generics.ListCreateAPIView):
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureDeletePostUpdateSerializer
 
