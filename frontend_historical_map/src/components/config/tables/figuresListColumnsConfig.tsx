@@ -67,7 +67,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         dataIndex: 'birthHistoricalState',
         defaultSortOrder: 'ascend',
         key: 'birthHistoricalState',
-        render: (text, historicalFigure) => historicalFigure.birthHistoricalState.name,
+        render: (_, historicalFigure) => historicalFigure.birthHistoricalState.name,
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.birthHistoricalState, b.birthHistoricalState),
         title: 'Birth Historical State',
@@ -77,7 +77,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         dataIndex: 'birthPresentCountry',
         defaultSortOrder: 'ascend',
         key: 'birthPresentCountry',
-        render: (text, historicalFigure) => historicalFigure.birthPresentCountry.name,
+        render: (_, historicalFigure) => historicalFigure.birthPresentCountry.name,
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.birthPresentCountry, b.birthPresentCountry),
         title: 'Birth Present Country',
@@ -87,7 +87,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         dataIndex: 'deathHistoricalState',
         defaultSortOrder: 'ascend',
         key: 'deathHistoricalState',
-        render: (text, historicalFigure) => historicalFigure.deathHistoricalState?.name,
+        render: (_, historicalFigure) => historicalFigure.deathHistoricalState?.name,
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.deathHistoricalState, b.deathHistoricalState),
         title: 'Death Historical State',
@@ -97,7 +97,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         dataIndex: 'deathPresentCountry',
         defaultSortOrder: 'ascend',
         key: 'deathPresentCountry',
-        render: (text, historicalFigure) => historicalFigure.deathPresentCountry?.name,
+        render: (_, historicalFigure) => historicalFigure.deathPresentCountry?.name,
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.deathPresentCountry, b.deathPresentCountry),
         title: 'Death Present Country',
@@ -106,7 +106,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
     {
         dataIndex: 'url',
         key: 'url',
-        render: (text, figure) => {
+        render: (_, figure) => {
             return (
                 <Button href={`${HISTORICAL_FIGURES_SECTION + '/' + figure.id}`}>
                     Details

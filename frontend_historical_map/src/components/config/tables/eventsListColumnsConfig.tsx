@@ -26,7 +26,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         dataIndex: 'dateTime',
         key: 'dateTime',
         sortDirections: ['ascend', 'descend', 'ascend'],
-        render(text, event) {
+        render(_, event) {
           return (
             <div>
               {event.date}
@@ -54,9 +54,29 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         width: 125
     },
     {
+        dataIndex: 'historicalState',
+        defaultSortOrder: 'ascend',
+        key: 'historicalState',
+        render: (_, event) => event.historicalState.name,
+        sortDirections: ['ascend', 'descend', 'ascend'],
+        sorter: (a, b) => sortRowsByNameProperty(a.historicalState, b.historicalState),
+        title: 'Historical State',
+        width: 275
+    },
+    {
+        dataIndex: 'presentCountry',
+        defaultSortOrder: 'ascend',
+        key: 'presentCountry',
+        render: (_, event) => event.presentCountry.name,
+        sortDirections: ['ascend', 'descend', 'ascend'],
+        sorter: (a, b) => sortRowsByNameProperty(a.presentCountry, b.presentCountry),
+        title: 'Birth Present Country',
+        width: 175
+    },
+    {
         dataIndex: 'coordinates',
         key: 'coordinates', 
-        render(text, event) {
+        render(_, event) {
             return (
               <div>
                 {displayLatitudeDMS(event.latitude)}
@@ -88,7 +108,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
     {
         dataIndex: 'url',
         key: 'url',
-        render: (text, event) => {
+        render: (_, event) => {
             return (
                 <Button href={`${HISTORICAL_EVENTS_SECTION + '/' + event.id}`}>
                     Details
