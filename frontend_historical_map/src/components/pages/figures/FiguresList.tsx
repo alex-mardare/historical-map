@@ -88,6 +88,7 @@ export default function FiguresList() {
                   dataSource={filteredFigures}
                   pagination={{ hideOnSinglePage:true }}
                   rowKey={(figure) => figure.id}
+                  size='middle'
               />
           </div>
         </div>

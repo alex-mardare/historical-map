@@ -17,6 +17,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         render: (text, figure) => <a href={`${HISTORICAL_FIGURES_SECTION + '/' + figure.id}`} style={{color:'#1e90ff'}}>{text}</a>,
         sorter: (a, b) => sortRowsByNameProperty(a, b),
         title: 'Name',
+        width: 200
     },
     {
         dataIndex: 'birthDate',
@@ -37,7 +38,8 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
 
             return dateColumnSort(firstDateObject, secondDateObject, firstDate, secondDate);
         },
-        title: 'Birth Date'
+        title: 'Birth Date',
+        width: 110
     },
     {
         dataIndex: 'deathDate',
@@ -58,7 +60,8 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
 
             return dateColumnSort(firstDateObject, secondDateObject, firstDate, secondDate);
         },
-        title: 'Death Date'
+        title: 'Death Date',
+        width: 110
     },
     {
         dataIndex: 'birthHistoricalState',
@@ -68,6 +71,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.birthHistoricalState, b.birthHistoricalState),
         title: 'Birth Historical State',
+        width: 275
     },
     {
         dataIndex: 'birthPresentCountry',
@@ -77,6 +81,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.birthPresentCountry, b.birthPresentCountry),
         title: 'Birth Present Country',
+        width: 175
     },
     {
         dataIndex: 'deathHistoricalState',
@@ -86,6 +91,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.deathHistoricalState, b.deathHistoricalState),
         title: 'Death Historical State',
+        width: 275
     },
     {
         dataIndex: 'deathPresentCountry',
@@ -95,6 +101,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
         sortDirections: ['ascend', 'descend', 'ascend'],
         sorter: (a, b) => sortRowsByNameProperty(a.deathPresentCountry, b.deathPresentCountry),
         title: 'Death Present Country',
+        width: 175
     },
     {
         dataIndex: 'url',
@@ -105,6 +112,7 @@ export const columnsConfig: ColumnsType<HistoricalFigure> = [
                     Details
                 </Button>
             )
-        }
+        },
+        width: 50
     }
 ]

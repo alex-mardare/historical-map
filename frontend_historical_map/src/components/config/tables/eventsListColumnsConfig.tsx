@@ -20,6 +20,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         render: (text, event) => <a href={`${HISTORICAL_EVENTS_SECTION + '/' + event.id}`} style={{color:'#1e90ff'}}>{text}</a>,
         sorter: (a, b) => sortRowsByNameProperty(a, b),
         title: 'Name',
+        width: 750
     },
     {
         dataIndex: 'dateTime',
@@ -49,7 +50,8 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
 
             return dateColumnSort(firstDateObject, secondDateObject, firstDate, secondDate);
         },
-        title: 'Date & Local Time'
+        title: 'Date & Local Time',
+        width: 125
     },
     {
         dataIndex: 'coordinates',
@@ -63,7 +65,8 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
               </div>
             )
           },
-        title: 'Coordinates'
+        title: 'Coordinates',
+        width: 75
     },
     {
         dataIndex: 'approximateRealLocation',
@@ -79,7 +82,8 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
             }
             return 0;
         },
-        title:'Real Location'
+        title:'Real Location',
+        width: 75
     },
     {
         dataIndex: 'url',
@@ -90,6 +94,7 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
                     Details
                 </Button>
             )
-        }
+        },
+        width: 50
     }
 ]

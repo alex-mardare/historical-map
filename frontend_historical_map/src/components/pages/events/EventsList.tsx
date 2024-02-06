@@ -102,6 +102,7 @@ export default function EventsList(props:EventsListProps) {
                 dataSource={filteredEvents}
                 pagination={{ hideOnSinglePage:true }}
                 rowKey={(event) => event.id}
+                size='middle'
             />
         </div>
       </div>
