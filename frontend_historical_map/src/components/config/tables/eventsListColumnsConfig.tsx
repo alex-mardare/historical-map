@@ -77,12 +77,12 @@ export const columnsConfig : ColumnsType<HistoricalEvent> = [
         dataIndex: 'coordinates',
         key: 'coordinates', 
         render(_, event) {
-            return (
-              <div>
-                {displayLatitudeDMS(event.latitude)}
-                <br/>
-                {displayLongitudeDMS(event.longitude)}
-              </div>
+            return event.approximateRealLocation && (
+                <div>
+                    {displayLatitudeDMS(event.latitude)}
+                    <br/>
+                    {displayLongitudeDMS(event.longitude)}
+                </div>
             )
           },
         title: 'Coordinates',
