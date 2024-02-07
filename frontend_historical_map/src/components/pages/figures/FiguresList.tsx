@@ -6,6 +6,8 @@ import { columnsConfig } from '../../config/tables/figuresListColumnsConfig';
 import { handleFormSubmission } from '../../utils/forms/formSubmission';
 import { useFiguresGet, useFigurePost } from '../../utils/hooks/figuresHooks';
 
+import '../../../assets/styling/tablePage.css';
+
 
 const { Search } = Input;
 
@@ -61,8 +63,8 @@ export default function FiguresList() {
 //#endregion
 
     return(
-        <div id='figuresList'>
-          <div className='topBar'>
+        <div className='mainDivTablePage'>
+          <div className='topBarTablePage'>
             <Search
                 allowClear
                 enterButton
@@ -82,7 +84,7 @@ export default function FiguresList() {
               <FiguresModalForm figure={null} form={form} onFinish={onFinish} />
             </Modal>
           </div>
-          <div className='tableContainer'>
+          <div className='tableDiv'>
             <Table 
                   columns={columnsConfig}
                   dataSource={filteredFigures}

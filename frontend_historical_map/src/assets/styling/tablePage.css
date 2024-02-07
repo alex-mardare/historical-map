@@ -1,17 +1,21 @@
-#eventsList {
+.mainDivTablePage {
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
-.tableContainer {
+.tableDiv {
     flex: 1;
     padding: 10px;
 }
 
-.topBar {
+.topBarTablePage {
     align-items: center;
     display: flex;
     justify-content: flex-end;
     padding: 10px;
+}
+
+.ant-table-thead th {
+    text-align: center !important;
 }

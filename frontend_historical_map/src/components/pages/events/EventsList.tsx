@@ -7,7 +7,7 @@ import { HistoricalEvent } from '../../models/types/historicalEvent';
 import { handleFormSubmission } from '../../utils/forms/formSubmission';
 import { useEventPost } from '../../utils/hooks/eventsHooks';
 
-import '../../../assets/styling/events/eventsList.css';
+import '../../../assets/styling/tablePage.css';
 
 
 const { Search } = Input;
@@ -75,8 +75,8 @@ export default function EventsList(props:EventsListProps) {
 //#endregion
 
   return(
-      <div id='eventsList'>
-        <div className='topBar'>
+      <div className='mainDivTablePage'>
+        <div className='topBarTablePage'>
           <Search
               allowClear
               enterButton
@@ -96,7 +96,7 @@ export default function EventsList(props:EventsListProps) {
             <EventCreateForm event={null} form={form} onFinish={onFinish} />
           </Modal>
         </div>
-        <div className='tableContainer'>
+        <div className='tableDiv'>
           <Table 
                 columns={columnsConfig}
                 dataSource={filteredEvents}
