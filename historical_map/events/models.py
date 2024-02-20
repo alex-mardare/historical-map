@@ -30,6 +30,9 @@ class HistoricalState(models.Model):
         if self.dateTo:
             displayName += " (" + dateFormatter(self.dateFrom) + " -> " + dateFormatter(self.dateTo) + ')'
         return displayName
+    
+    def get_present_countries(self):
+        return self.presentCountries.all()
 
     class Meta:
         ordering = ["name"]

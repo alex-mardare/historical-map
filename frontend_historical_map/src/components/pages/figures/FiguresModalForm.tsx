@@ -1,21 +1,25 @@
-import { Form, Input, Select } from "antd";
-import React from "react";
+import { Form, Input, Select } from "antd"
+import React, { useState } from "react"
 
-import { HistoricalFigure } from "../../models/types/historicalFigure";
-import { useFetchHistoricalStates, useFetchPresentCountries } from "../../utils/hooks/countriesHooks";
-import { dateFieldValidator } from "../../utils/validators/dateValidator";
-import { formValidationMessages } from '../../utils/validators/formValidator';
+import { HistoricalFigure } from "../../models/types/historicalFigure"
+import { useFetchHistoricalStates, useFetchPresentCountries } from "../../utils/hooks/countriesHooks"
+import { dateFieldValidator } from "../../utils/validators/dateValidator"
+import { formValidationMessages } from '../../utils/validators/formValidator'
 
 
 type FigureModalFormProps = {
-    figure: HistoricalFigure | null;
-    form: any;
-    onFinish?: (values: any) => void;
+    figure: HistoricalFigure | null
+    form: any
+    onFinish?: (values: any) => void
 }
 
 export default function FiguresModalForm(props:FigureModalFormProps) {
-    const { historicalStates } = useFetchHistoricalStates();
-    const { presentCountries } = useFetchPresentCountries();
+    const [birthHistoricalStateOption, setBirthHistoricalStateOption] = useState(props.figure?.birthHistoricalState?.id)
+    const [deathHistoricalStateOption, setDeathHistoricalStateOption] = useState(props.figure?.deathHistoricalState?.id)
+
+    const { historicalStates } = useFetchHistoricalStates()
+    const birthPresentCountries = useFetchPresentCountries(birthHistoricalStateOption).presentCountries
+    const deathPresentCountries = useFetchPresentCountries(deathHistoricalStateOption).presentCountries
 
     const displayIdFormItem = (figure: HistoricalFigure | null) => {
         if (figure !== null) {
@@ -29,8 +33,26 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
 
     const handleSubmit = (values: any) => {
         if (props.onFinish) {
-            props.onFinish(values);
+            props.onFinish(values)
         }
+    }
+
+    const onChangeBirthHistoricalState = (value: any, option: any) => {
+        setBirthHistoricalStateOption(value)
+        props.form.resetFields(['birthPresentCountryId'])
+    }
+
+    const onChangeBirthPresentCountry = (value: any, option: any) => {
+        props.form.setFieldsValue('birthPresentCountryId', value)
+    }
+
+    const onChangeDeathHistoricalState = (value: any, option: any) => {
+        setDeathHistoricalStateOption(value)
+        props.form.resetFields(['deathPresentCountryId'])
+    }
+
+    const onChangeDeathPresentCountry = (value: any, option: any) => {
+        props.form.setFieldsValue('deathPresentCountryId', value)
     }
     
     return (
@@ -45,13 +67,14 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
               <Form.Item initialValue={props.figure?.birthDate} label='Date' name='birthDate' rules={[{ required: true }, { validator: dateFieldValidator}]}>
                   <Input />
               </Form.Item>
-              <Form.Item initialValue={props.figure?.birthHistoricalState.id} label='Historical State' name='birthHistoricalStateId' rules={[{ required: true }]}>
+              <Form.Item initialValue={birthHistoricalStateOption} label='Historical State' name='birthHistoricalStateId' rules={[{ required: true }]}>
                   <Select
                       dropdownRender={(menu) => (
                           <div style={{ maxHeight: "300px" }}>
                               {menu}
                           </div>
                       )}
+                      onChange={onChangeBirthHistoricalState}
                       placeholder='Please select a historical state.'
                       showSearch>
                           {historicalStates.map(option => (
@@ -65,7 +88,8 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
                   <Select 
                       fieldNames={{ label: 'name', value:'id'}}
                       filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())} 
-                      options={presentCountries} 
+                      onChange={onChangeBirthPresentCountry}
+                      options={birthPresentCountries} 
                       placeholder='Please select a country.'
                       showSearch
                   />
@@ -75,13 +99,14 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
               <Form.Item initialValue={props.figure?.deathDate} label='Death Date' name='deathDate' rules={[{ validator: dateFieldValidator}]}>
                   <Input />
               </Form.Item>
-              <Form.Item initialValue={props.figure?.deathHistoricalState?.id} label='Historical State' name='deathHistoricalStateId'>
+              <Form.Item initialValue={deathHistoricalStateOption} label='Historical State' name='deathHistoricalStateId'>
                   <Select
                       dropdownRender={(menu) => (
                           <div style={{ maxHeight: "300px" }}>
                               {menu}
                           </div>
                       )}
+                      onChange={onChangeDeathHistoricalState}
                       placeholder='Please select a historical state.'
                       showSearch>
                           {historicalStates.map(option => (
@@ -94,13 +119,14 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
               <Form.Item initialValue={props.figure?.deathPresentCountry?.id} label='Present Country' name='deathPresentCountryId'>
                   <Select 
                       fieldNames={{ label: 'name', value:'id'}}
-                      filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())} 
-                      options={presentCountries} 
+                      filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())}
+                      onChange={onChangeDeathPresentCountry}
+                      options={deathPresentCountries} 
                       placeholder='Please select a country.'
                       showSearch
                   />
               </Form.Item>
           </Form>
         </div>  
-      );
+      )
 }

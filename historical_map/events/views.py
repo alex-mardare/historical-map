@@ -67,4 +67,15 @@ class PresentCountryList(generics.ListAPIView):
     pagination_class = NoPagination
     queryset = PresentCountry.objects.all()
     serializer_class = PresentCountryGetAllSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        histStateId = self.request.query_params.get('histStateId')
+        if histStateId:
+            historicalState = HistoricalState.objects.filter(id=histStateId).first()
+            queryset = historicalState.get_present_countries()
+        
+        return queryset
+
 #endregion

@@ -30,14 +30,15 @@ export const useFetchHistoricalStates = () => {
     return { errorHistoricalStates, historicalStates, loadingDataHistoricalStates };
 }
 
-export const useFetchPresentCountries = () => {
+export const useFetchPresentCountries = (histStateId: number | undefined) => {
     const [errorPresentCountries, setErrorPresentCountries] = useState(null);
     const [loadingDataPresentCountries, setLoadingDataPresentCountries] = useState(true);
     const [presentCountries, setPresentCountries] = useState<PresentCountries>([]);
 
     useEffect(() => {
         setLoadingDataPresentCountries(true);
-        axios.get(PRESENT_COUNTRIES_FULL_URL)
+        const presentCountriesUrl = histStateId != null ? PRESENT_COUNTRIES_FULL_URL + '?histStateId=' + histStateId : PRESENT_COUNTRIES_FULL_URL
+        axios.get(presentCountriesUrl)
             .then(res => {
                 setPresentCountries(res.data);
                 setLoadingDataPresentCountries(false);
@@ -47,7 +48,7 @@ export const useFetchPresentCountries = () => {
                 setErrorPresentCountries(errorPresentCountries);
                 setLoadingDataPresentCountries(false);
             });
-    }, [errorPresentCountries]);
+    }, [errorPresentCountries, histStateId]);
 
     return { errorPresentCountries, loadingDataPresentCountries, presentCountries };
 }

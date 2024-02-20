@@ -1,28 +1,29 @@
-import { Form, Input, InputNumber, Select, TimePicker } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import { DefaultOptionType } from 'antd/es/select';
-import dayjs from 'dayjs';
-import React from 'react';
+import { Form, Input, InputNumber, Select, TimePicker } from 'antd'
+import TextArea from 'antd/es/input/TextArea'
+import { DefaultOptionType } from 'antd/es/select'
+import dayjs from 'dayjs'
+import React, { useState } from 'react'
 
-import { TIME_FORMAT } from '../../models/constants/constants';
-import { HistoricalEvent } from '../../models/types/historicalEvent';
-import { useFetchHistoricalStates, useFetchPresentCountries } from '../../utils/hooks/countriesHooks';
-import { useFetchEventCategories } from '../../utils/hooks/eventPropertiesHooks';
-import { dateFieldValidator } from '../../utils/validators/dateValidator';
-import { formValidationMessages } from '../../utils/validators/formValidator';
+import { TIME_FORMAT } from '../../models/constants/constants'
+import { HistoricalEvent } from '../../models/types/historicalEvent'
+import { useFetchHistoricalStates, useFetchPresentCountries } from '../../utils/hooks/countriesHooks'
+import { useFetchEventCategories } from '../../utils/hooks/eventPropertiesHooks'
+import { dateFieldValidator } from '../../utils/validators/dateValidator'
+import { formValidationMessages } from '../../utils/validators/formValidator'
 
 
 type EventCreateFormProps = {
-    event: HistoricalEvent | null;
-    form: any;
-    onFinish?: (values: any) => void;
+    event: HistoricalEvent | null
+    form: any
+    onFinish?: (values: any) => void
 }
 
-export default function EventModalForm(props:EventCreateFormProps)
-{
-    const { eventCategories } = useFetchEventCategories();
-    const { historicalStates } = useFetchHistoricalStates();
-    const { presentCountries } = useFetchPresentCountries();
+export default function EventModalForm(props:EventCreateFormProps) {
+    const [historicalStateOption, setHistoricalStateOption] = useState(props.event?.historicalState.id)
+
+    const { eventCategories } = useFetchEventCategories()
+    const { historicalStates } = useFetchHistoricalStates()
+    const { presentCountries } = useFetchPresentCountries(historicalStateOption)
 
     const displayIdFormItem = (event: HistoricalEvent | null) => {
         if (event !== null) {
@@ -36,13 +37,22 @@ export default function EventModalForm(props:EventCreateFormProps)
 
     const handleSubmit = (values: any) => {
         if (props.onFinish) {
-            props.onFinish(values);
+            props.onFinish(values)
         }
     }
 
+    const onChangeHistoricalState = (value: any, option: any) => {
+        setHistoricalStateOption(value)
+        props.form.resetFields(['presentCountryId'])
+    }
+
+    const onChangePresentCountry = (value: any, option: any) => {
+        props.form.setFieldsValue('presentCountryId', value)
+    }
+
     const searchHistoricalStatesDropdown = (input: string, option: DefaultOptionType | undefined) => {
-        const historicalState = historicalStates.filter(hs => hs.value === option?.value).at(0);
-        return historicalState?.label.toLocaleLowerCase().includes(input.toLocaleLowerCase()) || false;
+        const historicalState = historicalStates.filter(hs => hs.value === option?.value).at(0)
+        return historicalState?.label.toLocaleLowerCase().includes(input.toLocaleLowerCase()) || false
     }
 
     return (
@@ -76,16 +86,7 @@ export default function EventModalForm(props:EventCreateFormProps)
                     showSearch
                 />
             </Form.Item>
-            <Form.Item initialValue={props.event?.presentCountry.id} label='Present Country' name='presentCountryId' rules={[{ required: true }]}>
-                <Select 
-                    fieldNames={{ label: 'name', value:'id'}}
-                    filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())} 
-                    options={presentCountries} 
-                    placeholder='Please select a country.'
-                    showSearch
-                />
-            </Form.Item>
-            <Form.Item initialValue={props.event?.historicalState.id} label='Historical State' name='historicalStateId' rules={[{ required: true }]}>
+            <Form.Item initialValue={historicalStateOption} label='Historical State' name='historicalStateId' rules={[{ required: true }]}>
                 <Select
                     dropdownRender={(menu) => (
                         <div style={{ maxHeight: "300px" }}>
@@ -93,6 +94,7 @@ export default function EventModalForm(props:EventCreateFormProps)
                         </div>
                     )}
                     filterOption={(input, option) => searchHistoricalStatesDropdown(input, option)}
+                    onChange={onChangeHistoricalState}
                     placeholder='Please select a historical state.'
                     showSearch>
                         {historicalStates.map(option => (
@@ -102,7 +104,17 @@ export default function EventModalForm(props:EventCreateFormProps)
                         ))}
                 </Select>
             </Form.Item>
+            <Form.Item initialValue={props.event?.presentCountry?.id} label='Present Country' name='presentCountryId' rules={[{ required: true }]}>
+                <Select 
+                    fieldNames={{ label: 'name', value:'id'}}
+                    filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())}
+                    onChange={onChangePresentCountry} 
+                    options={presentCountries} 
+                    placeholder='Please select a country.'
+                    showSearch
+                />
+            </Form.Item>
         </Form>
       </div>  
-    );
+    )
 }
