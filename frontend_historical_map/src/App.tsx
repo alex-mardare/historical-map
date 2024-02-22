@@ -1,8 +1,8 @@
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, MenuProps } from 'antd';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import { menuItems } from './components/config/menu/menuConfig';
+import { menuItems, rootMenuKeys } from './components/config/menu/menuConfig';
 import { HISTORICAL_EVENTS_SECTION, HISTORICAL_FIGURES_SECTION } from './components/models/constants/urls';
 import Home from './components/pages/Home';
 import EventDetails from './components/pages/events/EventDetails';
@@ -18,6 +18,7 @@ const { Content, Sider } = Layout;
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
+  const [openKeys, setOpenKeys] = useState(['0']);
   const [width, setWidth] = useState(205);
 
   const { events, refreshFunction } = useEventsGet();
@@ -27,6 +28,15 @@ function App() {
 
     if (!collapsed) {
       setWidth(width);
+    }
+  }
+
+  const onOpenChangeMenu: MenuProps['onOpenChange'] = (menuKeys) => {
+    const latestOpenKey = menuKeys.find((key) => openKeys.indexOf(key) === -1);
+    if (latestOpenKey && rootMenuKeys.indexOf(latestOpenKey!) === -1) {
+      setOpenKeys(menuKeys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   }
 
@@ -40,7 +50,14 @@ function App() {
             onCollapse={toggleCollapsed} 
             width={width}
           >
-            <Menu defaultSelectedKeys={['1']} items={menuItems} mode="inline" theme='dark' />
+            <Menu 
+              defaultSelectedKeys={['1']} 
+              items={menuItems} 
+              mode="inline" 
+              openKeys={openKeys}
+              onOpenChange={onOpenChangeMenu} 
+              theme='dark' 
+              />
           </Sider>
           <Content>
             <Routes>

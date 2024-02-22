@@ -28,3 +28,5 @@ export const menuItems: MenuItem[] = [
     getItem('Figures List', '2.1', <FiguresMenuSubItemList />),
   ])
 ];
+
+export const rootMenuKeys = ['1', '2']
