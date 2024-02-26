@@ -2,6 +2,7 @@ import { Form, Input, Select } from "antd"
 import React, { useState } from "react"
 
 import { HistoricalFigure } from "../../models/types/historicalFigure"
+import { PresentCountriesDropdown } from "../../partials/dropdowns/presentCountriesDropdown"
 import { useFetchHistoricalStates, useFetchPresentCountries } from "../../utils/hooks/countriesHooks"
 import { dateFieldValidator } from "../../utils/validators/dateValidator"
 import { formValidationMessages } from '../../utils/validators/formValidator'
@@ -15,7 +16,9 @@ type FigureModalFormProps = {
 
 export default function FiguresModalForm(props:FigureModalFormProps) {
     const [birthHistoricalStateOption, setBirthHistoricalStateOption] = useState(props.figure?.birthHistoricalState?.id)
+    const [birthPresentCountryOption, setBirthPresentCountryOption] = useState(props.figure?.birthPresentCountry?.id)
     const [deathHistoricalStateOption, setDeathHistoricalStateOption] = useState(props.figure?.deathHistoricalState?.id)
+    const [deathPresentCountryOption, setDeathPresentCountryOption] = useState(props.figure?.deathPresentCountry?.id)
 
     const { historicalStates } = useFetchHistoricalStates()
     const birthPresentCountries = useFetchPresentCountries(birthHistoricalStateOption).presentCountries
@@ -39,20 +42,28 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
 
     const onChangeBirthHistoricalState = (value: any, option: any) => {
         setBirthHistoricalStateOption(value)
+        setBirthPresentCountryOption(undefined)
+
         props.form.resetFields(['birthPresentCountryId'])
     }
 
     const onChangeBirthPresentCountry = (value: any, option: any) => {
-        props.form.setFieldsValue('birthPresentCountryId', value)
+        setBirthPresentCountryOption(value)
+
+        props.form.setFieldsValue({ birthPresentCountryId: value })
     }
 
     const onChangeDeathHistoricalState = (value: any, option: any) => {
         setDeathHistoricalStateOption(value)
+        setDeathPresentCountryOption(undefined)
+
         props.form.resetFields(['deathPresentCountryId'])
     }
 
     const onChangeDeathPresentCountry = (value: any, option: any) => {
-        props.form.setFieldsValue('deathPresentCountryId', value)
+        setDeathPresentCountryOption(value)
+
+        props.form.setFieldsValue({ deathPresentCountryId: value })
     }
     
     return (
@@ -84,19 +95,17 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
                           ))}
                   </Select>
               </Form.Item>
-              <Form.Item initialValue={props.figure?.birthPresentCountry.id} label='Present Country' name='birthPresentCountryId' rules={[{ required: true }]}>
-                  <Select 
-                      fieldNames={{ label: 'name', value:'id'}}
-                      filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())} 
-                      onChange={onChangeBirthPresentCountry}
-                      options={birthPresentCountries} 
-                      placeholder='Please select a country.'
-                      showSearch
-                  />
+              <Form.Item initialValue={props.figure?.birthPresentCountry?.id} label='Present Country' name='birthPresentCountryId' rules={[{ required: true }]}>
+                <PresentCountriesDropdown 
+                    onChangePresentCountry={onChangeBirthPresentCountry}
+                    presentCountries={birthPresentCountries} 
+                    selectedValue={birthPresentCountryOption} 
+                    selectId={'birthPresentCountryId'}
+                />
               </Form.Item>
 
               <h4 style={{paddingLeft:'75px'}}>Death</h4>
-              <Form.Item initialValue={props.figure?.deathDate} label='Death Date' name='deathDate' rules={[{ validator: dateFieldValidator}]}>
+              <Form.Item initialValue={props.figure?.deathDate} label='Date' name='deathDate' rules={[{ validator: dateFieldValidator}]}>
                   <Input />
               </Form.Item>
               <Form.Item initialValue={deathHistoricalStateOption} label='Historical State' name='deathHistoricalStateId'>
@@ -117,14 +126,12 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
                   </Select>
               </Form.Item>
               <Form.Item initialValue={props.figure?.deathPresentCountry?.id} label='Present Country' name='deathPresentCountryId'>
-                  <Select 
-                      fieldNames={{ label: 'name', value:'id'}}
-                      filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())}
-                      onChange={onChangeDeathPresentCountry}
-                      options={deathPresentCountries} 
-                      placeholder='Please select a country.'
-                      showSearch
-                  />
+                <PresentCountriesDropdown 
+                        onChangePresentCountry={onChangeDeathPresentCountry}
+                        presentCountries={deathPresentCountries} 
+                        selectedValue={deathPresentCountryOption} 
+                        selectId={'deathPresentCountryId'}
+                />
               </Form.Item>
           </Form>
         </div>  

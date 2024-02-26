@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 
 import { TIME_FORMAT } from '../../models/constants/constants'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
+import { PresentCountriesDropdown } from '../../partials/dropdowns/presentCountriesDropdown'
 import { useFetchHistoricalStates, useFetchPresentCountries } from '../../utils/hooks/countriesHooks'
 import { useFetchEventCategories } from '../../utils/hooks/eventPropertiesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
@@ -20,6 +21,7 @@ type EventCreateFormProps = {
 
 export default function EventModalForm(props:EventCreateFormProps) {
     const [historicalStateOption, setHistoricalStateOption] = useState(props.event?.historicalState.id)
+    const [presentCountryOption, setPresentCountryOption] = useState(props.event?.presentCountry?.id)
 
     const { eventCategories } = useFetchEventCategories()
     const { historicalStates } = useFetchHistoricalStates()
@@ -43,11 +45,15 @@ export default function EventModalForm(props:EventCreateFormProps) {
 
     const onChangeHistoricalState = (value: any, option: any) => {
         setHistoricalStateOption(value)
+        setPresentCountryOption(undefined)
+
         props.form.resetFields(['presentCountryId'])
     }
 
     const onChangePresentCountry = (value: any, option: any) => {
-        props.form.setFieldsValue('presentCountryId', value)
+        setPresentCountryOption(value)
+        
+        props.form.setFieldsValue({ presentCountryId: value })
     }
 
     const searchHistoricalStatesDropdown = (input: string, option: DefaultOptionType | undefined) => {
@@ -104,15 +110,8 @@ export default function EventModalForm(props:EventCreateFormProps) {
                         ))}
                 </Select>
             </Form.Item>
-            <Form.Item initialValue={props.event?.presentCountry?.id} label='Present Country' name='presentCountryId' rules={[{ required: true }]}>
-                <Select 
-                    fieldNames={{ label: 'name', value:'id'}}
-                    filterOption={(input, option) => (option?.name ?? '').toLowerCase().includes(input.toLowerCase())}
-                    onChange={onChangePresentCountry} 
-                    options={presentCountries} 
-                    placeholder='Please select a country.'
-                    showSearch
-                />
+            <Form.Item initialValue={props.event?.presentCountry.id} label='Present Country' name='presentCountryId' rules={[{ required: true }]}>
+                <PresentCountriesDropdown {...{onChangePresentCountry, presentCountries}} selectedValue={presentCountryOption} selectId={'presentCountryId'} />
             </Form.Item>
         </Form>
       </div>  
