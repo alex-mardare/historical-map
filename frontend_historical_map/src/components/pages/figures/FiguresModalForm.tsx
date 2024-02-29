@@ -1,4 +1,4 @@
-import { Form, Input, Select } from "antd"
+import { Form, Input } from "antd"
 import React, { useState } from "react"
 
 import { HistoricalFigure } from "../../models/types/historicalFigure"
@@ -6,6 +6,7 @@ import { PresentCountriesDropdown } from "../../partials/dropdowns/presentCountr
 import { useFetchHistoricalStates, useFetchPresentCountries } from "../../utils/hooks/countriesHooks"
 import { dateFieldValidator } from "../../utils/validators/dateValidator"
 import { formValidationMessages } from '../../utils/validators/formValidator'
+import { HistoricalStatesDropdown } from "../../partials/dropdowns/historicalStatesDropdown"
 
 
 type FigureModalFormProps = {
@@ -79,23 +80,13 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
                   <Input />
               </Form.Item>
               <Form.Item initialValue={birthHistoricalStateOption} label='Historical State' name='birthHistoricalStateId' rules={[{ required: true }]}>
-                  <Select
-                      dropdownRender={(menu) => (
-                          <div style={{ maxHeight: "300px" }}>
-                              {menu}
-                          </div>
-                      )}
-                      onChange={onChangeBirthHistoricalState}
-                      placeholder='Please select a historical state.'
-                      showSearch>
-                          {historicalStates.map(option => (
-                              <Select.Option key={option.value} value={option.value}>
-                                  <div style={{ whiteSpace: "pre-wrap" }}>{option.label}</div>
-                              </Select.Option>
-                          ))}
-                  </Select>
+                <HistoricalStatesDropdown {...{ historicalStates }} 
+                    onChangeHistoricalState={onChangeBirthHistoricalState}
+                    selectedValue={birthHistoricalStateOption} 
+                    selectId={'birthHistoricalStateId'}
+                />
               </Form.Item>
-              <Form.Item initialValue={props.figure?.birthPresentCountry?.id} label='Present Country' name='birthPresentCountryId' rules={[{ required: true }]}>
+              <Form.Item initialValue={birthPresentCountryOption} label='Present Country' name='birthPresentCountryId' rules={[{ required: true }]}>
                 <PresentCountriesDropdown 
                     onChangePresentCountry={onChangeBirthPresentCountry}
                     presentCountries={birthPresentCountries} 
@@ -109,23 +100,13 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
                   <Input />
               </Form.Item>
               <Form.Item initialValue={deathHistoricalStateOption} label='Historical State' name='deathHistoricalStateId'>
-                  <Select
-                      dropdownRender={(menu) => (
-                          <div style={{ maxHeight: "300px" }}>
-                              {menu}
-                          </div>
-                      )}
-                      onChange={onChangeDeathHistoricalState}
-                      placeholder='Please select a historical state.'
-                      showSearch>
-                          {historicalStates.map(option => (
-                              <Select.Option key={option.value} value={option.value}>
-                                  <div style={{ whiteSpace: "pre-wrap" }}>{option.label}</div>
-                              </Select.Option>
-                          ))}
-                  </Select>
+                <HistoricalStatesDropdown {...{ historicalStates }} 
+                        onChangeHistoricalState={onChangeDeathHistoricalState}
+                        selectedValue={deathHistoricalStateOption} 
+                        selectId={'deathHistoricalStateId'}
+                    />
               </Form.Item>
-              <Form.Item initialValue={props.figure?.deathPresentCountry?.id} label='Present Country' name='deathPresentCountryId'>
+              <Form.Item initialValue={deathPresentCountryOption} label='Present Country' name='deathPresentCountryId'>
                 <PresentCountriesDropdown 
                         onChangePresentCountry={onChangeDeathPresentCountry}
                         presentCountries={deathPresentCountries} 
