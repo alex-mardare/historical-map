@@ -1,34 +1,35 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Card, Form, Modal } from 'antd';
-import React, { useState } from 'react';
-import { useParams } from 'react-router';
-import { useNavigate } from 'react-router-dom';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Card, Form, Modal } from 'antd'
+import React, { useState } from 'react'
+import { useParams } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
-import EventModalForm from './EventModalForm';
-import { HistoricalEvent } from '../../models/types/historicalEvent';
-import { antCardHeaderEvent } from '../../partials/antdCardHeader';
-import { createSinglePointMapContainer } from '../../partials/leafletMapPartials';
-import { displayBooleanValues } from '../../utils/display/displayBooleanValues';
-import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates';
-import { handleFormSubmission } from '../../utils/forms/formSubmission';
-import { eventDelete, useEventCoordinates, useEventGet, useEventPut } from '../../utils/hooks/eventsHooks';
+import EventModalForm from './EventModalForm'
+import { HistoricalEvent } from '../../models/types/historicalEvent'
+import { antCardHeaderEvent } from '../../partials/antdCardHeader'
+import { createSinglePointMapContainer } from '../../partials/leafletMapPartials'
+import { displayBooleanValues } from '../../utils/display/displayBooleanValues'
+import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates'
+import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { eventDelete, useEventCoordinates, useEventGet, useEventPut } from '../../utils/hooks/eventsHooks'
 
-import '../../../assets/styling/events/eventDetails.css';
+import '../../../assets/styling/events/eventDetails.css'
+import '../../../assets/styling/detailsPage.css'
 
 
 export default function EventDetails(){
-  const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-  const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
+  const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false)
+  const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
 
-  const [form] = Form.useForm();
-  const { submitData } = useEventPut();
-  const navigate = useNavigate();
+  const [form] = Form.useForm()
+  const { submitData } = useEventPut()
+  const navigate = useNavigate()
 
-  const { eventId } = useParams();
-  let event = useEventGet(eventId);
-  const coordinates = useEventCoordinates(event);
+  const { eventId } = useParams()
+  let event = useEventGet(eventId)
+  const coordinates = useEventCoordinates(event)
 
 
   //#region DISPLAY FUNCTIONALITY
@@ -43,45 +44,45 @@ export default function EventDetails(){
 
   const displayMap = (event: HistoricalEvent | null) => {
     if (event) {
-      return (createSinglePointMapContainer(coordinates, event, 'eventDetailsMap'));
+      return (createSinglePointMapContainer(coordinates, event, 'eventDetailsMap'))
     }
   }
 
   const displayTitleSection = (event: HistoricalEvent | null) => {
-    return antCardHeaderEvent(event, handleGoBack);
+    return antCardHeaderEvent(event, handleGoBack)
   }
   //#endregion
 
   //#region HANDLERS PAGE
   const handleGoBack = () => {
-    navigate('/events');
+    navigate('/events')
   }
   //#endregion
 
 
   //#region HANDLERS DELETE
   const handleCancelDelete = () => {
-    setOpenDelete(false);  
+    setOpenDelete(false)
   }
 
   const handleEventDelete = () => {
-    setOpenDelete(true);
+    setOpenDelete(true)
   }
 
   const handleOkDelete = () => {
     try {
-      setConfirmLoadingDelete(true);
-      eventDelete(event);
-      setOpenDelete(false);
+      setConfirmLoadingDelete(true)
+      eventDelete(event)
+      setOpenDelete(false)
 
       setTimeout(() => {
-        handleGoBack();
-      }, 1250);
+        handleGoBack()
+      }, 1250)
     }
     catch(error) {
-      setConfirmLoadingDelete(false);
-      setOpenDelete(true);
-      console.log(error);
+      setConfirmLoadingDelete(false)
+      setOpenDelete(true)
+      console.log(error)
     }
     
   }
@@ -89,24 +90,24 @@ export default function EventDetails(){
 
   //#region HANDLERS EDIT
   const handleCancelEdit = () => {
-    setOpenEdit(false);
+    setOpenEdit(false)
   }
 
   const handleEventEdit = () => {
-    setOpenEdit(true);
+    setOpenEdit(true)
   }
 
   const handleOkEdit = () => {
-    handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit);
+    handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit)
   }
 
   const onFinishEdit = async (values: any) => {
     try {
-      await submitData(values, setConfirmLoadingEdit, setOpenEdit);
+      await submitData(values, setConfirmLoadingEdit, setOpenEdit)
       window.location.reload()
     }
     catch(error) {
-      console.log(error);
+      console.log(error)
     }
   }
   //#endregion
@@ -117,7 +118,8 @@ export default function EventDetails(){
         actions={[
           <EditOutlined key='edit' onClick={handleEventEdit} />,
           <DeleteOutlined key='delete' onClick={handleEventDelete} />
-        ]} 
+        ]}
+        id='eventDetailsCard'
         loading={event == null} 
         title={displayTitleSection(event)}>
           <p><b>Description:</b> {event?.description}</p>

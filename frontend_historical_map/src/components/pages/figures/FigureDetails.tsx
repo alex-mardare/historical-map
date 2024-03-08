@@ -1,32 +1,34 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Card, Form, Modal } from "antd";
-import React, { useState} from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Card, Form, Modal } from "antd"
+import React, { useState} from "react"
+import { useParams } from "react-router"
+import { useNavigate } from "react-router-dom"
 
-import FiguresModalForm from './FiguresModalForm';
-import { HistoricalFigure } from "../../models/types/historicalFigure";
-import { antCardHeaderFigure } from "../../partials/antdCardHeader";
-import { handleFormSubmission } from '../../utils/forms/formSubmission';
-import { figureDelete, useFigureGet, useFigurePut } from '../../utils/hooks/figuresHooks';
+import FiguresModalForm from './FiguresModalForm'
+import { HistoricalFigure } from "../../models/types/historicalFigure"
+import { antCardHeaderFigure } from "../../partials/antdCardHeader"
+import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { figureDelete, useFigureGet, useFigurePut } from '../../utils/hooks/figuresHooks'
+
+import '../../../assets/styling/detailsPage.css'
 
 
 export default function FigureDetails(){
-    const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false);
-    const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false);
-    const [openDelete, setOpenDelete] = useState(false);
-    const [openEdit, setOpenEdit] = useState(false);
+    const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false)
+    const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false)
+    const [openDelete, setOpenDelete] = useState(false)
+    const [openEdit, setOpenEdit] = useState(false)
 
-    const [form] = Form.useForm();
-    const { submitData } = useFigurePut();
-    const navigate = useNavigate();
+    const [form] = Form.useForm()
+    const { submitData } = useFigurePut()
+    const navigate = useNavigate()
   
-    const { figureId } = useParams();
-    let figure = useFigureGet(figureId);  
+    const { figureId } = useParams()
+    let figure = useFigureGet(figureId)  
   
     //#region DISPLAY FUNCTIONALITY    
     const displayTitleSection = (figure: HistoricalFigure | null) => {
-      return antCardHeaderFigure(figure, handleGoBack);
+      return antCardHeaderFigure(figure, handleGoBack)
     }
 
     const displayDeathSection = (figure: HistoricalFigure | null) => {
@@ -48,34 +50,34 @@ export default function FigureDetails(){
   
     //#region HANDLERS PAGE
     const handleGoBack = () => {
-      navigate('/figures');
+      navigate('/figures')
     }
     //#endregion
   
   
     //#region HANDLERS DELETE
     const handleCancelDelete = () => {
-      setOpenDelete(false);  
+      setOpenDelete(false)  
     }
   
     const handleFigureDelete = () => {
-      setOpenDelete(true);
+      setOpenDelete(true)
     }
   
     const handleOkDelete = () => {
       try {
-        setConfirmLoadingDelete(true);
-        figureDelete(figure);
-        setOpenDelete(false);
+        setConfirmLoadingDelete(true)
+        figureDelete(figure)
+        setOpenDelete(false)
   
         setTimeout(() => {
-          handleGoBack();
-        }, 1250);
+          handleGoBack()
+        }, 1250)
       }
       catch(error) {
-        setConfirmLoadingDelete(false);
-        setOpenDelete(true);
-        console.log(error);
+        setConfirmLoadingDelete(false)
+        setOpenDelete(true)
+        console.log(error)
       }
       
     }
@@ -83,24 +85,24 @@ export default function FigureDetails(){
   
     //#region HANDLERS EDIT
     const handleCancelEdit = () => {
-      setOpenEdit(false);
+      setOpenEdit(false)
     }
   
     const handleFigureEdit = () => {
-      setOpenEdit(true);
+      setOpenEdit(true)
     }
   
     const handleOkEdit = () => {
-      handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit);
+      handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit)
     }
   
     const onFinishEdit = async (values: any) => {
       try {
-        await submitData(values, setConfirmLoadingEdit, setOpenEdit);
+        await submitData(values, setConfirmLoadingEdit, setOpenEdit)
         window.location.reload()
       }
       catch(error) {
-        console.log(error);
+        console.log(error)
       }
     }
     //#endregion

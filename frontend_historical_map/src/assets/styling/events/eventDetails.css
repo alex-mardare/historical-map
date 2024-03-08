@@ -1,9 +1,9 @@
 #eventDetailsMap {
-    height: 54vh;
+    height: 58vh;
 }
 
-.ant-card {
-    height: 46vh;
+#eventDetailsCard {
+    height: 42vh;
 }
 
 .card-header {
