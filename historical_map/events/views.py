@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from .models import HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState
+from .models import HistoricalEvent, HistoricalFigure, HistoricalState
 from .paginations import NoPagination
 from .serializers import *
 
