@@ -26,13 +26,13 @@ export default function FigureDetails(){
     const { figureId } = useParams()
     let figure = useFigureGet(figureId)  
   
-    //#region DISPLAY FUNCTIONALITY    
+    //#region DISPLAY FUNCTIONALITY
     const displayTitleSection = (figure: HistoricalFigure | null) => {
       return antCardHeaderFigure(figure, handleGoBack)
     }
 
     const displayDeathSection = (figure: HistoricalFigure | null) => {
-      if (figure) {
+      if (figure && figure.deathDate) {
         return (
           <>
             <h2>Death</h2>
