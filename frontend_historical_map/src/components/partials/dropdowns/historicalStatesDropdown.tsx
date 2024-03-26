@@ -4,6 +4,7 @@ import React from 'react'
 import { HistoricalStateOptions } from '../../models/types/historicalState'
 import { DefaultOptionType } from 'antd/es/select'
 
+
 type HistoricalStatesDropdownProps = {
     historicalStates: HistoricalStateOptions,
     onChangeHistoricalState: (value: any, option: any) => void
@@ -19,25 +20,30 @@ export const HistoricalStatesDropdown = (props: HistoricalStatesDropdownProps) =
         return historicalState?.label.toLocaleLowerCase().includes(input.toLocaleLowerCase()) || false
     }
 
+    const optionRender = (option: any) => {
+        return (
+            <div style={{ whiteSpace: "pre-wrap" }}>
+                <div>{option.label}</div>
+                <div>{option.data.description}</div>
+            </div>
+        )
+    }
+
     return (
         <Select
-            dropdownRender={(menu) => (
-                <div style={{ maxHeight: "300px" }}>
-                    {menu}
-                </div>
-            )}
             filterOption={(input, option) => searchHistoricalStatesDropdown(input, option)}
             id={selectId}
-            onChange={onChangeHistoricalState}
+            labelInValue
+            onChange={(valueObj: any, option) => {
+                // dropdown option value is an object containing value
+                const { value } = valueObj
+                onChangeHistoricalState(value, option)
+            }}
+            optionRender={optionRender}
+            options={historicalStates}
             placeholder='Please select a historical state.'
             showSearch
             value={selectedValue}
-        >
-                {historicalStates.map(option => (
-                    <Select.Option key={option.value} value={option.value}>
-                        <div style={{ whiteSpace: "pre-wrap" }}>{option.label}</div>
-                    </Select.Option>
-                ))}
-        </Select>
+        />
     )
 }

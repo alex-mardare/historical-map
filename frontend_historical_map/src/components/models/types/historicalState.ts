@@ -7,6 +7,7 @@ export interface HistoricalState {
 export type HistoricalStates = HistoricalState[]
 
 type HistoricalStateOption = {
+    description: string,
     label: string,
     value: number
 }

@@ -5,7 +5,7 @@ import { HISTORICAL_STATES_FULL_URL, PRESENT_COUNTRIES_FULL_URL } from '../../mo
 import { PresentCountries } from '../../models/types/presentCountry';
 import { HistoricalStateOptions } from '../../models/types/historicalState';
 import { historicalStatesLoadingError, presentCountriesLoadingError } from '../../partials/notifications';
-import { transformHistoricalStatesForSelector } from '../selectors/eventCategorySelector';
+import { transformHistoricalStatesForSelector } from '../selectors/historicalStateSelector';
 
 
 export const useFetchHistoricalStates = () => {
