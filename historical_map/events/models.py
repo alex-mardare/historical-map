@@ -18,11 +18,11 @@ class EventCategory(models.Model):
 
 class HistoricalState(models.Model):
     name = models.CharField(max_length=255)
-    dateFrom = models.CharField(max_length=15, blank=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
-    dateTo = models.CharField(max_length=15, blank=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    dateFrom = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    dateTo = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
-    flagUrl = models.CharField(max_length=255, blank=True)
+    flagUrl = models.CharField(blank=True, max_length=255, null=True)
     presentCountries = models.ManyToManyField('events.PresentCountry', related_name='presentCountries')
 
     def __str__(self):
@@ -43,7 +43,7 @@ class PresentCountry(models.Model):
     code = models.CharField(max_length=5)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
-    flagUrl = models.CharField(max_length=255, blank=True)
+    flagUrl = models.CharField(blank=True, max_length=255, null=True)
 
     def __str__(self):
         return self.name
@@ -58,7 +58,7 @@ class HistoricalFigure(models.Model):
     birthHistoricalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE, related_name='birthHistoricalState')
     birthPresentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE, related_name='birthPresentCountry')
     birthDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
-    deathDate = models.CharField(blank=True, max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    deathDate = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
     deathHistoricalStateId = models.ForeignKey(HistoricalState, blank=True, null=True, on_delete=models.CASCADE, related_name='deathHistoricalState')
@@ -73,7 +73,7 @@ class HistoricalFigure(models.Model):
 
 class HistoricalFigureRole(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(blank=True, max_length=1000)
+    description = models.CharField(blank=True, max_length=1000, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 
