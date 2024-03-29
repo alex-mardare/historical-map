@@ -5,7 +5,7 @@ export function transformHistoricalStatesForSelector(historicalStates : Historic
     let historicalStateOptions: HistoricalStateOptions = [];
     historicalStates.forEach(hs => {
         historicalStateOptions.push({
-            description: hs.dateTo.length > 0 ? '(' + hs.dateFrom + ' - ' + hs.dateTo + ')' : '',
+            description: hs.dateTo && hs.dateTo.length > 0 ? '(' + hs.dateFrom + ' - ' + hs.dateTo + ')' : '',
             label: hs.name,
             value: hs.id
         })

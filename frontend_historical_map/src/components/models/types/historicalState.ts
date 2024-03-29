@@ -1,8 +1,8 @@
 export interface HistoricalState {
     id: number,
     name: string,
-    dateFrom: string,
-    dateTo: string
+    dateFrom: string | null,
+    dateTo: string | null
 }
 export type HistoricalStates = HistoricalState[]
 

@@ -1,4 +1,4 @@
 export interface HistoricalDateObject {
-    date: string,
+    date: string | null,
     time: Date | null
 }

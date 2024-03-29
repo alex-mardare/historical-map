@@ -5,7 +5,7 @@ export interface HistoricalFigure {
     birthDate: string,
     birthHistoricalState: HistoricalState,
     birthPresentCountry: PresentCountry,
-    deathDate: string,
+    deathDate: string | null,
     deathHistoricalState: HistoricalState,
     deathPresentCountry: PresentCountry,
     id: number,
