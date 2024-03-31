@@ -55,14 +55,14 @@ class PresentCountry(models.Model):
 
 class HistoricalFigure(models.Model):
     name = models.CharField(max_length=255)
-    birthHistoricalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE, related_name='birthHistoricalState')
-    birthPresentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE, related_name='birthPresentCountry')
+    birthHistoricalStateId = models.ForeignKey(HistoricalState, on_delete=models.PROTECT, related_name='birthHistoricalState')
+    birthPresentCountryId = models.ForeignKey(PresentCountry, on_delete=models.PROTECT, related_name='birthPresentCountry')
     birthDate = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     deathDate = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
-    deathHistoricalStateId = models.ForeignKey(HistoricalState, blank=True, null=True, on_delete=models.CASCADE, related_name='deathHistoricalState')
-    deathPresentCountryId = models.ForeignKey(PresentCountry, blank=True, null=True, on_delete=models.CASCADE, related_name='deathPresentCountry')
+    deathHistoricalStateId = models.ForeignKey(HistoricalState, blank=True, null=True, on_delete=models.PROTECT, related_name='deathHistoricalState')
+    deathPresentCountryId = models.ForeignKey(PresentCountry, blank=True, null=True, on_delete=models.PROTECT, related_name='deathPresentCountry')
 
     def __str__(self):
         return self.name
@@ -93,10 +93,10 @@ class HistoricalEvent(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, validators=[MinValueValidator(-180), MaxValueValidator(180)])
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
-    eventCategoryId = models.ForeignKey(EventCategory, on_delete=models.CASCADE)
-    presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
+    eventCategoryId = models.ForeignKey(EventCategory, on_delete=models.PROTECT)
+    presentCountryId = models.ForeignKey(PresentCountry, on_delete=models.PROTECT)
     approximateRealLocation = models.BooleanField(default=False, editable=False)
-    historicalStateId = models.ForeignKey(HistoricalState, on_delete=models.CASCADE)
+    historicalStateId = models.ForeignKey(HistoricalState, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
