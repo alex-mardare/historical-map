@@ -29,7 +29,7 @@ class HistoricalStatePropertySerializer(serializers.ModelSerializer):
 class PresentCountryGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
-        fields = ['id', 'name']
+        fields = ['code', 'id', 'name']
 
 class PresentCountryPropertySerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,7 +42,7 @@ class PresentCountryPropertySerializer(serializers.ModelSerializer):
 class HistoricalEventDeletePostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEvent
-        fields = '__all__'
+        exclude=['createdAt', 'updatedAt']
 
     def create(self, data):
         try:
