@@ -100,6 +100,9 @@ class HistoricalEvent(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        ordering = ["name"]
 
 
 class EventFigureRole(models.Model):
