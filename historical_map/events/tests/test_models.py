@@ -14,6 +14,7 @@ class BaseModelTestClass(TestCase):
     sleep_time = 0.1
     mocked_time = dt.now(tz=pytz.utc)
 
+
 class CommonFunctionalityModelsTestClass(TestCase):
     @classmethod
     def setUp(self):
