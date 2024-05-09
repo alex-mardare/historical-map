@@ -13,6 +13,11 @@ class EventCategoryGetAllSerializer(serializers.ModelSerializer):
 
 
 #region HISTORICAL STATE SERIALIZERS
+class HistoricalStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalState
+        exclude = ['createdAt', 'updatedAt']
+
 class HistoricalStateGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState

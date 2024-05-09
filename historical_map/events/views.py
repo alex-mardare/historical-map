@@ -55,10 +55,20 @@ class HistoricalFigureListPost(generics.ListCreateAPIView):
 
 
 #region HISTORICAL STATE ENDPOINTS 
-class HistoricalStateList(generics.ListAPIView):
+class HistoricalStateListPost(generics.ListCreateAPIView):
     pagination_class = NoPagination
     queryset = HistoricalState.objects.all()
-    serializer_class = HistoricalStateGetAllSerializer
+    serializer_class = HistoricalStateSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return HistoricalStateGetAllSerializer
+        return super().get_serializer_class()
+    
+class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
+    pagination_class = NoPagination
+    queryset = HistoricalState.objects.all()
+    serializer_class = HistoricalStateSerializer
 #endregion
 
 

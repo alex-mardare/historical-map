@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalState, PresentCountry
-from ..serializers import EventCategoryGetAllSerializer, HistoricalEventGetSerializer, HistoricalEventDeletePostUpdateSerializer, HistoricalFigureGetSerializer, HistoricalFigureDeletePostUpdateSerializer, HistoricalStateGetAllSerializer, PresentCountryGetAllSerializer
+from ..serializers import *
 
 class BaseViewTestClass(TestCase):
     client = APIClient()
@@ -37,12 +37,15 @@ class EventCategoryViewTestClass(BaseViewTestClass):
 class HistoricalStateViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.url = reverse('historical-state-list')
-        HistoricalState.objects.create(dateFrom='1234', dateTo='1245', name='Historical State 1')
+        self.historical_state = HistoricalState.objects.create(dateFrom='1234', dateTo='1245', name='Historical State 1')
+        self.present_country = PresentCountry.objects.create(code='PC', name='Present country')
         HistoricalState.objects.create(dateFrom='2345', dateTo='2356', name='Historical State 2')
 
+        self.url_list = reverse('historical-state-list')
+        self.url_item = reverse('historical-state-item', kwargs={'pk':self.historical_state.id})
+
     def test_get_list(self):
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotIn('next', response.data)
         self.assertNotIn('previous', response.data)
@@ -53,10 +56,57 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         HistoricalState.objects.all().delete()
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
+
+    def test_post_historical_state(self):
+        historical_state = HistoricalStateSerializer(data={'dateFrom': '1234', 'dateTo': '1235', 'name': 'Historical State', 'presentCountries': [self.present_country.id]})
+        historical_state.is_valid()
+
+        response = self.client.post(self.url_list, data=historical_state.data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['dateFrom'], historical_state.data['dateFrom'])
+        self.assertEqual(response.data['dateTo'], historical_state.data['dateTo'])
+        self.assertEqual(response.data['name'], historical_state.data['name'])
+        self.assertEqual(response.data['presentCountries'], historical_state.data['presentCountries'])
+
+    def test_delete_item(self):
+        response = self.client.delete(self.url_item)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertIsNone(response.data)
+
+    def test_delete_item_non_existent(self):
+        response = self.client.delete(reverse('historical-state-item', kwargs={'pk':self.historical_state.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
+
+    def test_put_item(self):
+        updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
+
+        serializer = HistoricalStateSerializer(data=updated_historical_state)
+        serializer.is_valid()
+        response = self.client.put(self.url_item, serializer.data, content_type='application/json')
+        self.assertEqual(response.data['name'], updated_historical_state['name'])
+
+    def test_put_item_non_existent(self):
+        response = self.client.put(reverse('event-item', kwargs={'pk':self.historical_state.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
+
+    def test_patch_item(self):
+        updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
+        serializer = HistoricalStateSerializer(data=updated_historical_state)
+
+        serializer.is_valid()
+        response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
+        self.assertEqual(response.data['name'], updated_historical_state['name'])
+
+    def test_patch_item_non_existent(self):
+        response = self.client.patch(reverse('event-item', kwargs={'pk':self.historical_state.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
 
 
 class PresentCountryViewTestClass(BaseViewTestClass):
