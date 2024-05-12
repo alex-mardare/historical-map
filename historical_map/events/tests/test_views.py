@@ -51,7 +51,7 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
         self.assertNotIn('previous', response.data)
         
         historical_state_list = HistoricalState.objects.all()
-        serializer = HistoricalStateGetAllSerializer(historical_state_list, many=True)
+        serializer = HistoricalStateGetSerializer(historical_state_list, many=True)
         self.assertEqual(response.data, serializer.data)
 
     def test_get_list_no_object(self):
@@ -62,7 +62,8 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data, [])
 
     def test_post_historical_state(self):
-        historical_state = HistoricalStateSerializer(data={'dateFrom': '1234', 'dateTo': '1235', 'name': 'Historical State', 'presentCountries': [self.present_country.id]})
+        historical_state = HistoricalStateDeletePostUpdateSerializer(data={'dateFrom': '1234', 'dateTo': '1235', 'name': 'Historical State', 
+                                                                           'presentCountries': [self.present_country.id]})
         historical_state.is_valid()
 
         response = self.client.post(self.url_list, data=historical_state.data, content_type='application/json')
@@ -85,7 +86,7 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
     def test_put_item(self):
         updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
 
-        serializer = HistoricalStateSerializer(data=updated_historical_state)
+        serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
         serializer.is_valid()
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_state['name'])
@@ -97,7 +98,7 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
 
     def test_patch_item(self):
         updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
-        serializer = HistoricalStateSerializer(data=updated_historical_state)
+        serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
 
         serializer.is_valid()
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')

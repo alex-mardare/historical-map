@@ -37,31 +37,38 @@ class EventCategorySerializersTestClass(TestCase):
 
 
 class HistoricalStateSerializerTestClass(TestCase):
-#region HistoricalStateGetAllSerializer
+    def setUp(self):
+        self.present_country = PresentCountry.objects.create(code='PC', name='Present country')
+
+#region HistoricalStateGetSerializer
     def test_serialization_get_all(self):
         historical_state = HistoricalState.objects.create(dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state')
-        serializer = HistoricalStateGetAllSerializer(historical_state)
-        expected_data = {'dateFrom': historical_state.dateFrom, 'dateTo': historical_state.dateTo, 'id': historical_state.id, 'name': historical_state.name}
+        serializer = HistoricalStateGetSerializer(historical_state)
+        expected_data = {'id': historical_state.id, 'presentCountries': [], 'name': historical_state.name, 'dateFrom': historical_state.dateFrom, 
+                         'dateTo': historical_state.dateTo, 'flagUrl': None}
 
         self.assertEqual(serializer.data, expected_data)
 
     def test_serialization_valid_data_get_all(self):
-        valid_historical_state = {'dateFrom': '1234', 'dateTo': '4321', 'name': 'Historical state'}
-        serializer = HistoricalStateGetAllSerializer(data=valid_historical_state)
+        valid_historical_state = {'dateFrom': '1234', 'dateTo': '4321', 'name': 'Historical state', 
+                                  'presentCountries': [{'id': self.present_country.id, 'name': self.present_country.name}]}
+        serializer = HistoricalStateGetSerializer(data=valid_historical_state)
 
         self.assertTrue(serializer.is_valid())
 
     def test_validation_name_not_present(self):
         invalid_historical_state = {'dateFrom': '1234', 'dateTo': '4321'}
-        serializer = HistoricalStateGetAllSerializer(data=invalid_historical_state)
+        serializer = HistoricalStateGetSerializer(data=invalid_historical_state)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('name', serializer.errors)
+        self.assertIn('presentCountries', serializer.errors)
         self.assertTrue(any('required' in error.code for error in serializer.errors['name']))
+        self.assertTrue(any('required' in error.code for error in serializer.errors['presentCountries']))
 
     def test_validation_invalid_dates(self):
         invalid_historical_state = {'dateFrom': '123-1-1', 'dateTo': '4321-1', 'name': 'Historical state'}
-        serializer = HistoricalStateGetAllSerializer(data=invalid_historical_state)
+        serializer = HistoricalStateGetSerializer(data=invalid_historical_state)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('dateFrom', serializer.errors)
@@ -71,7 +78,7 @@ class HistoricalStateSerializerTestClass(TestCase):
 
     def test_validation_properties_exceed_max_length(self):
         invalid_historical_state = {'dateFrom': '1234'*4, 'dateTo': '4321'*4, 'name': 'h' * 256}
-        serializer = HistoricalStateGetAllSerializer(data=invalid_historical_state)
+        serializer = HistoricalStateGetSerializer(data=invalid_historical_state)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('dateFrom', serializer.errors)
@@ -97,15 +104,12 @@ class HistoricalStateSerializerTestClass(TestCase):
         self.assertTrue(serializer.is_valid())
 #endregion
 
-#region HistoricalStateSerializer
-    def setUp(self):
-        self.present_country = PresentCountry.objects.create(code='PC', name='Present country')
-
+#region HistoricalStateDeletePostUpdateSerializer
     def test_serialization(self):
         historical_state = HistoricalState.objects.create(dateFrom='1234-05-06', dateTo='2345-06-07', flagUrl='', name='Historical state')
         historical_state.presentCountries.set(PresentCountry.objects.all())
 
-        serializer = HistoricalStateSerializer(historical_state)
+        serializer = HistoricalStateDeletePostUpdateSerializer(historical_state)
         expected_data = {'id': historical_state.id, 'name': historical_state.name, 'dateFrom': historical_state.dateFrom, 'dateTo': historical_state.dateTo, 
                          'flagUrl': historical_state.flagUrl, 'presentCountries': [self.present_country.id]}
 
@@ -113,13 +117,13 @@ class HistoricalStateSerializerTestClass(TestCase):
 
     def test_serialization_valid_data(self):
         valid_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState', 'presentCountries': [self.present_country.id]}
-        serializer = HistoricalStateSerializer(data=valid_historical_state)
+        serializer = HistoricalStateDeletePostUpdateSerializer(data=valid_historical_state)
 
         self.assertTrue(serializer.is_valid())
 
     def test_serialization_presentCountries_not_present(self):
         valid_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState'}
-        serializer = HistoricalStateSerializer(data=valid_historical_state)
+        serializer = HistoricalStateDeletePostUpdateSerializer(data=valid_historical_state)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('presentCountries', serializer.errors)
@@ -127,7 +131,7 @@ class HistoricalStateSerializerTestClass(TestCase):
 
     def test_serialization_presentCountries_invalid(self):
         valid_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState', 'presentCountries': [self.present_country.id - 1]}
-        serializer = HistoricalStateSerializer(data=valid_historical_state)
+        serializer = HistoricalStateDeletePostUpdateSerializer(data=valid_historical_state)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('presentCountries', serializer.errors)

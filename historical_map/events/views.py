@@ -58,17 +58,22 @@ class HistoricalFigureListPost(generics.ListCreateAPIView):
 class HistoricalStateListPost(generics.ListCreateAPIView):
     pagination_class = NoPagination
     queryset = HistoricalState.objects.all()
-    serializer_class = HistoricalStateSerializer
+    serializer_class = HistoricalStateGetSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return HistoricalStateGetAllSerializer
+        if self.request.method == 'POST':
+            return HistoricalStateDeletePostUpdateSerializer
         return super().get_serializer_class()
     
 class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
     pagination_class = NoPagination
     queryset = HistoricalState.objects.all()
-    serializer_class = HistoricalStateSerializer
+    serializer_class = HistoricalStateDeletePostUpdateSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return HistoricalStateGetSerializer
+        return super().get_serializer_class()
 #endregion
 
 
@@ -87,5 +92,4 @@ class PresentCountryList(generics.ListAPIView):
             queryset = historicalState.get_present_countries()
         
         return queryset
-
 #endregion

@@ -12,24 +12,6 @@ class EventCategoryGetAllSerializer(serializers.ModelSerializer):
 #endregion
 
 
-#region HISTORICAL STATE SERIALIZERS
-class HistoricalStateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalState
-        exclude = ['createdAt', 'updatedAt']
-
-class HistoricalStateGetAllSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalState
-        fields = ['dateFrom', 'dateTo', 'id', 'name']
-
-class HistoricalStatePropertySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HistoricalState
-        fields = ['id', 'name']
-#endregion
-
-
 #region PRESENT COUNTRY SERIALIZERS
 class PresentCountryGetAllSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,6 +21,26 @@ class PresentCountryGetAllSerializer(serializers.ModelSerializer):
 class PresentCountryPropertySerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
+        fields = ['id', 'name']
+#endregion
+
+
+#region HISTORICAL STATE SERIALIZERS
+class HistoricalStateDeletePostUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalState
+        exclude = ['createdAt', 'updatedAt']
+
+class HistoricalStateGetSerializer(serializers.ModelSerializer):
+    presentCountries = PresentCountryPropertySerializer(many=True)
+
+    class Meta:
+        model = HistoricalState
+        exclude = ['createdAt', 'updatedAt']
+
+class HistoricalStatePropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalState
         fields = ['id', 'name']
 #endregion
 
