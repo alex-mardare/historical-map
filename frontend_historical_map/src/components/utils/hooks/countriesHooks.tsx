@@ -2,13 +2,14 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { HISTORICAL_STATES_FULL_URL, PRESENT_COUNTRIES_FULL_URL } from '../../models/constants/urls';
+import { HistoricalState, HistoricalStateOptions } from '../../models/types/historicalState'
+import { DataGetHistoricalStates } from '../../models/types/hooksDataTypes';
 import { PresentCountries } from '../../models/types/presentCountry';
-import { HistoricalStateOptions } from '../../models/types/historicalState';
 import { historicalStatesLoadingError, presentCountriesLoadingError } from '../../partials/notifications';
 import { transformHistoricalStatesForSelector } from '../selectors/historicalStateSelector';
 
 
-export const useFetchHistoricalStates = () => {
+const useGetHistoricalStatesOptions = () => {
     const [errorHistoricalStates, setErrorHistoricalStates] = useState(null);
     const [historicalStates, setHistoricalStates] = useState<HistoricalStateOptions>([]);
     const [loadingDataHistoricalStates, setLoadingDataHistoricalStates] = useState(true);
@@ -30,7 +31,29 @@ export const useFetchHistoricalStates = () => {
     return { errorHistoricalStates, historicalStates, loadingDataHistoricalStates };
 }
 
-export const useFetchPresentCountries = (histStateId: number | undefined) => {
+function useGetHistoricalStates(): DataGetHistoricalStates<HistoricalState> {
+    const [historicalStates, setHistoricalStates] = useState(null);
+
+    const fetchHistoricalStates = async () => {
+        try {
+            const response = await axios.get(HISTORICAL_STATES_FULL_URL);
+            setHistoricalStates(response.data);
+        } catch (error) {
+            historicalStatesLoadingError();
+        }
+    };
+
+    useEffect(() => {
+        fetchHistoricalStates();
+    }, []);
+
+    return {
+        historicalStates,
+        refreshFunction: fetchHistoricalStates,
+    };
+}
+
+const useFetchPresentCountries = (histStateId: number | undefined) => {
     const [errorPresentCountries, setErrorPresentCountries] = useState(null);
     const [loadingDataPresentCountries, setLoadingDataPresentCountries] = useState(true);
     const [presentCountries, setPresentCountries] = useState<PresentCountries>([]);
@@ -51,4 +74,9 @@ export const useFetchPresentCountries = (histStateId: number | undefined) => {
     }, [errorPresentCountries, histStateId]);
 
     return { errorPresentCountries, loadingDataPresentCountries, presentCountries };
+}
+
+export {
+    useGetHistoricalStatesOptions, useGetHistoricalStates,
+    useFetchPresentCountries   
 }

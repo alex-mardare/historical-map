@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import EventCreateForm from './EventModalForm';
 import { columnsConfig } from '../../config/tables/eventsListColumnsConfig';
-import { HistoricalEvent } from '../../models/types/historicalEvent';
+import { HistoricalEvents } from '../../models/types/historicalEvent';
 import { handleFormSubmission } from '../../utils/forms/formSubmission';
 import { useEventPost } from '../../utils/hooks/eventsHooks';
 
@@ -12,7 +12,7 @@ import '../../../assets/styling/tablePage.css';
 
 const { Search } = Input;
 
-type HistoricalEvents = HistoricalEvent[];
+
 type EventsListProps = {
   events: HistoricalEvents | null,
   onRefreshEvents: () => void

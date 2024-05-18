@@ -3,7 +3,7 @@ import React, { useState } from "react"
 
 import { HistoricalFigure } from "../../models/types/historicalFigure"
 import { PresentCountriesDropdown } from "../../partials/dropdowns/presentCountriesDropdown"
-import { useFetchHistoricalStates, useFetchPresentCountries } from "../../utils/hooks/countriesHooks"
+import { useFetchPresentCountries, useGetHistoricalStatesOptions } from "../../utils/hooks/countriesHooks"
 import { dateFieldValidator } from "../../utils/validators/dateValidator"
 import { formValidationMessages } from '../../utils/validators/formValidator'
 import { HistoricalStatesDropdown } from "../../partials/dropdowns/historicalStatesDropdown"
@@ -21,7 +21,7 @@ export default function FiguresModalForm(props:FigureModalFormProps) {
     const [deathHistoricalStateOption, setDeathHistoricalStateOption] = useState(props.figure?.deathHistoricalState?.id)
     const [deathPresentCountryOption, setDeathPresentCountryOption] = useState(props.figure?.deathPresentCountry?.id)
 
-    const { historicalStates } = useFetchHistoricalStates()
+    const { historicalStates } = useGetHistoricalStatesOptions()
     const birthPresentCountries = useFetchPresentCountries(birthHistoricalStateOption).presentCountries
     const deathPresentCountries = useFetchPresentCountries(deathHistoricalStateOption).presentCountries
 

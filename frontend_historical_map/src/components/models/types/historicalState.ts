@@ -1,8 +1,13 @@
+import { PresentCountries } from "./presentCountry"
+
+
 export interface HistoricalState {
+    dateFrom: string | null,
+    dateTo: string | null,
+    flagUrl: string | null,
     id: number,
     name: string,
-    dateFrom: string | null,
-    dateTo: string | null
+    presentCountries: PresentCountries
 }
 export type HistoricalStates = HistoricalState[]
 

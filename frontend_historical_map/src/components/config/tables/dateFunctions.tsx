@@ -14,96 +14,25 @@ export function convertDateToString(date: string | null) : Date | undefined {
 
 export function dateColumnSort(firstObjectDate: HistoricalDateObject, secondObjectDate: HistoricalDateObject, firstDate: Date | undefined, secondDate: Date | undefined) {
     // For negative dates the order is reversed
-    if (firstObjectDate.date && firstObjectDate.date[0] === '-') {
-        if (secondObjectDate.date && secondObjectDate.date[0] !== '-') {
-            return -1;
-        }
-        else {
-            if (firstDate === undefined || secondDate === undefined) {
-                if (firstDate === undefined && secondDate !== undefined) {
-                    return -1;
-                }
-                else if (firstDate !== undefined && secondDate === undefined) {
-                    return 1;
-                }
-                else {
-                    return 0;
-                }
-            }
-            else {
-                if (firstDate > secondDate) {
-                    return 1;
-                }
-                else if (firstDate < secondDate) {
-                    return -1;
-                }
-                else {
-                    if (firstObjectDate.time === null) {
-                        return secondObjectDate.time === null ? 0 : 1;
-                    }
-                    else {
-                        if (secondObjectDate.time === null) {
-                            return -1;
-                        }
-                        else {
-                            if (firstObjectDate.time > secondObjectDate.time) {
-                                return -1;
-                            }
-                            else if (firstObjectDate.time < secondObjectDate.time) {
-                                return 1;
-                            }
-                            return 0;
-                        }
-                    }
-                }
-            }
-        }
+    const isFirstDateNegative = firstObjectDate.date && firstObjectDate.date[0] === '-'
+    const isSecondDateNegative = secondObjectDate.date && secondObjectDate.date[0] === '-'
+
+    if (isFirstDateNegative && !isSecondDateNegative) return -1
+    if (!isFirstDateNegative && isSecondDateNegative) return 1
+
+    if (firstDate === undefined) return secondDate === undefined ? 0 : 1
+    if (secondDate === undefined) return -1
+
+    if (firstDate !== secondDate) return firstDate > secondDate ? 1 : -1
+
+    if (firstObjectDate.time === null) return secondObjectDate.time === null ? 0 : 1
+    if (secondObjectDate.time === null) return -1
+
+    if (firstObjectDate.time !== secondObjectDate.time) {
+        if (firstObjectDate.time > secondObjectDate.time) return 1
+        else return -1
     }
-    else {
-        if (secondObjectDate.date && secondObjectDate.date[0] === '-') {
-            return 1;
-        }
-        else {
-            if (firstDate === undefined || secondDate === undefined) {
-                if (firstDate === undefined && secondDate !== undefined) {
-                    return -1;
-                }
-                else if (firstDate !== undefined && secondDate === undefined) {
-                    return 1;
-                }
-                else {
-                    return 0;
-                }
-            }
-            else {
-                if (firstDate > secondDate) {
-                    return 1;
-                }
-                else if (firstDate < secondDate) {
-                    return -1;
-                }
-                else {
-                    if (firstObjectDate.time === null) {
-                        return secondObjectDate.time === null ? 0 : -1;
-                    }
-                    else {
-                        if (secondObjectDate.time === null) {
-                            return 1;
-                        }
-                        else {
-                            if (firstObjectDate.time > secondObjectDate.time) {
-                                return 1;
-                            }
-                            else if (firstObjectDate.time < secondObjectDate.time) {
-                                return -1;
-                            }
-                            return 0;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    else return 0
 }
 
 function extractDateFromString(date : string | null): String[] | undefined {

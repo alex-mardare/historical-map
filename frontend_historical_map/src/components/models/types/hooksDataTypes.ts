@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type DataCreateUpdate<T> = {
   submitData: (
       formData: any, 
@@ -16,5 +17,10 @@ export type DataGetEvents<HistoricalEvent> = {
 
 export type DataGetFigures<HistoricalFigure> = {
   figures: HistoricalFigure[] | null;
+  refreshFunction: () => void;
+}
+
+export type DataGetHistoricalStates<HistoricalState> = {
+  historicalStates: HistoricalState[] | null;
   refreshFunction: () => void;
 }

@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { menuItems, rootMenuKeys } from './components/config/menu/menuConfig';
-import { HISTORICAL_EVENTS_SECTION, HISTORICAL_FIGURES_SECTION } from './components/models/constants/urls';
+import { HISTORICAL_EVENTS_SECTION, HISTORICAL_FIGURES_SECTION, HISTORICAL_STATES_SECTION } from './components/models/constants/urls';
 import Home from './components/pages/Home';
 import EventDetails from './components/pages/events/EventDetails';
 import EventsList from './components/pages/events/EventsList';
 import FigureDetails from './components/pages/figures/FigureDetails';
 import FiguresList from './components/pages/figures/FiguresList';
+import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList';
 import { useEventsGet } from './components/utils/hooks/eventsHooks';
 
 import './App.css'; 
@@ -66,6 +67,7 @@ function App() {
               <Route element={<EventDetails />} path={HISTORICAL_EVENTS_SECTION + "/:eventId"} />
               <Route element={<FiguresList />} path={HISTORICAL_FIGURES_SECTION} />
               <Route element={<FigureDetails />} path={HISTORICAL_FIGURES_SECTION + "/:figureId"}  />
+              <Route element={<HistoricalStatesList />} path={HISTORICAL_STATES_SECTION} />
             </Routes>
           </Content>
         </Layout>
