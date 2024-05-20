@@ -9,6 +9,7 @@ import EventDetails from './components/pages/events/EventDetails';
 import EventsList from './components/pages/events/EventsList';
 import FigureDetails from './components/pages/figures/FigureDetails';
 import FiguresList from './components/pages/figures/FiguresList';
+import HistoricalStateDetails from './components/pages/historical-states/HistoricalStateDetails';
 import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList';
 import { useEventsGet } from './components/utils/hooks/eventsHooks';
 
@@ -68,6 +69,7 @@ function App() {
               <Route element={<FiguresList />} path={HISTORICAL_FIGURES_SECTION} />
               <Route element={<FigureDetails />} path={HISTORICAL_FIGURES_SECTION + "/:figureId"}  />
               <Route element={<HistoricalStatesList />} path={HISTORICAL_STATES_SECTION} />
+              <Route element={<HistoricalStateDetails />} path={HISTORICAL_STATES_SECTION + "/:historicalStateId"} />
             </Routes>
           </Content>
         </Layout>

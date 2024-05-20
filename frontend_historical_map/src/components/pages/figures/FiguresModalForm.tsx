@@ -3,7 +3,8 @@ import React, { useState } from "react"
 
 import { HistoricalFigure } from "../../models/types/historicalFigure"
 import { PresentCountriesDropdown } from "../../partials/dropdowns/presentCountriesDropdown"
-import { useFetchPresentCountries, useGetHistoricalStatesOptions } from "../../utils/hooks/countriesHooks"
+import { useFetchPresentCountries } from "../../utils/hooks/countriesHooks"
+import { useGetHistoricalStatesOptions } from "../../utils/hooks/historicalStatesHooks"
 import { dateFieldValidator } from "../../utils/validators/dateValidator"
 import { formValidationMessages } from '../../utils/validators/formValidator'
 import { HistoricalStatesDropdown } from "../../partials/dropdowns/historicalStatesDropdown"

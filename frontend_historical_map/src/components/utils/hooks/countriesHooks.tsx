@@ -1,57 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { HISTORICAL_STATES_FULL_URL, PRESENT_COUNTRIES_FULL_URL } from '../../models/constants/urls';
-import { HistoricalState, HistoricalStateOptions } from '../../models/types/historicalState'
-import { DataGetHistoricalStates } from '../../models/types/hooksDataTypes';
+import { PRESENT_COUNTRIES_FULL_URL } from '../../models/constants/urls';
 import { PresentCountries } from '../../models/types/presentCountry';
-import { historicalStatesLoadingError, presentCountriesLoadingError } from '../../partials/notifications';
-import { transformHistoricalStatesForSelector } from '../selectors/historicalStateSelector';
+import { presentCountriesLoadingError } from '../../partials/notifications';
 
-
-const useGetHistoricalStatesOptions = () => {
-    const [errorHistoricalStates, setErrorHistoricalStates] = useState(null);
-    const [historicalStates, setHistoricalStates] = useState<HistoricalStateOptions>([]);
-    const [loadingDataHistoricalStates, setLoadingDataHistoricalStates] = useState(true);
-
-    useEffect(() => {
-        setLoadingDataHistoricalStates(true);
-        axios.get(HISTORICAL_STATES_FULL_URL)
-            .then(res => {
-                setHistoricalStates(transformHistoricalStatesForSelector(res.data));
-                setLoadingDataHistoricalStates(false);
-            })
-            .catch(() => {
-                historicalStatesLoadingError()
-                setErrorHistoricalStates(errorHistoricalStates);
-                setLoadingDataHistoricalStates(false);
-            });
-    }, [errorHistoricalStates]);
-
-    return { errorHistoricalStates, historicalStates, loadingDataHistoricalStates };
-}
-
-function useGetHistoricalStates(): DataGetHistoricalStates<HistoricalState> {
-    const [historicalStates, setHistoricalStates] = useState(null);
-
-    const fetchHistoricalStates = async () => {
-        try {
-            const response = await axios.get(HISTORICAL_STATES_FULL_URL);
-            setHistoricalStates(response.data);
-        } catch (error) {
-            historicalStatesLoadingError();
-        }
-    };
-
-    useEffect(() => {
-        fetchHistoricalStates();
-    }, []);
-
-    return {
-        historicalStates,
-        refreshFunction: fetchHistoricalStates,
-    };
-}
 
 const useFetchPresentCountries = (histStateId: number | undefined) => {
     const [errorPresentCountries, setErrorPresentCountries] = useState(null);
@@ -77,6 +30,5 @@ const useFetchPresentCountries = (histStateId: number | undefined) => {
 }
 
 export {
-    useGetHistoricalStatesOptions, useGetHistoricalStates,
     useFetchPresentCountries   
 }

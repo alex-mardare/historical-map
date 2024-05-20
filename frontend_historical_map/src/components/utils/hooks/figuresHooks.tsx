@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { FIGURES_FULL_URL } from '../../models/constants/urls';
 import { HistoricalFigure } from '../../models/types/historicalFigure';
 import { DataCreateUpdate, DataGetFigures } from '../../models/types/hooksDataTypes';
-import { figureCreationError, figureCreationSuccess, figureDeletionError, figureDeletionSuccess, figureEditError, figureEditSuccess, figureLoadingError } from '../../partials/notifications';
+import { figureCreationError, figureCreationSuccess, figureDeletionError, figureDeletionSuccess, figureEditError, figureEditSuccess, figureLoadingError, figuresLoadingError } from '../../partials/notifications';
 
 
 export async function figureDelete(figure: HistoricalFigure | null) {
@@ -45,7 +45,7 @@ export function useFiguresGet(): DataGetFigures<HistoricalFigure> {
             const response = await axios.get(FIGURES_FULL_URL);
             setFigures(response.data.results);
         } catch (error) {
-            figureLoadingError();
+            figuresLoadingError();
         }
     };
 

@@ -84,7 +84,6 @@ export default function EventDetails(){
       setOpenDelete(true)
       console.log(error)
     }
-    
   }
   //#endregion
 

@@ -2,7 +2,7 @@ import { Input, Table } from 'antd';
 import React, { useState } from 'react';
 
 import { columnsConfig } from '../../config/tables/historicalStatesListColumnsConfig';
-import { useGetHistoricalStates } from '../../utils/hooks/countriesHooks';
+import { useGetHistoricalStates } from '../../utils/hooks/historicalStatesHooks';
 
 import '../../../assets/styling/tablePage.css';
 

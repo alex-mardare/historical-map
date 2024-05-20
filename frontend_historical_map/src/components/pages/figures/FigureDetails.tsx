@@ -79,7 +79,6 @@ export default function FigureDetails(){
         setOpenDelete(true)
         console.log(error)
       }
-      
     }
     //#endregion
   
