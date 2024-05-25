@@ -1,12 +1,12 @@
-import { Button, Form, Input, Modal, Table } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Table } from 'antd'
+import React, { useState } from 'react'
 
-import FiguresModalForm from './FiguresModalForm';
-import { columnsConfig } from '../../config/tables/figuresListColumnsConfig';
-import { handleFormSubmission } from '../../utils/forms/formSubmission';
-import { useFiguresGet, useFigurePost } from '../../utils/hooks/figuresHooks';
+import FiguresModalForm from './FiguresModalForm'
+import { columnsConfig } from '../../config/tables/figuresListColumnsConfig'
+import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { useFiguresGet, useFigurePost } from '../../utils/hooks/figuresHooks'
 
-import '../../../assets/styling/tablePage.css';
+import '../../../assets/styling/tablePage.css'
 
 
 const { Search } = Input;
@@ -72,7 +72,7 @@ export default function FiguresList() {
                 placeholder='Search' 
                 style={{ maxWidth: 400, paddingRight: '5px' }}
               />
-            <Button onClick={showModal} type='primary'>Create Figure</Button>
+            <Button onClick={showModal} type='primary'>Create</Button>
             <Modal
               confirmLoading={confirmLoading}
               okText='Create'

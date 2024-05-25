@@ -6,7 +6,7 @@ import { PresentCountries } from '../../models/types/presentCountry';
 import { presentCountriesLoadingError } from '../../partials/notifications';
 
 
-const useFetchPresentCountries = (histStateId: number | undefined) => {
+const useFetchPresentCountries = (histStateId: number | undefined | null) => {
     const [errorPresentCountries, setErrorPresentCountries] = useState(null);
     const [loadingDataPresentCountries, setLoadingDataPresentCountries] = useState(true);
     const [presentCountries, setPresentCountries] = useState<PresentCountries>([]);

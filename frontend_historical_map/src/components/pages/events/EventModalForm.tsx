@@ -14,13 +14,13 @@ import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
 
-type EventCreateFormProps = {
+type EventModalProp = {
     event: HistoricalEvent | null
     form: any
     onFinish?: (values: any) => void
 }
 
-export default function EventModalForm(props:EventCreateFormProps) {
+export default function EventModalForm(props:EventModalProp) {
     const [historicalStateOption, setHistoricalStateOption] = useState(props.event?.historicalState?.id)
     const [presentCountryOption, setPresentCountryOption] = useState(props.event?.presentCountry?.id)
 

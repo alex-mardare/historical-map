@@ -4,11 +4,11 @@ import React, { useState} from "react"
 import { useParams } from "react-router"
 import { useNavigate } from "react-router-dom"
 
-//import FiguresModalForm from './FiguresModalForm'
+import HistoricalStateModalForm from './HistoricalStateModalForm'
 import { HistoricalState } from '../../models/types/historicalState'
 import { antCardHeaderHistoricalState } from "../../partials/antdCardHeader"
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
-import { deleteHistoricalState, useGetHistoricalState } from '../../utils/hooks/historicalStatesHooks'
+import { deleteHistoricalState, useGetHistoricalState, usePutHistoricalState } from '../../utils/hooks/historicalStatesHooks'
 
 import '../../../assets/styling/detailsPage.css'
 
@@ -20,7 +20,7 @@ export default function HistoricalStateDetails(){
     const [openEdit, setOpenEdit] = useState(false)
 
     const [form] = Form.useForm()
-    //const { submitData } = useFigurePut()
+    const { submitData } = usePutHistoricalState()
     const navigate = useNavigate()
   
     const { historicalStateId } = useParams()
@@ -81,7 +81,7 @@ export default function HistoricalStateDetails(){
   
     const onFinishEdit = async (values: any) => {
       try {
-        //await submitData(values, setConfirmLoadingEdit, setOpenEdit)
+        await submitData(values, setConfirmLoadingEdit, setOpenEdit)
         window.location.reload()
       }
       catch(error) {
@@ -105,18 +105,16 @@ export default function HistoricalStateDetails(){
             <p><b>Flag</b></p>
             <img alt={`${'Flag of ' + historicalState?.name}`} className='stateFlag' src={`${historicalState?.flagUrl}`}></img>
         </Card>
-        {/*
         <Modal
           confirmLoading={confirmLoadingEdit}
           okText='Save'
           onCancel={handleCancelEdit}
           onOk={handleOkEdit}
           open={openEdit}
-          title='Edit Figure'
+          title='Edit Historical State'
         >
-          <FiguresModalForm figure={figure} form={form} onFinish={onFinishEdit} />
+          <HistoricalStateModalForm historicalState={historicalState} form={form} onFinish={onFinishEdit} />
         </Modal>
-        */}
         <Modal
           confirmLoading={confirmLoadingDelete}
           okButtonProps={{danger:true}}

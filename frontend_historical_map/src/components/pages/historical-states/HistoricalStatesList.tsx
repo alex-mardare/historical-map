@@ -1,18 +1,24 @@
-import { Input, Table } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Table } from 'antd'
+import React, { useState } from 'react'
 
-import { columnsConfig } from '../../config/tables/historicalStatesListColumnsConfig';
-import { useGetHistoricalStates } from '../../utils/hooks/historicalStatesHooks';
+import HistoricalStateModalForm from './HistoricalStateModalForm'
+import { columnsConfig } from '../../config/tables/historicalStatesListColumnsConfig'
+import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { useGetHistoricalStates, usePostHistoricalState } from '../../utils/hooks/historicalStatesHooks'
 
-import '../../../assets/styling/tablePage.css';
+import '../../../assets/styling/tablePage.css'
 
 
 const { Search } = Input;
 
 export default function HistoricalStatesList() {
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  const { historicalStates } = useGetHistoricalStates();
+  const { historicalStates, refreshFunction } = useGetHistoricalStates();
+  const [form] = Form.useForm();
+  const { submitData } = usePostHistoricalState();
 
   let filteredHistoricalEvents = historicalStates?.filter((historicalState) => {
     return Object.values(historicalState).some((value) => {
@@ -22,6 +28,30 @@ export default function HistoricalStatesList() {
       return value.toString().toLowerCase().includes(searchText.toLowerCase());
     })
   });
+
+//#region MODAL
+  const handleCancel = () => {
+    setOpen(false);
+  }
+
+  const handleOk = () => {
+    handleFormSubmission(form, onFinish, setConfirmLoading);
+  }
+
+  const onFinish = async (values: any) => {
+    try {
+        await submitData(values, setConfirmLoading, setOpen);
+        refreshFunction();
+    }
+    catch(error) {
+        console.log(error);
+    }
+  }
+
+  const showModal = () => {
+    setOpen(true);
+  }
+//#endregion
 
 //#region SEARCH BAR
   const handleSearch = (value:string) => {
@@ -39,6 +69,17 @@ export default function HistoricalStatesList() {
               placeholder='Search' 
               style={{ maxWidth: 400, paddingRight: '5px' }}
             />
+          <Button onClick={showModal} type='primary'>Create</Button>
+            <Modal
+              confirmLoading={confirmLoading}
+              okText='Create'
+              onCancel={handleCancel}
+              onOk={handleOk}
+              open={open}
+              title='Create Historical State'
+            >
+              <HistoricalStateModalForm historicalState={null} form={form} onFinish={onFinish} />
+            </Modal>
         </div>
         <div className='tableDiv'>
           <Table 

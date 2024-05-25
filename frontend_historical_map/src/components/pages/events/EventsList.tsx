@@ -1,17 +1,16 @@
-import { Button, Form, Input, Modal, Table } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Table } from 'antd'
+import React, { useState } from 'react'
 
-import EventCreateForm from './EventModalForm';
-import { columnsConfig } from '../../config/tables/eventsListColumnsConfig';
-import { HistoricalEvents } from '../../models/types/historicalEvent';
-import { handleFormSubmission } from '../../utils/forms/formSubmission';
-import { useEventPost } from '../../utils/hooks/eventsHooks';
+import EventModalForm from './EventModalForm'
+import { columnsConfig } from '../../config/tables/eventsListColumnsConfig'
+import { HistoricalEvents } from '../../models/types/historicalEvent'
+import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { useEventPost } from '../../utils/hooks/eventsHooks'
 
-import '../../../assets/styling/tablePage.css';
+import '../../../assets/styling/tablePage.css'
 
 
 const { Search } = Input;
-
 
 type EventsListProps = {
   events: HistoricalEvents | null,
@@ -84,7 +83,7 @@ export default function EventsList(props:EventsListProps) {
               placeholder='Search' 
               style={{ maxWidth: 400, paddingRight: '5px' }}
             />
-          <Button onClick={showModal} type='primary'>Create Event</Button>
+          <Button onClick={showModal} type='primary'>Create</Button>
           <Modal
             confirmLoading={confirmLoading}
             okText='Create'
@@ -93,7 +92,7 @@ export default function EventsList(props:EventsListProps) {
             open={open}
             title='Create Historical Event'
           >
-            <EventCreateForm event={null} form={form} onFinish={onFinish} />
+            <EventModalForm event={null} form={form} onFinish={onFinish} />
           </Modal>
         </div>
         <div className='tableDiv'>

@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import axios, { AxiosError } from 'axios'
+import { useEffect, useState } from 'react'
 
-import { HISTORICAL_STATES_FULL_URL } from '../../models/constants/urls';
+import { HISTORICAL_STATES_FULL_URL } from '../../models/constants/urls'
 import { HistoricalState, HistoricalStateOptions } from '../../models/types/historicalState'
-import { DataGetHistoricalStates } from '../../models/types/hooksDataTypes';
-import { historicalStateDeletionError, historicalStateDeletionSuccess, historicalStateLoadingError, historicalStatesLoadingError } from '../../partials/notifications';
-import { transformHistoricalStatesForSelector } from '../selectors/historicalStateSelector';
+import { DataCreateUpdate, DataGetHistoricalStates } from '../../models/types/hooksDataTypes'
+import { historicalStateCreationError, historicalStateCreationSuccess, historicalStateDeletionError, historicalStateDeletionSuccess, historicalStateEditError, historicalStateEditSuccess, historicalStateLoadingError, historicalStatesLoadingError } from '../../partials/notifications'
+import { transformHistoricalStatesForSelector } from '../selectors/historicalStateSelector'
 
 async function deleteHistoricalState(historicalState: HistoricalState | null) {
     try {
@@ -82,6 +82,71 @@ function useGetHistoricalState(historicalStateId: string | undefined): Historica
     return historicalState;
 }
 
+function usePostHistoricalState<T>(): DataCreateUpdate<T> {
+    const [error, setError] = useState<AxiosError | null>(null);
+
+    const submitData = async (
+        formData: any,
+        setConfirmLoading: (loading: boolean) => void,
+        setOpen: (open: boolean) => void
+      ): Promise<any> => {
+        setError(null);
+
+        try {
+            setConfirmLoading(true);
+            const response = await axios.post(HISTORICAL_STATES_FULL_URL, formData);
+
+            setConfirmLoading(false);
+            setOpen(false);
+
+            historicalStateCreationSuccess(formData.name);
+            return response.data;
+        } catch (error) {
+            setConfirmLoading(false);
+            setOpen(true);
+
+            setError(error as AxiosError<any>);
+            historicalStateCreationError();
+            throw error;
+        }
+    }
+
+    return { submitData, error };
+}
+
+function usePutHistoricalState<T>(): DataCreateUpdate<T> {
+    const [error, setError] = useState<AxiosError | null>(null);
+
+    const submitData = async (
+        formData: any,
+        setConfirmLoading: (loading: boolean) => void,
+        setOpen: (open: boolean) => void
+      ): Promise<any> => {
+        setError(null);
+
+        try {
+            setConfirmLoading(true);
+
+            const response = await axios.patch(HISTORICAL_STATES_FULL_URL + formData.id, formData);
+
+            setConfirmLoading(false);
+            setOpen(false);
+
+            historicalStateEditSuccess(formData.name);
+            return response.data;
+        } catch (error) {
+            setConfirmLoading(false);
+            setOpen(true);
+
+            setError(error as AxiosError<any>);
+            historicalStateEditError(formData.name);
+            throw error;
+        }
+    }
+
+    return { submitData, error };
+}
+
 export {
-    deleteHistoricalState, useGetHistoricalStatesOptions, useGetHistoricalState, useGetHistoricalStates
+    deleteHistoricalState, useGetHistoricalStatesOptions, useGetHistoricalState, useGetHistoricalStates, usePostHistoricalState, usePutHistoricalState
 }

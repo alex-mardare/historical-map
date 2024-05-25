@@ -117,6 +117,20 @@ const figuresLoadingError = () => {
 //#endregion
 
 //#region HISTORICAL STATES NOTIFICATIONS
+const historicalStateCreationError = () => {
+    notification.error({
+        description: 'There was an issue creating the historical state.',
+        message: 'Problems creating the historical state.'
+    });
+}
+
+const historicalStateCreationSuccess = (title: string) => {
+    notification.success({
+        description: 'Historical state ' + title + ' was created successfully.',
+        message: 'Historical state created.'
+    });
+}
+
 const historicalStateDeletionError = (title: string | undefined) => {
     notification.error({
         description: 'There was an issue deleting ' + title + ' historical state.',
@@ -128,6 +142,20 @@ const historicalStateDeletionSuccess = (title: string | undefined) => {
     notification.success({
         description: 'Historical state ' + title + ' was deleted successfully.',
         message: 'Historical state deleted.'
+    });
+}
+
+const historicalStateEditError = (title: string) => {
+    notification.error({
+        description: 'There was an issue editing ' + title + ' historical state.',
+        message: 'Problems editing the historical state.'
+    });
+}
+
+const historicalStateEditSuccess = (title: string) => {
+    notification.success({
+        description: 'Historical state ' + title + ' was updated successfully.',
+        message: 'Historical state updated.'
     });
 }
 
@@ -163,6 +191,7 @@ const presentCountriesLoadingError = () => {
 export {
     eventCreationError, eventCreationSuccess, eventDeletionError, eventDeletionSuccess, eventEditError, eventEditSuccess, eventLoadingError, eventsLoadingError,
     figureCreationError, figureCreationSuccess, figureDeletionError, figureDeletionSuccess, figureEditError, figureEditSuccess, figureLoadingError, figuresLoadingError,
-    historicalStateDeletionError, historicalStateDeletionSuccess, historicalStateLoadingError, historicalStatesLoadingError,
+    historicalStateCreationError, historicalStateCreationSuccess, historicalStateDeletionError, historicalStateDeletionSuccess, historicalStateEditError, 
+        historicalStateEditSuccess, historicalStateLoadingError, historicalStatesLoadingError,
     eventCategoriesLoadingError, presentCountriesLoadingError    
 }

@@ -10,13 +10,13 @@ import { formValidationMessages } from '../../utils/validators/formValidator'
 import { HistoricalStatesDropdown } from "../../partials/dropdowns/historicalStatesDropdown"
 
 
-type FigureModalFormProps = {
+type FigurelModalProp = {
     figure: HistoricalFigure | null
     form: any
     onFinish?: (values: any) => void
 }
 
-export default function FiguresModalForm(props:FigureModalFormProps) {
+export default function FiguresModalForm(props:FigurelModalProp) {
     const [birthHistoricalStateOption, setBirthHistoricalStateOption] = useState(props.figure?.birthHistoricalState?.id)
     const [birthPresentCountryOption, setBirthPresentCountryOption] = useState(props.figure?.birthPresentCountry?.id)
     const [deathHistoricalStateOption, setDeathHistoricalStateOption] = useState(props.figure?.deathHistoricalState?.id)
