@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.3",
+    "@types/pluralize": "^0.0.33",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "typescript": "^4.9.5"
