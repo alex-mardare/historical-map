@@ -5,12 +5,12 @@ import EventModalForm from './EventModalForm'
 import { columnsConfig } from '../../config/tables/eventsListColumnsConfig'
 import { HistoricalEvents } from '../../models/types/historicalEvent'
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
-import { useEventPost } from '../../utils/hooks/eventsHooks'
+import { usePostEvent } from '../../utils/hooks/eventsHooks'
 
 import '../../../assets/styling/tablePage.css'
 
 
-const { Search } = Input;
+const { Search } = Input
 
 type EventsListProps = {
   events: HistoricalEvents | null,
@@ -18,17 +18,17 @@ type EventsListProps = {
 }
 
 export default function EventsList(props:EventsListProps) {
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [confirmLoading, setConfirmLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [searchText, setSearchText] = useState('')
 
-  const [form] = Form.useForm();
-  const { submitData } = useEventPost();
+  const [form] = Form.useForm()
+  const { submitData } = usePostEvent()
 
   let filteredEvents = props.events?.filter((event) => {
     return Object.values(event).some((value) => {
       if (value === null || value === undefined) {
-        return false;
+        return false
       }
       if (value === event.approximateRealLocation) {
         if (searchText === 'yes') {
@@ -39,38 +39,38 @@ export default function EventsList(props:EventsListProps) {
         }
         return false
       }
-      return value.toString().toLowerCase().includes(searchText.toLowerCase());
+      return value.toString().toLowerCase().includes(searchText.toLowerCase())
     })
-  });
+  })
 
 //#region MODAL
   const handleCancel = () => {
-    setOpen(false);
+    setOpen(false)
   }
 
   const handleOk = () => {
-    handleFormSubmission(form, onFinish, setConfirmLoading);
+    handleFormSubmission(form, onFinish, setConfirmLoading)
   }
 
   const onFinish = async (values: any) => {
     try {
-      await submitData(values, setConfirmLoading, setOpen);
-      props.onRefreshEvents();
+      await submitData(values, setConfirmLoading, setOpen)
+      props.onRefreshEvents()
     }
     catch(error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
   const showModal = () => {
-    setOpen(true);
+    setOpen(true)
   }
 //#endregion
 
 //#region SEARCH BAR
   const handleSearch = (value:string) => {
-    setSearchText(value);
-  };
+    setSearchText(value)
+  }
 //#endregion
 
   return(

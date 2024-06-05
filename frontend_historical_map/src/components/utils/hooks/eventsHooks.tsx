@@ -4,12 +4,23 @@ import { useEffect, useState } from 'react'
 import { EVENT_NAME } from '../../models/constants/constants'
 import { DEV_API_EVENTS_APP_BASE_URL } from '../../models/constants/urls'
 import { objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess, objectLoadingError, objectListLoadingError } from '../../partials/notifications'
-import { DataCreateUpdate, DataGetEvents } from '../../models/types/hooksDataTypes'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
+import { DataCreateUpdate, DataGetEvents } from '../../models/types/hooksDataTypes'
 import { returnMapCoordinatesByPresentCountryName } from '../../partials/leafletMapPartials'
  
 
-export function useEventCoordinates(event: HistoricalEvent | null) {
+async function eventDelete(event: HistoricalEvent | null) {
+    try {
+        const response = await axios.delete(DEV_API_EVENTS_APP_BASE_URL + event?.id)
+        objectDeletionSuccess(EVENT_NAME, event?.name)
+        return response
+    }
+    catch(error) {
+        objectDeletionError(EVENT_NAME, event?.name)
+    }
+}
+
+function useEventCoordinates(event: HistoricalEvent | null) {
     const [coordinates, setCoordinates] = useState<null | number[]>(null)
 
     useEffect(() => {
@@ -30,17 +41,7 @@ export function useEventCoordinates(event: HistoricalEvent | null) {
     return coordinates
 }
 
-export async function eventDelete(event: HistoricalEvent | null) {
-    try {
-        await axios.delete(DEV_API_EVENTS_APP_BASE_URL + event?.id)
-        objectDeletionSuccess(EVENT_NAME, event?.name)
-    }
-    catch(error) {
-        objectDeletionError(EVENT_NAME, event?.name)
-    }
-}
-
-export function useEventGet(eventId: string | undefined): HistoricalEvent | null {
+function useGetEvent(eventId: string | undefined): HistoricalEvent | null {
     const [event, setEvent] = useState(null)
 
     useEffect(() => {
@@ -60,7 +61,7 @@ export function useEventGet(eventId: string | undefined): HistoricalEvent | null
     return event
 }
 
-export function useEventsGet(): DataGetEvents<HistoricalEvent> {
+function useGetEvents(): DataGetEvents<HistoricalEvent> {
     const [events, setEvents] = useState(null)
 
     const fetchEvents = async () => {
@@ -82,7 +83,7 @@ export function useEventsGet(): DataGetEvents<HistoricalEvent> {
     }
 }
 
-export function useEventPost<T>(): DataCreateUpdate<T> {
+function usePostEvent<T>(): DataCreateUpdate<T> {
     const [error, setError] = useState<AxiosError | null>(null)
 
     const submitData = async (
@@ -114,14 +115,10 @@ export function useEventPost<T>(): DataCreateUpdate<T> {
     return { submitData, error }
 }
 
-export function useEventPut<T>(): DataCreateUpdate<T> {
+function usePutEvent<T>(): DataCreateUpdate<T> {
     const [error, setError] = useState<AxiosError | null>(null)
 
-    const submitData = async (
-        formData: any,
-        setConfirmLoading: (loading: boolean) => void,
-        setOpen: (open: boolean) => void
-      ): Promise<any> => {
+    const submitData = async (formData: any, setConfirmLoading: (loading: boolean) => void, setOpen: (open: boolean) => void): Promise<any> => {
         setError(null)
 
         try {
@@ -149,3 +146,5 @@ export function useEventPut<T>(): DataCreateUpdate<T> {
 
     return { submitData, error }
 }
+
+export { eventDelete, useEventCoordinates, useGetEvent, useGetEvents, usePostEvent, usePutEvent }

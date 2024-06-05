@@ -41,6 +41,26 @@ const useGetHistoricalStatesOptions = () => {
     return { errorHistoricalStates, historicalStates, loadingDataHistoricalStates }
 }
 
+function useGetHistoricalState(historicalStateId: string | undefined): HistoricalState | null {
+    const [historicalState, setHistoricalState] = useState(null)
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await axios.get(HISTORICAL_STATES_FULL_URL + historicalStateId)
+                setHistoricalState(response.data)
+            }
+            catch(error) {
+                objectLoadingError(HISTORICAL_STATE_NAME)
+            }
+        }
+
+        fetchData()
+    }, [historicalStateId])
+
+    return historicalState
+}
+
 function useGetHistoricalStates(): DataGetHistoricalStates<HistoricalState> {
     const [historicalStates, setHistoricalStates] = useState(null)
 
@@ -61,26 +81,6 @@ function useGetHistoricalStates(): DataGetHistoricalStates<HistoricalState> {
         historicalStates,
         refreshFunction: fetchHistoricalStates,
     }
-}
-
-function useGetHistoricalState(historicalStateId: string | undefined): HistoricalState | null {
-    const [historicalState, setHistoricalState] = useState(null)
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await axios.get(HISTORICAL_STATES_FULL_URL + historicalStateId)
-                setHistoricalState(response.data)
-            }
-            catch(error) {
-                objectLoadingError(HISTORICAL_STATE_NAME)
-            }
-        }
-
-        fetchData()
-    }, [historicalStateId])
-
-    return historicalState
 }
 
 function usePostHistoricalState<T>(): DataCreateUpdate<T> {

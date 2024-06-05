@@ -8,17 +8,18 @@ import { DataCreateUpdate, DataGetFigures } from '../../models/types/hooksDataTy
 import { objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess, objectLoadingError, objectListLoadingError } from '../../partials/notifications'
 
 
-export async function figureDelete(figure: HistoricalFigure | null) {
+async function figureDelete(figure: HistoricalFigure | null) {
     try {
-        await axios.delete(FIGURES_FULL_URL + figure?.id)
+        const response = await axios.delete(FIGURES_FULL_URL + figure?.id)
         objectDeletionSuccess(HISTORICAL_FIGURE_NAME, figure?.name)
+        return response
     }
     catch(error) {
         objectDeletionError(HISTORICAL_FIGURE_NAME, figure?.name)
     }
 }
 
-export function useFigureGet(figureId: string | undefined): HistoricalFigure | null {
+function useGetFigure(figureId: string | undefined): HistoricalFigure | null {
     const [figure, setFigure] = useState(null)
 
     useEffect(() => {
@@ -38,7 +39,7 @@ export function useFigureGet(figureId: string | undefined): HistoricalFigure | n
     return figure
 }
 
-export function useFiguresGet(): DataGetFigures<HistoricalFigure> {
+function useGetFigures(): DataGetFigures<HistoricalFigure> {
     const [figures, setFigures] = useState(null)
 
     const fetchFigures = async () => {
@@ -61,7 +62,7 @@ export function useFiguresGet(): DataGetFigures<HistoricalFigure> {
 }
 
 
-export function useFigurePost<T>(): DataCreateUpdate<T> {
+function usePostFigure<T>(): DataCreateUpdate<T> {
     const [error, setError] = useState<AxiosError | null>(null)
 
     const submitData = async (
@@ -93,7 +94,7 @@ export function useFigurePost<T>(): DataCreateUpdate<T> {
     return { submitData, error }
 }
 
-export function useFigurePut<T>(): DataCreateUpdate<T> {
+function usePutFigure<T>(): DataCreateUpdate<T> {
     const [error, setError] = useState<AxiosError | null>(null)
 
     const submitData = async (
@@ -125,3 +126,5 @@ export function useFigurePut<T>(): DataCreateUpdate<T> {
 
     return { submitData, error }
 }
+
+export { figureDelete, useGetFigure, useGetFigures, usePostFigure, usePutFigure }

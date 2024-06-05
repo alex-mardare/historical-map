@@ -1,131 +1,68 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Card, Form, Modal } from "antd"
-import React, { useState} from "react"
+import { Card } from "antd"
+import React from "react"
 import { useParams } from "react-router"
-import { useNavigate } from "react-router-dom"
 
 import HistoricalStateModalForm from './HistoricalStateModalForm'
+import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
 import { HistoricalState } from '../../models/types/historicalState'
 import { antCardHeaderHistoricalState } from "../../partials/antdCardHeader"
-import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { useDetailPageHandlers } from '../../partials/detailsPageHandlers'
+import { DeleteModal, FormModal } from '../../partials/modals'
 import { deleteHistoricalState, useGetHistoricalState, usePutHistoricalState } from '../../utils/hooks/historicalStatesHooks'
 
 import '../../../assets/styling/detailsPage.css'
 
 
 export default function HistoricalStateDetails(){
-    const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false)
-    const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false)
-    const [openDelete, setOpenDelete] = useState(false)
-    const [openEdit, setOpenEdit] = useState(false)
+  const { historicalStateId } = useParams()
+  let historicalState = useGetHistoricalState(historicalStateId)  
 
-    const [form] = Form.useForm()
-    const { submitData } = usePutHistoricalState()
-    const navigate = useNavigate()
+  const useDetailPageHandlersProps = {detailsPageObject: historicalState, objectDeleteHook: deleteHistoricalState, objectPutHook: usePutHistoricalState, 
+    returnPage: 'historical-states'}
+  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
+    handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
   
-    const { historicalStateId } = useParams()
-    let historicalState = useGetHistoricalState(historicalStateId)  
-  
-    //#region DISPLAY FUNCTIONALITY
-    const displayTitleSection = (historicalState: HistoricalState | null) => {
-      return antCardHeaderHistoricalState(historicalState, handleGoBack)
-    }
-    //#endregion
-  
-    //#region HANDLERS PAGE
-    const handleGoBack = () => {
-      navigate('/historical-states')
-    }
-    //#endregion
-  
-    //#region HANDLERS DELETE
-    const handleCancelDelete = () => {
-      setOpenDelete(false)  
-    }
-  
-    const handleHistoricalStateDelete = () => {
-      setOpenDelete(true)
-    }
-  
-    const handleOkDelete = () => {
-      try {
-        setConfirmLoadingDelete(true)
-        const ceva = deleteHistoricalState(historicalState)
-        setOpenDelete(false)
-        console.log(ceva)
+  //#region DISPLAY FUNCTIONALITY
+  const displayTitleSection = (historicalState: HistoricalState | null) => {
+    return antCardHeaderHistoricalState(historicalState, handleGoBack)
+  }
+  //#endregion
 
-        setTimeout(() => {
-          handleGoBack()
-        }, 1250)
-      }
-      catch(error) {
-        setConfirmLoadingDelete(false)
-        setOpenDelete(true)
-        console.log(error)
-      }
-    }
-    //#endregion
+  const historicalStateModalForm = () => { return (<HistoricalStateModalForm historicalState={historicalState} form={form} onFinish={onFinishEdit} />)}
   
-    //#region HANDLERS EDIT
-    const handleCancelEdit = () => {
-      setOpenEdit(false)
-    }
-  
-    const handleFigureEdit = () => {
-      setOpenEdit(true)
-    }
-  
-    const handleOkEdit = () => {
-      handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit)
-    }
-  
-    const onFinishEdit = async (values: any) => {
-      try {
-        await submitData(values, setConfirmLoadingEdit, setOpenEdit)
-        window.location.reload()
-      }
-      catch(error) {
-        console.log(error)
-      }
-    }
-    //#endregion
-  
-    return(
-      <>
-        <Card 
-          actions={[
-            <EditOutlined key='edit' onClick={handleFigureEdit} />,
-            <DeleteOutlined key='delete' onClick={handleHistoricalStateDelete} />
-          ]} 
-          loading={historicalState == null} 
-          title={displayTitleSection(historicalState)}
-          >
-            <p><b>Foundation Date:</b> {historicalState?.dateFrom}</p>
-            <p><b>Dissolution Date:</b> {historicalState?.dateTo}</p>
-            <p><b>Flag</b></p>
-            <img alt={`${'Flag of ' + historicalState?.name}`} className='stateFlag' src={`${historicalState?.flagUrl}`}></img>
-        </Card>
-        <Modal
-          confirmLoading={confirmLoadingEdit}
-          okText='Save'
-          onCancel={handleCancelEdit}
-          onOk={handleOkEdit}
-          open={openEdit}
-          title='Edit Historical State'
+  return(
+    <>
+      <Card 
+        actions={[
+          <EditOutlined key='edit' onClick={openObjectEditModal} />,
+          <DeleteOutlined key='delete' onClick={openObjectDeleteModal} />
+        ]} 
+        loading={historicalState == null} 
+        title={displayTitleSection(historicalState)}
         >
-          <HistoricalStateModalForm historicalState={historicalState} form={form} onFinish={onFinishEdit} />
-        </Modal>
-        <Modal
-          confirmLoading={confirmLoadingDelete}
-          okButtonProps={{danger:true}}
-          okText='Delete'
-          onCancel={handleCancelDelete}
-          onOk={handleOkDelete}
-          open={openDelete}
-          title='Delete Historical State'
-        >
-          <h2>Are you sure you want to remove this historical state?</h2>
-        </Modal>
-      </>
-    )
+          <p><b>Foundation Date:</b> {historicalState?.dateFrom}</p>
+          <p><b>Dissolution Date:</b> {historicalState?.dateTo}</p>
+          <p><b>Flag</b></p>
+          <img alt={`${'Flag of ' + historicalState?.name}`} className='stateFlag' src={`${historicalState?.flagUrl}`}></img>
+      </Card>
+
+      <FormModal
+        confirmLoadingEdit={confirmLoadingEdit}
+        formComponent={historicalStateModalForm()}
+        closeObjectEditModal={closeObjectEditModal}
+        handleEditModalOk={handleEditModalOk}
+        objectName={HISTORICAL_STATE_NAME}
+        openEdit={openEdit}
+      />
+
+      <DeleteModal
+        confirmLoadingDelete={confirmLoadingDelete}
+        closeObjectDeleteModal={closeObjectDeleteModal}
+        handleDeleteModalOk={handleDeleteModalOk}
+        objectName={HISTORICAL_STATE_NAME}
+        openDelete={openDelete}
+      />
+    </>
+  )
 }

@@ -1,44 +1,44 @@
-import { Layout, Menu, MenuProps } from 'antd';
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Layout, Menu, MenuProps } from 'antd'
+import React, { useState } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import { menuItems, rootMenuKeys } from './components/config/menu/menuConfig';
-import { HISTORICAL_EVENTS_SECTION, HISTORICAL_FIGURES_SECTION, HISTORICAL_STATES_SECTION } from './components/models/constants/urls';
-import Home from './components/pages/Home';
-import EventDetails from './components/pages/events/EventDetails';
-import EventsList from './components/pages/events/EventsList';
-import FigureDetails from './components/pages/figures/FigureDetails';
-import FiguresList from './components/pages/figures/FiguresList';
-import HistoricalStateDetails from './components/pages/historical-states/HistoricalStateDetails';
-import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList';
-import { useEventsGet } from './components/utils/hooks/eventsHooks';
+import { menuItems, rootMenuKeys } from './components/config/menu/menuConfig'
+import { HISTORICAL_EVENTS_SECTION, HISTORICAL_FIGURES_SECTION, HISTORICAL_STATES_SECTION } from './components/models/constants/urls'
+import Home from './components/pages/Home'
+import EventDetails from './components/pages/events/EventDetails'
+import EventsList from './components/pages/events/EventsList'
+import FigureDetails from './components/pages/figures/FigureDetails'
+import FiguresList from './components/pages/figures/FiguresList'
+import HistoricalStateDetails from './components/pages/historical-states/HistoricalStateDetails'
+import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList'
+import { useGetEvents } from './components/utils/hooks/eventsHooks'
 
-import './App.css'; 
+import './App.css' 
 
 
-const { Content, Sider } = Layout;
+const { Content, Sider } = Layout
 
 function App() {
-  const [collapsed, setCollapsed] = useState(false);
-  const [openKeys, setOpenKeys] = useState(['0']);
-  const [width, setWidth] = useState(205);
+  const [collapsed, setCollapsed] = useState(false)
+  const [openKeys, setOpenKeys] = useState(['0'])
+  const [width, setWidth] = useState(205)
 
-  const { events, refreshFunction } = useEventsGet();
+  const { events, refreshFunction } = useGetEvents()
 
   const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+    setCollapsed(!collapsed)
 
     if (!collapsed) {
-      setWidth(width);
+      setWidth(width)
     }
   }
 
   const onOpenChangeMenu: MenuProps['onOpenChange'] = (menuKeys) => {
-    const latestOpenKey = menuKeys.find((key) => openKeys.indexOf(key) === -1);
+    const latestOpenKey = menuKeys.find((key) => openKeys.indexOf(key) === -1)
     if (latestOpenKey && rootMenuKeys.indexOf(latestOpenKey!) === -1) {
-      setOpenKeys(menuKeys);
+      setOpenKeys(menuKeys)
     } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
     }
   }
 
@@ -75,7 +75,7 @@ function App() {
         </Layout>
       </div>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

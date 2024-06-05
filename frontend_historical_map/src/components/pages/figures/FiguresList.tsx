@@ -4,62 +4,62 @@ import React, { useState } from 'react'
 import FiguresModalForm from './FiguresModalForm'
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig'
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
-import { useFiguresGet, useFigurePost } from '../../utils/hooks/figuresHooks'
+import { useGetFigures, usePostFigure } from '../../utils/hooks/figuresHooks'
 
 import '../../../assets/styling/tablePage.css'
 
 
-const { Search } = Input;
+const { Search } = Input
 
 export default function FiguresList() {
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [searchText, setSearchText] = useState('');
+    const [confirmLoading, setConfirmLoading] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [searchText, setSearchText] = useState('')
 
-    const { figures, refreshFunction } = useFiguresGet();
-    const [form] = Form.useForm();
-    const { submitData } = useFigurePost();
+    const { figures, refreshFunction } = useGetFigures()
+    const [form] = Form.useForm()
+    const { submitData } = usePostFigure()
 
     let filteredFigures = figures?.filter((figure) => {
         return Object.values(figure).some((value) => {
             if (value === null || value === undefined) {
-                return false;
+                return false
             }
             if (value.name) {
-                return value.name.toString().toLowerCase().includes(searchText.toLowerCase());
+                return value.name.toString().toLowerCase().includes(searchText.toLowerCase())
             }
-            return value.toString().toLowerCase().includes(searchText.toLowerCase());
+            return value.toString().toLowerCase().includes(searchText.toLowerCase())
         })
-    });
+    })
 
 //#region MODAL
     const handleCancel = () => {
-        setOpen(false);
+        setOpen(false)
     }
 
     const handleOk = () => {
-        handleFormSubmission(form, onFinish, setConfirmLoading);
+        handleFormSubmission(form, onFinish, setConfirmLoading)
     }
 
     const onFinish = async (values: any) => {
         try {
-            await submitData(values, setConfirmLoading, setOpen);
-            refreshFunction();
+            await submitData(values, setConfirmLoading, setOpen)
+            refreshFunction()
         }
         catch(error) {
-            console.log(error);
+            console.log(error)
         }
     }
 
     const showModal = () => {
-        setOpen(true);
+        setOpen(true)
     }
 //#endregion
     
 //#region SEARCH BAR
     const handleSearch = (value:string) => {
-        setSearchText(value);
-    };
+        setSearchText(value)
+    }
 //#endregion
 
     return(

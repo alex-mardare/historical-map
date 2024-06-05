@@ -5,7 +5,7 @@ import { Dictionary } from '../models/types/genericTypes'
 import { capitaliseWord } from '../utils/display/displayStrings'
 
 
-const notificationsDictionary: Dictionary = {
+const entitiesDictionary: Dictionary = {
     EVENT: 'event',
     EVENT_CATEGORY: 'event category',
     HISTORICAL_FIGURE: 'historical figure',
@@ -15,12 +15,12 @@ const notificationsDictionary: Dictionary = {
 
 const objectCreationError = (objectName: string) => {
     notification.error({
-        description: `There was an issue creating the ${notificationsDictionary[objectName]}.`,
-        message: `Problems creating the ${notificationsDictionary[objectName]}`
+        description: `There was an issue creating the ${entitiesDictionary[objectName]}.`,
+        message: `Problems creating the ${entitiesDictionary[objectName]}`
     })
 }
 const objectCreationSuccess = (objectName: string, title: string | undefined) => {
-    const capitalisedWord = capitaliseWord(notificationsDictionary[objectName])
+    const capitalisedWord = capitaliseWord(entitiesDictionary[objectName])
     notification.success({
         description: `${capitalisedWord + ' ' + title} was created successfully.`,
         message: `${capitalisedWord} created`
@@ -28,12 +28,12 @@ const objectCreationSuccess = (objectName: string, title: string | undefined) =>
 }
 const objectDeletionError = (objectName: string, title: string | undefined) => {
     notification.error({
-        description: `There was an issue deleting ${title} ${notificationsDictionary[objectName]}.`,
-        message: `Problems deleting the ${notificationsDictionary[objectName]}`
+        description: `There was an issue deleting ${title} ${entitiesDictionary[objectName]}.`,
+        message: `Problems deleting the ${entitiesDictionary[objectName]}`
     })
 }
 const objectDeletionSuccess = (objectName: string, title: string | undefined) => {
-    const capitalisedWord = capitaliseWord(notificationsDictionary[objectName])
+    const capitalisedWord = capitaliseWord(entitiesDictionary[objectName])
     notification.success({
         description: `${capitalisedWord} ${title} was deleted successfully.`,
         message: `${capitalisedWord} deleted`
@@ -41,12 +41,12 @@ const objectDeletionSuccess = (objectName: string, title: string | undefined) =>
 }
 const objectEditError = (objectName: string, title: string | undefined) => {
     notification.error({
-        description: `There was an issue editing ${title} ${notificationsDictionary[objectName]}.`,
-        message: `Problems editing the ${notificationsDictionary[objectName]}`
+        description: `There was an issue editing ${title} ${entitiesDictionary[objectName]}.`,
+        message: `Problems editing the ${entitiesDictionary[objectName]}`
     })
 }
 const objectEditSuccess = (objectName: string, title: string | undefined) => {
-    const capitalisedWord = capitaliseWord(notificationsDictionary[objectName])
+    const capitalisedWord = capitaliseWord(entitiesDictionary[objectName])
     notification.success({
         description: `${capitalisedWord} ${title} was updated successfully.`,
         message: `${capitalisedWord} updated`
@@ -54,17 +54,18 @@ const objectEditSuccess = (objectName: string, title: string | undefined) => {
 }
 const objectLoadingError = (objectName: string) => {
     notification.error({
-        description: `There was an issue loading the ${notificationsDictionary[objectName]}.`,
-        message: `Problems loading the ${notificationsDictionary[objectName]}`
+        description: `There was an issue loading the ${entitiesDictionary[objectName]}.`,
+        message: `Problems loading the ${entitiesDictionary[objectName]}`
     })
 }
 const objectListLoadingError = (objectName: string) => {
     notification.error({
-        description: `There was an issue loading the list of ${pluralize(notificationsDictionary[objectName])}.`,
+        description: `There was an issue loading the list of ${pluralize(entitiesDictionary[objectName])}.`,
         message: 'Problems loading the data'
     })
 }
 
 export {
+    entitiesDictionary,
     objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess, objectLoadingError, objectListLoadingError
 }

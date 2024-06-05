@@ -1,36 +1,32 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Card, Form, Modal } from 'antd'
-import React, { useState } from 'react'
+import { Card } from 'antd'
+import React from 'react'
 import { useParams } from 'react-router'
-import { useNavigate } from 'react-router-dom'
 
 import EventModalForm from './EventModalForm'
+import { EVENT_NAME } from '../../models/constants/constants'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
 import { antCardHeaderEvent } from '../../partials/antdCardHeader'
+import { useDetailPageHandlers } from '../../partials/detailsPageHandlers'
 import { createSinglePointMapContainer } from '../../partials/leafletMapPartials'
+import { DeleteModal, FormModal } from '../../partials/modals'
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues'
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates'
-import { handleFormSubmission } from '../../utils/forms/formSubmission'
-import { eventDelete, useEventCoordinates, useEventGet, useEventPut } from '../../utils/hooks/eventsHooks'
+import { eventDelete, useEventCoordinates, useGetEvent, usePutEvent } from '../../utils/hooks/eventsHooks'
 
 import '../../../assets/styling/events/eventDetails.css'
 import '../../../assets/styling/detailsPage.css'
 
 
 export default function EventDetails(){
-  const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false)
-  const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false)
-  const [openDelete, setOpenDelete] = useState(false)
-  const [openEdit, setOpenEdit] = useState(false)
-
-  const [form] = Form.useForm()
-  const { submitData } = useEventPut()
-  const navigate = useNavigate()
-
   const { eventId } = useParams()
-  let event = useEventGet(eventId)
-  const coordinates = useEventCoordinates(event)
+  let event = useGetEvent(eventId)
 
+  const useDetailPageHandlersProps = {detailsPageObject: event, objectDeleteHook: eventDelete, objectPutHook: usePutEvent, returnPage: 'events'}
+  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
+    handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
+
+  const coordinates = useEventCoordinates(event)
 
   //#region DISPLAY FUNCTIONALITY
   const displayCoordinates = (event: HistoricalEvent | null) => {
@@ -53,70 +49,14 @@ export default function EventDetails(){
   }
   //#endregion
 
-  //#region HANDLERS PAGE
-  const handleGoBack = () => {
-    navigate('/events')
-  }
-  //#endregion
-
-
-  //#region HANDLERS DELETE
-  const handleCancelDelete = () => {
-    setOpenDelete(false)
-  }
-
-  const handleEventDelete = () => {
-    setOpenDelete(true)
-  }
-
-  const handleOkDelete = () => {
-    try {
-      setConfirmLoadingDelete(true)
-      eventDelete(event)
-      setOpenDelete(false)
-
-      setTimeout(() => {
-        handleGoBack()
-      }, 1250)
-    }
-    catch(error) {
-      setConfirmLoadingDelete(false)
-      setOpenDelete(true)
-      console.log(error)
-    }
-  }
-  //#endregion
-
-  //#region HANDLERS EDIT
-  const handleCancelEdit = () => {
-    setOpenEdit(false)
-  }
-
-  const handleEventEdit = () => {
-    setOpenEdit(true)
-  }
-
-  const handleOkEdit = () => {
-    handleFormSubmission(form, onFinishEdit, setConfirmLoadingEdit)
-  }
-
-  const onFinishEdit = async (values: any) => {
-    try {
-      await submitData(values, setConfirmLoadingEdit, setOpenEdit)
-      window.location.reload()
-    }
-    catch(error) {
-      console.log(error)
-    }
-  }
-  //#endregion
+  const eventsModalForm = () => { return (<EventModalForm event={event} form={form} onFinish={onFinishEdit} />)}
 
   return(
     <>
       <Card 
         actions={[
-          <EditOutlined key='edit' onClick={handleEventEdit} />,
-          <DeleteOutlined key='delete' onClick={handleEventDelete} />
+          <EditOutlined key='edit' onClick={openObjectEditModal} />,
+          <DeleteOutlined key='delete' onClick={openObjectDeleteModal} />
         ]}
         id='eventDetailsCard'
         loading={event == null} 
@@ -132,27 +72,23 @@ export default function EventDetails(){
       <div className="eventLocation">
         {displayMap(event)}
       </div>
-      <Modal
-        confirmLoading={confirmLoadingEdit}
-        okText='Save'
-        onCancel={handleCancelEdit}
-        onOk={handleOkEdit}
-        open={openEdit}
-        title='Edit Event'
-      >
-        <EventModalForm event={event} form={form} onFinish={onFinishEdit} />
-      </Modal>
-      <Modal
-        confirmLoading={confirmLoadingDelete}
-        okButtonProps={{danger:true}}
-        okText='Delete'
-        onCancel={handleCancelDelete}
-        onOk={handleOkDelete}
-        open={openDelete}
-        title='Delete Event'
-      >
-        <h2>Are you sure you want to remove this historical event?</h2>
-      </Modal>
+      
+      <FormModal
+        confirmLoadingEdit={confirmLoadingEdit}
+        formComponent={eventsModalForm()}
+        closeObjectEditModal={closeObjectEditModal}
+        handleEditModalOk={handleEditModalOk}
+        objectName={EVENT_NAME}
+        openEdit={openEdit}
+      />
+
+      <DeleteModal
+        confirmLoadingDelete={confirmLoadingDelete}
+        closeObjectDeleteModal={closeObjectDeleteModal}
+        handleDeleteModalOk={handleDeleteModalOk}
+        objectName={EVENT_NAME}
+        openDelete={openDelete}
+      />
     </>
   )
 }
