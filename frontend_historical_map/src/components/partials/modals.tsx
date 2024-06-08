@@ -14,12 +14,13 @@ interface DeleteModalProps {
 }
 
 interface FormModalProps {
-    confirmLoadingEdit: any,
+    confirmLoading: any,
     formComponent: ReactElement,
-    closeObjectEditModal: any,
-    handleEditModalOk: any,
+    closeObjectModal: any,
+    handleModalOk: any,
+    modalTitle: string,
     objectName: string,
-    openEdit: any
+    openModal: any
 }
 
 
@@ -37,19 +38,17 @@ const DeleteModal: React.FC<DeleteModalProps> = ({closeObjectDeleteModal, confir
     </Modal>
 )
 
-const FormModal: React.FC<FormModalProps> = ({confirmLoadingEdit, formComponent, closeObjectEditModal, handleEditModalOk, objectName, openEdit}) => {
+const FormModal: React.FC<FormModalProps> = ({confirmLoading, formComponent, closeObjectModal, handleModalOk, modalTitle, objectName, openModal}) => {
     return (<Modal
-        confirmLoading={confirmLoadingEdit}
+        confirmLoading={confirmLoading}
         okText='Save'
-        onCancel={closeObjectEditModal}
-        onOk={handleEditModalOk}
-        open={openEdit}
-        title={`Edit ${capitaliseWord(entitiesDictionary[objectName])}`}
+        onCancel={closeObjectModal}
+        onOk={handleModalOk}
+        open={openModal}
+        title={`${modalTitle + ' ' + capitaliseWord(entitiesDictionary[objectName])}`}
     >
         {formComponent}
     </Modal>)
 }
 
-export {
-    DeleteModal, FormModal
-}
+export { DeleteModal, FormModal }

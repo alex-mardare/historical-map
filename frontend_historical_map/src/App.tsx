@@ -23,7 +23,7 @@ function App() {
   const [openKeys, setOpenKeys] = useState(['0'])
   const [width, setWidth] = useState(205)
 
-  const { events, refreshFunction } = useGetEvents()
+  const { events } = useGetEvents()
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed)
@@ -64,7 +64,7 @@ function App() {
           <Content>
             <Routes>
               <Route element={<Home {...{events}} />} path="/" />
-              <Route element={<EventsList events={events} onRefreshEvents={refreshFunction} />} path={HISTORICAL_EVENTS_SECTION} />
+              <Route element={<EventsList />} path={HISTORICAL_EVENTS_SECTION} />
               <Route element={<EventDetails />} path={HISTORICAL_EVENTS_SECTION + "/:eventId"} />
               <Route element={<FiguresList />} path={HISTORICAL_FIGURES_SECTION} />
               <Route element={<FigureDetails />} path={HISTORICAL_FIGURES_SECTION + "/:figureId"}  />

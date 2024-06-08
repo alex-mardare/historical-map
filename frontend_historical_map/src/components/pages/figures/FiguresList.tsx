@@ -1,98 +1,34 @@
-import { Button, Form, Input, Modal, Table } from 'antd'
-import React, { useState } from 'react'
+import React from 'react'
 
 import FiguresModalForm from './FiguresModalForm'
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig'
-import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
+import { TableComponent } from '../../partials/tablePage'
+import { useTablePadeHandlers } from '../../partials/handlers/tablePageHandlers'
 import { useGetFigures, usePostFigure } from '../../utils/hooks/figuresHooks'
 
-import '../../../assets/styling/tablePage.css'
-
-
-const { Search } = Input
 
 export default function FiguresList() {
-    const [confirmLoading, setConfirmLoading] = useState(false)
-    const [open, setOpen] = useState(false)
-    const [searchText, setSearchText] = useState('')
-
     const { figures, refreshFunction } = useGetFigures()
-    const [form] = Form.useForm()
-    const { submitData } = usePostFigure()
 
-    let filteredFigures = figures?.filter((figure) => {
-        return Object.values(figure).some((value) => {
-            if (value === null || value === undefined) {
-                return false
-            }
-            if (value.name) {
-                return value.name.toString().toLowerCase().includes(searchText.toLowerCase())
-            }
-            return value.toString().toLowerCase().includes(searchText.toLowerCase())
-        })
-    })
+    const useTablePadeHandlersProps = {objectPostHook: usePostFigure, refreshFunction, tableObjects: figures}
+    const { closeObjectModal, confirmLoading, filteredObjectsArray, form, handleModalOk, handleSearch, onFormSubmit, openModal, showModal } = 
+        useTablePadeHandlers(useTablePadeHandlersProps)
 
-//#region MODAL
-    const handleCancel = () => {
-        setOpen(false)
-    }
-
-    const handleOk = () => {
-        handleFormSubmission(form, onFinish, setConfirmLoading)
-    }
-
-    const onFinish = async (values: any) => {
-        try {
-            await submitData(values, setConfirmLoading, setOpen)
-            refreshFunction()
-        }
-        catch(error) {
-            console.log(error)
-        }
-    }
-
-    const showModal = () => {
-        setOpen(true)
-    }
-//#endregion
-    
-//#region SEARCH BAR
-    const handleSearch = (value:string) => {
-        setSearchText(value)
-    }
-//#endregion
+    const figuresModalForm = () => { return <FiguresModalForm figure={null} form={form} onFinish={onFormSubmit} />}
 
     return(
-        <div className='mainDivTablePage'>
-          <div className='topBarTablePage'>
-            <Search
-                allowClear
-                enterButton
-                onChange={(e) => handleSearch(e.target.value)} 
-                placeholder='Search' 
-                style={{ maxWidth: 400, paddingRight: '5px' }}
-              />
-            <Button onClick={showModal} type='primary'>Create</Button>
-            <Modal
-              confirmLoading={confirmLoading}
-              okText='Create'
-              onCancel={handleCancel}
-              onOk={handleOk}
-              open={open}
-              title="Create Historical Figure"
-            >
-              <FiguresModalForm figure={null} form={form} onFinish={onFinish} />
-            </Modal>
-          </div>
-          <div className='tableDiv'>
-            <Table 
-                  columns={columnsConfig}
-                  dataSource={filteredFigures}
-                  pagination={{ hideOnSinglePage:true }}
-                  rowKey={(figure) => figure.id}
-                  size='middle'
-              />
-          </div>
-        </div>
+        <TableComponent 
+          closeObjectModal={closeObjectModal}
+          columnsConfig={columnsConfig}
+          confirmLoading={confirmLoading}
+          filteredObjectsArray={filteredObjectsArray}
+          formComponent={figuresModalForm()}
+          handleModalOk={handleModalOk}
+          handleSearch={handleSearch}
+          objectName={HISTORICAL_FIGURE_NAME}
+          openModal={openModal}
+          showModal={showModal}
+        />
     )
 }

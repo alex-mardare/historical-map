@@ -7,7 +7,7 @@ import HistoricalStateModalForm from './HistoricalStateModalForm'
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
 import { HistoricalState } from '../../models/types/historicalState'
 import { antCardHeaderHistoricalState } from "../../partials/antdCardHeader"
-import { useDetailPageHandlers } from '../../partials/detailsPageHandlers'
+import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
 import { DeleteModal, FormModal } from '../../partials/modals'
 import { deleteHistoricalState, useGetHistoricalState, usePutHistoricalState } from '../../utils/hooks/historicalStatesHooks'
 
@@ -29,7 +29,7 @@ export default function HistoricalStateDetails(){
   }
   //#endregion
 
-  const historicalStateModalForm = () => { return (<HistoricalStateModalForm historicalState={historicalState} form={form} onFinish={onFinishEdit} />)}
+  const historicalStateModalForm = () => { return <HistoricalStateModalForm historicalState={historicalState} form={form} onFinish={onFinishEdit} />}
   
   return(
     <>
@@ -48,12 +48,13 @@ export default function HistoricalStateDetails(){
       </Card>
 
       <FormModal
-        confirmLoadingEdit={confirmLoadingEdit}
+        confirmLoading={confirmLoadingEdit}
         formComponent={historicalStateModalForm()}
-        closeObjectEditModal={closeObjectEditModal}
-        handleEditModalOk={handleEditModalOk}
+        closeObjectModal={closeObjectEditModal}
+        handleModalOk={handleEditModalOk}
+        modalTitle='Edit'
         objectName={HISTORICAL_STATE_NAME}
-        openEdit={openEdit}
+        openModal={openEdit}
       />
 
       <DeleteModal

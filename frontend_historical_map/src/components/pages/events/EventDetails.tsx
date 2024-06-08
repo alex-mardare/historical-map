@@ -7,7 +7,7 @@ import EventModalForm from './EventModalForm'
 import { EVENT_NAME } from '../../models/constants/constants'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
 import { antCardHeaderEvent } from '../../partials/antdCardHeader'
-import { useDetailPageHandlers } from '../../partials/detailsPageHandlers'
+import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
 import { createSinglePointMapContainer } from '../../partials/leafletMapPartials'
 import { DeleteModal, FormModal } from '../../partials/modals'
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues'
@@ -49,7 +49,7 @@ export default function EventDetails(){
   }
   //#endregion
 
-  const eventsModalForm = () => { return (<EventModalForm event={event} form={form} onFinish={onFinishEdit} />)}
+  const eventsModalForm = () => { return <EventModalForm event={event} form={form} onFinish={onFinishEdit} />}
 
   return(
     <>
@@ -74,12 +74,13 @@ export default function EventDetails(){
       </div>
       
       <FormModal
-        confirmLoadingEdit={confirmLoadingEdit}
+        confirmLoading={confirmLoadingEdit}
         formComponent={eventsModalForm()}
-        closeObjectEditModal={closeObjectEditModal}
-        handleEditModalOk={handleEditModalOk}
+        closeObjectModal={closeObjectEditModal}
+        handleModalOk={handleEditModalOk}
+        modalTitle='Edit'
         objectName={EVENT_NAME}
-        openEdit={openEdit}
+        openModal={openEdit}
       />
 
       <DeleteModal

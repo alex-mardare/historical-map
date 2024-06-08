@@ -3,8 +3,8 @@ import { AxiosResponse } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { DataCreateUpdate } from "../models/types/hooksDataTypes"
-import { handleFormSubmission } from '../utils/forms/formSubmission'
+import { DataCreateUpdate } from "../../models/types/hooksDataTypes"
+import { handleFormSubmission } from '../../utils/forms/formSubmission'
 
 
 interface DetailsPageHandlersProps {

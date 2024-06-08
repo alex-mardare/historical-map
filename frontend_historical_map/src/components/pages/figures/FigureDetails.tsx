@@ -7,7 +7,7 @@ import FiguresModalForm from './FiguresModalForm'
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
 import { HistoricalFigure } from "../../models/types/historicalFigure"
 import { antCardHeaderFigure } from "../../partials/antdCardHeader"
-import { useDetailPageHandlers } from '../../partials/detailsPageHandlers'
+import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
 import { DeleteModal, FormModal } from '../../partials/modals'
 import { figureDelete, useGetFigure, usePutFigure } from '../../utils/hooks/figuresHooks'
 
@@ -44,7 +44,7 @@ export default function FigureDetails(){
   }
   //#endregion
 
-  const figureModalForm = () => { return (<FiguresModalForm figure={figure} form={form} onFinish={onFinishEdit} />)}
+  const figureModalForm = () => { return <FiguresModalForm figure={figure} form={form} onFinish={onFinishEdit} />}
 
   return(
     <>
@@ -64,12 +64,13 @@ export default function FigureDetails(){
       </Card>
 
       <FormModal
-        confirmLoadingEdit={confirmLoadingEdit}
+        confirmLoading={confirmLoadingEdit}
         formComponent={figureModalForm()}
-        closeObjectEditModal={closeObjectEditModal}
-        handleEditModalOk={handleEditModalOk}
+        closeObjectModal={closeObjectEditModal}
+        handleModalOk={handleEditModalOk}
+        modalTitle='Edit'
         objectName={HISTORICAL_FIGURE_NAME}
-        openEdit={openEdit}
+        openModal={openEdit}
       />
 
       <DeleteModal
