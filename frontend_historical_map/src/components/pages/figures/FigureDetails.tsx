@@ -5,11 +5,13 @@ import { useParams } from "react-router"
 
 import FiguresModalForm from './FiguresModalForm'
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
+import { HISTORICAL_FIGURES_SECTION } from '../../models/constants/urls'
 import { HistoricalFigure } from "../../models/types/historicalFigure"
 import { antCardHeaderFigure } from "../../partials/antdCardHeader"
 import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
 import { DeleteModal, FormModal } from '../../partials/modals'
-import { figureDelete, useGetFigure, usePutFigure } from '../../utils/hooks/figuresHooks'
+import { useGetFigure } from '../../utils/hooks/figuresHooks'
+import { objectDelete } from '../../utils/hooks/generalHooks'
 
 import '../../../assets/styling/detailsPage.css'
 
@@ -18,7 +20,8 @@ export default function FigureDetails(){
   const { figureId } = useParams()
   let figure = useGetFigure(figureId)
 
-  const useDetailPageHandlersProps = {detailsPageObject: figure, objectDeleteHook: figureDelete, objectPutHook: usePutFigure, returnPage: 'figures'}
+  const useDetailPageHandlersProps = {detailsPageObject: figure, objectDeleteHook: objectDelete, objectTypeName: HISTORICAL_FIGURE_NAME, 
+    returnPage: HISTORICAL_FIGURES_SECTION}
   const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
     handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
   

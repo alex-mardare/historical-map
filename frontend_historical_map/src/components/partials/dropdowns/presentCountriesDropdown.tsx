@@ -1,11 +1,11 @@
 import { Select } from 'antd'
 import React from 'react'
 
-import { PresentCountries } from '../../models/types/presentCountry'
+import { PresentCountry } from '../../models/types/presentCountry'
 
 type PresentCountriesDropdownProps = {
     onChangePresentCountry: (value: any, option: any) => void
-    presentCountries: PresentCountries,
+    presentCountries: PresentCountry[],
     selectedValue: number | undefined,
     selectId: string
 }

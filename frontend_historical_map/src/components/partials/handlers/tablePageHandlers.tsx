@@ -1,23 +1,23 @@
 import { Form } from 'antd'
 import { useState } from 'react'
 
-import { DataCreateUpdate } from '../../models/types/hooksDataTypes'
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { usePostObject } from '../../utils/hooks/generalHooks'
 
 
 interface TablePageHandlersProps {
-    objectPostHook: () => DataCreateUpdate<any>,
-    refreshFunction: () => void,
-    tableObjects: any[] | null
+  objectName: string,
+  refreshFunction: () => void,
+  tableObjects: any[] | null
 }
 
-export const useTablePadeHandlers = ({objectPostHook, refreshFunction, tableObjects}: TablePageHandlersProps) => {
+export const useTablePadeHandlers = ({objectName, refreshFunction, tableObjects}: TablePageHandlersProps) => {
     const [confirmLoading, setConfirmLoading] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [searchText, setSearchText] = useState('')
 
     const [form] = Form.useForm()
-    const { submitData } = objectPostHook()
+    const { submitData } = usePostObject(objectName)
 
     let filteredObjectsArray = tableObjects?.filter((object) => {
         return Object.values(object).some((value) => {
@@ -54,11 +54,11 @@ export const useTablePadeHandlers = ({objectPostHook, refreshFunction, tableObje
 
     const onFormSubmit = async (values: any) => {
         try {
-            await submitData(values, setConfirmLoading, setOpenModal)
-            refreshFunction()
+          await submitData(values, setConfirmLoading, setOpenModal)
+          refreshFunction()
         }
         catch(error) {
-        console.log(error)
+          console.log(error)
         }
     }
 

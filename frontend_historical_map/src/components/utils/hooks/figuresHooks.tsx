@@ -1,23 +1,12 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
 import { FIGURES_FULL_URL } from '../../models/constants/urls'
 import { HistoricalFigure } from '../../models/types/historicalFigure'
-import { DataCreateUpdate, DataGetFigures } from '../../models/types/hooksDataTypes'
-import { objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess, objectLoadingError, objectListLoadingError } from '../../partials/notifications'
+import { DataGetFigures } from '../../models/types/hooksDataTypes'
+import { objectLoadingError, objectListLoadingError } from '../../partials/notifications'
 
-
-async function figureDelete(figure: HistoricalFigure | null) {
-    try {
-        const response = await axios.delete(FIGURES_FULL_URL + figure?.id)
-        objectDeletionSuccess(HISTORICAL_FIGURE_NAME, figure?.name)
-        return response
-    }
-    catch(error) {
-        objectDeletionError(HISTORICAL_FIGURE_NAME, figure?.name)
-    }
-}
 
 function useGetFigure(figureId: string | undefined): HistoricalFigure | null {
     const [figure, setFigure] = useState(null)
@@ -39,8 +28,8 @@ function useGetFigure(figureId: string | undefined): HistoricalFigure | null {
     return figure
 }
 
-function useGetFigures(): DataGetFigures<HistoricalFigure> {
-    const [figures, setFigures] = useState(null)
+function useGetFigures(): DataGetFigures {
+    const [figures, setFigures] = useState([])
 
     const fetchFigures = async () => {
         try {
@@ -61,70 +50,4 @@ function useGetFigures(): DataGetFigures<HistoricalFigure> {
     }
 }
 
-
-function usePostFigure<T>(): DataCreateUpdate<T> {
-    const [error, setError] = useState<AxiosError | null>(null)
-
-    const submitData = async (
-        formData: any,
-        setConfirmLoading: (loading: boolean) => void,
-        setOpen: (open: boolean) => void
-      ): Promise<any> => {
-        setError(null)
-
-        try {
-            setConfirmLoading(true)
-            const response = await axios.post(FIGURES_FULL_URL, formData)
-
-            setConfirmLoading(false)
-            setOpen(false)
-
-            objectCreationSuccess(HISTORICAL_FIGURE_NAME, formData.name)
-            return response.data
-        } catch (error) {
-            setConfirmLoading(false)
-            setOpen(true)
-
-            setError(error as AxiosError<any>)
-            objectCreationError(HISTORICAL_FIGURE_NAME)
-            throw error
-        }
-    }
-
-    return { submitData, error }
-}
-
-function usePutFigure<T>(): DataCreateUpdate<T> {
-    const [error, setError] = useState<AxiosError | null>(null)
-
-    const submitData = async (
-        formData: any,
-        setConfirmLoading: (loading: boolean) => void,
-        setOpen: (open: boolean) => void
-      ): Promise<any> => {
-        setError(null)
-
-        try {
-            setConfirmLoading(true)
-
-            const response = await axios.patch(FIGURES_FULL_URL + formData.id, formData)
-
-            setConfirmLoading(false)
-            setOpen(false)
-
-            objectEditSuccess(HISTORICAL_FIGURE_NAME, formData.name)
-            return response.data
-        } catch (error) {
-            setConfirmLoading(false)
-            setOpen(true)
-
-            setError(error as AxiosError<any>)
-            objectEditError(HISTORICAL_FIGURE_NAME, formData.name)
-            throw error
-        }
-    }
-
-    return { submitData, error }
-}
-
-export { figureDelete, useGetFigure, useGetFigures, usePostFigure, usePutFigure }
+export { useGetFigure, useGetFigures }

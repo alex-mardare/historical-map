@@ -5,13 +5,13 @@ import { columnsConfig } from '../../config/tables/figuresListColumnsConfig'
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
 import { TableComponent } from '../../partials/tablePage'
 import { useTablePadeHandlers } from '../../partials/handlers/tablePageHandlers'
-import { useGetFigures, usePostFigure } from '../../utils/hooks/figuresHooks'
+import { useGetFigures } from '../../utils/hooks/figuresHooks'
 
 
 export default function FiguresList() {
     const { figures, refreshFunction } = useGetFigures()
 
-    const useTablePadeHandlersProps = {objectPostHook: usePostFigure, refreshFunction, tableObjects: figures}
+    const useTablePadeHandlersProps = {objectName: HISTORICAL_FIGURE_NAME, refreshFunction: refreshFunction, tableObjects: figures}
     const { closeObjectModal, confirmLoading, filteredObjectsArray, form, handleModalOk, handleSearch, onFormSubmit, openModal, showModal } = 
         useTablePadeHandlers(useTablePadeHandlersProps)
 

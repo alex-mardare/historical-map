@@ -3,27 +3,32 @@ import { useEffect, useState } from 'react'
 
 import { EVENT_CATEGORY_NAME } from '../../models/constants/constants'
 import { EVENT_CATEGORIES_FULL_URL } from '../../models/constants/urls'
-import { EventCategories } from '../../models/types/eventCategory'
+import { DataGetEventCategories } from '../../models/types/hooksDataTypes'
 import { objectListLoadingError } from '../../partials/notifications'
 
-export const useFetchEventCategories = () => {
-    const [errorEventCategories, setErrorEventCategories] = useState(null)
-    const [loadingDataEventCategories, setLoadingDataEventCategories] = useState(true)
-    const [eventCategories, setEventCategories] = useState<EventCategories>([])
+
+function useGetEventCategories(): DataGetEventCategories {
+    const [eventCategories, setEventCategories] = useState([])
+
+    const fetchEventCategories = async () => {
+        try {
+            const response = await axios.get(EVENT_CATEGORIES_FULL_URL)
+            setEventCategories(response.data)
+        } catch (error) {
+            objectListLoadingError(EVENT_CATEGORY_NAME)
+        }
+    }
 
     useEffect(() => {
-        setLoadingDataEventCategories(true)
-        axios.get(EVENT_CATEGORIES_FULL_URL)
-            .then(res => {
-                setEventCategories(res.data)
-                setLoadingDataEventCategories(false)
-            })
-            .catch(() => {
-                objectListLoadingError(EVENT_CATEGORY_NAME)
-                setErrorEventCategories(errorEventCategories)
-                setLoadingDataEventCategories(false)
-            })
-    }, [errorEventCategories])
+        fetchEventCategories()
+    })
 
-    return { errorEventCategories, loadingDataEventCategories, eventCategories }
+    return {
+        eventCategories,
+        refreshFunction: fetchEventCategories,
+    }
+}
+
+export {
+    useGetEventCategories   
 }

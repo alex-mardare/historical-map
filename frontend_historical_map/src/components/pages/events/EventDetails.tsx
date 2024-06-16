@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 
 import EventModalForm from './EventModalForm'
 import { EVENT_NAME } from '../../models/constants/constants'
+import { HISTORICAL_EVENTS_SECTION } from '../../models/constants/urls'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
 import { antCardHeaderEvent } from '../../partials/antdCardHeader'
 import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
@@ -12,7 +13,8 @@ import { createSinglePointMapContainer } from '../../partials/leafletMapPartials
 import { DeleteModal, FormModal } from '../../partials/modals'
 import { displayBooleanValues } from '../../utils/display/displayBooleanValues'
 import { displayLatitudeDMS, displayLongitudeDMS } from '../../utils/display/displayCoordinates'
-import { eventDelete, useEventCoordinates, useGetEvent, usePutEvent } from '../../utils/hooks/eventsHooks'
+import { useEventCoordinates, useGetEvent } from '../../utils/hooks/eventsHooks'
+import { objectDelete } from '../../utils/hooks/generalHooks'
 
 import '../../../assets/styling/events/eventDetails.css'
 import '../../../assets/styling/detailsPage.css'
@@ -22,7 +24,7 @@ export default function EventDetails(){
   const { eventId } = useParams()
   let event = useGetEvent(eventId)
 
-  const useDetailPageHandlersProps = {detailsPageObject: event, objectDeleteHook: eventDelete, objectPutHook: usePutEvent, returnPage: 'events'}
+  const useDetailPageHandlersProps = {detailsPageObject: event, objectDeleteHook: objectDelete, objectTypeName: EVENT_NAME, returnPage: HISTORICAL_EVENTS_SECTION}
   const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
     handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
 

@@ -5,13 +5,13 @@ import { columnsConfig } from '../../config/tables/eventsListColumnsConfig'
 import { EVENT_NAME } from '../../models/constants/constants'
 import { TableComponent } from '../../partials/tablePage'
 import { useTablePadeHandlers } from '../../partials/handlers/tablePageHandlers'
-import { useGetEvents, usePostEvent } from '../../utils/hooks/eventsHooks'
+import { useGetEvents } from '../../utils/hooks/eventsHooks'
 
 
 export default function EventsList() {
   const { events, refreshFunction } = useGetEvents()
 
-  const useTablePadeHandlersProps = {objectPostHook: usePostEvent, refreshFunction, tableObjects: events}
+  const useTablePadeHandlersProps = {objectName: EVENT_NAME, refreshFunction, tableObjects: events}
   const { closeObjectModal, confirmLoading, filteredObjectsArray, form, handleModalOk, handleSearch, onFormSubmit, openModal, showModal } = 
     useTablePadeHandlers(useTablePadeHandlersProps)
 

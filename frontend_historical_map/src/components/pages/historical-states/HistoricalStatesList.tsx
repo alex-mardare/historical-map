@@ -5,13 +5,13 @@ import { columnsConfig } from '../../config/tables/historicalStatesListColumnsCo
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
 import { TableComponent } from '../../partials/tablePage'
 import { useTablePadeHandlers } from '../../partials/handlers/tablePageHandlers'
-import { useGetHistoricalStates, usePostHistoricalState } from '../../utils/hooks/historicalStatesHooks'
+import { useGetHistoricalStates } from '../../utils/hooks/historicalStatesHooks'
 
 
 export default function HistoricalStatesList() {
   const { historicalStates, refreshFunction } = useGetHistoricalStates()
 
-  const useTablePadeHandlersProps = {objectPostHook: usePostHistoricalState, refreshFunction, tableObjects: historicalStates}
+  const useTablePadeHandlersProps = {objectName: HISTORICAL_STATE_NAME, refreshFunction, tableObjects: historicalStates}
   const { closeObjectModal, confirmLoading, filteredObjectsArray, form, handleModalOk, handleSearch, onFormSubmit, openModal, showModal } = 
       useTablePadeHandlers(useTablePadeHandlersProps)
 

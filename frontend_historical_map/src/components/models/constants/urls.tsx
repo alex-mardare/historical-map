@@ -1,9 +1,9 @@
 const DEV_API_EVENTS_APP_BASE_URL = "http://localhost:8000/api/events/"
 
 
-const HISTORICAL_EVENTS_SECTION = "/events"
-const HISTORICAL_FIGURES_SECTION = "/figures"
-const HISTORICAL_STATES_SECTION = "/historical-states"
+const HISTORICAL_EVENTS_SECTION = "events"
+const HISTORICAL_FIGURES_SECTION = "figures"
+const HISTORICAL_STATES_SECTION = "historical-states"
 const PRESENT_COUNTRIES_SECTION = "/present-countries"
 
 const EVENT_CATEGORIES_ENDPOINT = "event-categories/"

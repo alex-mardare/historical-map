@@ -1,3 +1,3 @@
 export const formValidationMessages = {
-    required: ""
+    required: "This field is mandatory."
 }

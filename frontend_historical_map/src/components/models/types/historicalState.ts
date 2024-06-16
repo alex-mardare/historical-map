@@ -1,4 +1,4 @@
-import { PresentCountries } from "./presentCountry"
+import { PresentCountry } from "./presentCountry"
 
 
 export interface HistoricalState {
@@ -7,13 +7,11 @@ export interface HistoricalState {
     flagUrl: string | null,
     id: number,
     name: string,
-    presentCountries: PresentCountries
+    presentCountries: PresentCountry[]
 }
-export type HistoricalStates = HistoricalState[]
 
-type HistoricalStateOption = {
+export type HistoricalStateOption = {
     description: string,
     label: string,
     value: number
 }
-export type HistoricalStateOptions = HistoricalStateOption[]

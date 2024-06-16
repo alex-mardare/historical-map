@@ -1,12 +1,12 @@
 import { Select } from 'antd'
 import React from 'react'
 
-import { HistoricalStateOptions } from '../../models/types/historicalState'
+import { HistoricalStateOption } from '../../models/types/historicalState'
 import { DefaultOptionType } from 'antd/es/select'
 
 
 type HistoricalStatesDropdownProps = {
-    historicalStates: HistoricalStateOptions,
+    historicalStates: HistoricalStateOption[],
     onChangeHistoricalState: (value: any, option: any) => void
     selectedValue: number | undefined,
     selectId: string
@@ -33,10 +33,7 @@ export const HistoricalStatesDropdown = (props: HistoricalStatesDropdownProps) =
         <Select
             filterOption={(input, option) => searchHistoricalStatesDropdown(input, option)}
             id={selectId}
-            labelInValue
-            onChange={(valueObj: any, option) => {
-                // dropdown option value is an object containing value
-                const { value } = valueObj
+            onChange={(value: any, option) => {
                 onChangeHistoricalState(value, option)
             }}
             optionRender={optionRender}

@@ -5,11 +5,13 @@ import { useParams } from "react-router"
 
 import HistoricalStateModalForm from './HistoricalStateModalForm'
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
+import { HISTORICAL_STATES_SECTION } from '../../models/constants/urls'
 import { HistoricalState } from '../../models/types/historicalState'
 import { antCardHeaderHistoricalState } from "../../partials/antdCardHeader"
 import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
 import { DeleteModal, FormModal } from '../../partials/modals'
-import { deleteHistoricalState, useGetHistoricalState, usePutHistoricalState } from '../../utils/hooks/historicalStatesHooks'
+import { objectDelete } from '../../utils/hooks/generalHooks'
+import { useGetHistoricalState } from '../../utils/hooks/historicalStatesHooks'
 
 import '../../../assets/styling/detailsPage.css'
 
@@ -18,8 +20,8 @@ export default function HistoricalStateDetails(){
   const { historicalStateId } = useParams()
   let historicalState = useGetHistoricalState(historicalStateId)  
 
-  const useDetailPageHandlersProps = {detailsPageObject: historicalState, objectDeleteHook: deleteHistoricalState, objectPutHook: usePutHistoricalState, 
-    returnPage: 'historical-states'}
+  const useDetailPageHandlersProps = {detailsPageObject: historicalState, objectDeleteHook: objectDelete, objectTypeName: HISTORICAL_STATE_NAME, 
+    returnPage: HISTORICAL_STATES_SECTION}
   const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
     handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
   

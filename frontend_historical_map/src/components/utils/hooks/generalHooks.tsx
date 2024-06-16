@@ -1,0 +1,85 @@
+import axios, { AxiosError } from "axios"
+import { useState } from "react"
+
+import { urlsDictionary } from "../../models/constants/constants"
+import { DataCreateUpdate } from "../../models/types/hooksDataTypes"
+import { objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess } from "../../partials/notifications"
+
+
+async function objectDelete(objectId: number, objectName: string, objectTypeName: string) {
+    try {
+        const response = await axios.delete(urlsDictionary[objectName] + objectId)
+        objectDeletionSuccess(objectTypeName, objectName)
+        return response
+    }
+    catch(error) {
+        objectDeletionError(objectTypeName, objectName)
+    }
+}
+
+function usePostObject(objectName: string): DataCreateUpdate {
+    const [error, setError] = useState<AxiosError | null>(null)
+
+    const submitData = async (
+        formData: any,
+        setConfirmLoading: (loading: boolean) => void,
+        setOpen: (open: boolean) => void
+      ): Promise<any> => {
+        setError(null)
+
+        try {
+            setConfirmLoading(true)
+            const response = await axios.post(urlsDictionary[objectName], formData)
+
+            setConfirmLoading(false)
+            setOpen(false)
+
+            objectCreationSuccess(objectName, formData.name)
+            return response.data
+        } catch (error) {
+            setConfirmLoading(false)
+            setOpen(true)
+
+            setError(error as AxiosError<any>)
+            objectCreationError(objectName)
+            throw error
+        }
+    }
+
+    return { submitData, error }
+}
+
+function usePutObject(objectName: string): DataCreateUpdate {
+    const [error, setError] = useState<AxiosError | null>(null)
+
+    const submitData = async (formData: any, setConfirmLoading: (loading: boolean) => void, setOpen: (open: boolean) => void): Promise<any> => {
+        setError(null)
+
+        try {
+            setConfirmLoading(true)
+            
+            if (formData.time !== undefined) {
+                formData.time = formData.time.format('HH:mm:ss')
+            }
+            const response = await axios.patch(urlsDictionary[objectName] + formData.id, formData)
+
+            setConfirmLoading(false)
+            setOpen(false)
+
+            objectEditSuccess(objectName, formData.name)
+            return response.data
+        } catch (error) {
+
+            setConfirmLoading(false)
+            setOpen(true)
+
+            setError(error as AxiosError<any>)
+            objectEditError(objectName, formData.name)
+            throw error
+        }
+    }
+
+    return { submitData, error }
+}
+
+export { objectDelete, usePostObject, usePutObject }

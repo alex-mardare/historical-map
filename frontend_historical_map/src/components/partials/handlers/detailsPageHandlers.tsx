@@ -3,25 +3,25 @@ import { AxiosResponse } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { DataCreateUpdate } from "../../models/types/hooksDataTypes"
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
+import { usePutObject } from '../../utils/hooks/generalHooks'
 
 
 interface DetailsPageHandlersProps {
     detailsPageObject: any,
-    objectDeleteHook: (object: any) => Promise<AxiosResponse<any, any> | undefined>,
-    objectPutHook: () => DataCreateUpdate<any>,
+    objectDeleteHook: (objectId: number, objectName: string, objectTypeName: string) => Promise<AxiosResponse<any, any> | undefined>,
+    objectTypeName: string,
     returnPage: string
 }
 
-export const useDetailPageHandlers = ({detailsPageObject, objectDeleteHook, objectPutHook, returnPage}: DetailsPageHandlersProps) => {
+export const useDetailPageHandlers = ({detailsPageObject, objectDeleteHook, objectTypeName, returnPage}: DetailsPageHandlersProps) => {
     const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false)
     const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
     const [openEdit, setOpenEdit] = useState(false)
 
     const [form] = Form.useForm()
-    const { submitData } = objectPutHook()
+    const { submitData } = usePutObject(objectTypeName)
     const navigate = useNavigate()
 
     //#region HANDLERS DELETE
@@ -32,7 +32,7 @@ export const useDetailPageHandlers = ({detailsPageObject, objectDeleteHook, obje
     const handleDeleteModalOk = () => {
         try {
             setConfirmLoadingDelete(true)
-            objectDeleteHook(detailsPageObject)
+            objectDeleteHook(detailsPageObject.id, detailsPageObject.name, objectTypeName)
             setOpenDelete(false)
 
             setTimeout(() => {

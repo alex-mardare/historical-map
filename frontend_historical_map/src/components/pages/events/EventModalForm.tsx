@@ -7,9 +7,9 @@ import { TIME_FORMAT } from '../../models/constants/constants'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
 import { HistoricalStatesDropdown } from '../../partials/dropdowns/historicalStatesDropdown'
 import { PresentCountriesDropdown } from '../../partials/dropdowns/presentCountriesDropdown'
-import { useFetchPresentCountries } from '../../utils/hooks/countriesHooks'
+import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { useGetHistoricalStatesOptions } from '../../utils/hooks/historicalStatesHooks'
-import { useFetchEventCategories } from '../../utils/hooks/eventPropertiesHooks'
+import { useGetEventCategories } from '../../utils/hooks/eventPropertiesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
@@ -24,9 +24,9 @@ export default function EventModalForm(props:EventModalProp) {
     const [historicalStateOption, setHistoricalStateOption] = useState(props.event?.historicalState?.id)
     const [presentCountryOption, setPresentCountryOption] = useState(props.event?.presentCountry?.id)
 
-    const { eventCategories } = useFetchEventCategories()
+    const { eventCategories } = useGetEventCategories()
     const { historicalStates } = useGetHistoricalStatesOptions()
-    const { presentCountries } = useFetchPresentCountries(historicalStateOption)
+    const { presentCountries } = useGetPresentCountries(historicalStateOption)
 
     const displayIdFormItem = (event: HistoricalEvent | null) => {
         if (event !== null) {

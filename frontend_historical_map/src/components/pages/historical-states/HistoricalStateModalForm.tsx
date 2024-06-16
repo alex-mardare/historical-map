@@ -2,7 +2,7 @@ import { Form, Input, Select } from 'antd'
 import React from 'react'
 
 import { HistoricalState } from '../../models/types/historicalState'
-import { useFetchPresentCountries } from '../../utils/hooks/countriesHooks'
+import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
@@ -14,7 +14,7 @@ type HistoricalStateModalProp = {
 }
 
 export default function HistoricalStateModalForm(props:HistoricalStateModalProp) {
-    const { presentCountries } = useFetchPresentCountries(null)
+    const { presentCountries } = useGetPresentCountries(null)
 
     const displayIdFormItem = (historicalState: HistoricalState | null) => {
         if (historicalState !== null) {

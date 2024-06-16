@@ -1,24 +1,13 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 import { EVENT_NAME } from '../../models/constants/constants'
 import { DEV_API_EVENTS_APP_BASE_URL } from '../../models/constants/urls'
-import { objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess, objectLoadingError, objectListLoadingError } from '../../partials/notifications'
+import { objectLoadingError, objectListLoadingError } from '../../partials/notifications'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
-import { DataCreateUpdate, DataGetEvents } from '../../models/types/hooksDataTypes'
+import { DataGetEvents } from '../../models/types/hooksDataTypes'
 import { returnMapCoordinatesByPresentCountryName } from '../../partials/leafletMapPartials'
  
-
-async function eventDelete(event: HistoricalEvent | null) {
-    try {
-        const response = await axios.delete(DEV_API_EVENTS_APP_BASE_URL + event?.id)
-        objectDeletionSuccess(EVENT_NAME, event?.name)
-        return response
-    }
-    catch(error) {
-        objectDeletionError(EVENT_NAME, event?.name)
-    }
-}
 
 function useEventCoordinates(event: HistoricalEvent | null) {
     const [coordinates, setCoordinates] = useState<null | number[]>(null)
@@ -61,8 +50,8 @@ function useGetEvent(eventId: string | undefined): HistoricalEvent | null {
     return event
 }
 
-function useGetEvents(): DataGetEvents<HistoricalEvent> {
-    const [events, setEvents] = useState(null)
+function useGetEvents(): DataGetEvents {
+    const [events, setEvents] = useState([])
 
     const fetchEvents = async () => {
         try {
@@ -83,68 +72,4 @@ function useGetEvents(): DataGetEvents<HistoricalEvent> {
     }
 }
 
-function usePostEvent<T>(): DataCreateUpdate<T> {
-    const [error, setError] = useState<AxiosError | null>(null)
-
-    const submitData = async (
-        formData: any,
-        setConfirmLoading: (loading: boolean) => void,
-        setOpen: (open: boolean) => void
-      ): Promise<any> => {
-        setError(null)
-
-        try {
-            setConfirmLoading(true)
-            const response = await axios.post(DEV_API_EVENTS_APP_BASE_URL, formData)
-
-            setConfirmLoading(false)
-            setOpen(false)
-
-            objectCreationSuccess(EVENT_NAME, formData.name)
-            return response.data
-        } catch (error) {
-            setConfirmLoading(false)
-            setOpen(true)
-
-            setError(error as AxiosError<any>)
-            objectCreationError(EVENT_NAME)
-            throw error
-        }
-    }
-
-    return { submitData, error }
-}
-
-function usePutEvent<T>(): DataCreateUpdate<T> {
-    const [error, setError] = useState<AxiosError | null>(null)
-
-    const submitData = async (formData: any, setConfirmLoading: (loading: boolean) => void, setOpen: (open: boolean) => void): Promise<any> => {
-        setError(null)
-
-        try {
-            setConfirmLoading(true)
-            
-            if (formData.time !== undefined) {
-                formData.time = formData.time.format('HH:mm:ss')
-            }
-            const response = await axios.patch(DEV_API_EVENTS_APP_BASE_URL + formData.id, formData)
-
-            setConfirmLoading(false)
-            setOpen(false)
-
-            objectEditSuccess(EVENT_NAME, formData.name)
-            return response.data
-        } catch (error) {
-            setConfirmLoading(false)
-            setOpen(true)
-
-            setError(error as AxiosError<any>)
-            objectEditError(EVENT_NAME, formData.name)
-            throw error
-        }
-    }
-
-    return { submitData, error }
-}
-
-export { eventDelete, useEventCoordinates, useGetEvent, useGetEvents, usePostEvent, usePutEvent }
+export { useEventCoordinates, useGetEvent, useGetEvents }

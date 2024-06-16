@@ -1,26 +1,41 @@
-import { AxiosError } from "axios";
+import { AxiosError } from "axios"
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type DataCreateUpdate<T> = {
+import { HistoricalEvent } from "./historicalEvent"
+import { HistoricalFigure } from "./historicalFigure"
+import { HistoricalState } from "./historicalState"
+import { PresentCountry } from "./presentCountry"
+import { EventCategory } from "./eventCategory"
+
+export type DataCreateUpdate = {
+  error: AxiosError | null,
   submitData: (
       formData: any, 
       setConfirmLoading: (loading: boolean) => void,
       setOpen: (open: boolean) => void
-  ) => Promise<any>;
-  error: AxiosError | null;
+  ) => Promise<any>
 }
 
-export type DataGetEvents<HistoricalEvent> = {
-  events: HistoricalEvent[] | null;
-  refreshFunction: () => void;
-};
-
-export type DataGetFigures<HistoricalFigure> = {
-  figures: HistoricalFigure[] | null;
-  refreshFunction: () => void;
+export type DataGetEventCategories = {
+  eventCategories: EventCategory[],
+  refreshFunction: () => void
 }
 
-export type DataGetHistoricalStates<HistoricalState> = {
-  historicalStates: HistoricalState[] | null;
-  refreshFunction: () => void;
+export type DataGetEvents = {
+  events: HistoricalEvent[],
+  refreshFunction: () => void
+}
+
+export type DataGetFigures = {
+  figures: HistoricalFigure[],
+  refreshFunction: () => void
+}
+
+export type DataGetHistoricalStates = {
+  historicalStates: HistoricalState[],
+  refreshFunction: () => void
+}
+
+export type DataGetPresentCountries = {
+  presentCountries: PresentCountry[],
+  refreshFunction: () => void
 }

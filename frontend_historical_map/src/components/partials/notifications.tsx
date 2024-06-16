@@ -1,17 +1,9 @@
 import { notification } from 'antd'
 import pluralize from 'pluralize'
 
-import { Dictionary } from '../models/types/genericTypes'
+import { entitiesDictionary } from '../models/constants/constants'
 import { capitaliseWord } from '../utils/display/displayStrings'
 
-
-const entitiesDictionary: Dictionary = {
-    EVENT: 'event',
-    EVENT_CATEGORY: 'event category',
-    HISTORICAL_FIGURE: 'historical figure',
-    HISTORICAL_STATE: 'historical state',
-    PRESENT_COUNTRY: 'country'
-}
 
 const objectCreationError = (objectName: string) => {
     notification.error({

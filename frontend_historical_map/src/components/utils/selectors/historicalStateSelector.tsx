@@ -1,8 +1,8 @@
-import { HistoricalStates, HistoricalStateOptions } from "../../models/types/historicalState";
+import { HistoricalState, HistoricalStateOption } from "../../models/types/historicalState";
 
 
-export function transformHistoricalStatesForSelector(historicalStates : HistoricalStates) {
-    let historicalStateOptions: HistoricalStateOptions = [];
+export function transformHistoricalStatesForSelector(historicalStates : HistoricalState[]) {
+    let historicalStateOptions: HistoricalStateOption[] = [];
     historicalStates.forEach(hs => {
         historicalStateOptions.push({
             description: hs.dateTo && hs.dateTo.length > 0 ? '(' + hs.dateFrom + ' - ' + hs.dateTo + ')' : '',
