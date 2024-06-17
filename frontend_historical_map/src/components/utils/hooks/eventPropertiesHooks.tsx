@@ -21,7 +21,7 @@ function useGetEventCategories(): DataGetEventCategories {
 
     useEffect(() => {
         fetchEventCategories()
-    })
+    }, [])
 
     return {
         eventCategories,
