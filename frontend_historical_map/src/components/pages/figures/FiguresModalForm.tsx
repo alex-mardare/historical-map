@@ -46,6 +46,7 @@ export default function FiguresModalForm(props:FigurelModalProp) {
         setBirthHistoricalStateOption(value)
         setBirthPresentCountryOption(undefined)
 
+        props.form.setFieldsValue({ birthHistoricalStateId: value })
         props.form.resetFields(['birthPresentCountryId'])
     }
 
@@ -59,6 +60,7 @@ export default function FiguresModalForm(props:FigurelModalProp) {
         setDeathHistoricalStateOption(value)
         setDeathPresentCountryOption(undefined)
 
+        props.form.setFieldsValue({ deathHistoricalStateId: value })
         props.form.resetFields(['deathPresentCountryId'])
     }
 
