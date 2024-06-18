@@ -1,21 +1,19 @@
 import React from 'react';
 
 import { createMultiMarkerMapContainer } from '../partials/leafletMapPartials';
-import { HistoricalEvents } from '../models/types/historicalEvent';
+import { useGetEvents } from '../utils/hooks/eventsHooks';
 
 import "leaflet/dist/leaflet.css";
 
 import "../../assets/styling/home.css";
 
 
-type props = {
-  events: HistoricalEvents | null
-}
+function Home() {
+  const { events } = useGetEvents()
 
-function Home(props: props) {
   return (
     <div className="Home">
-      {createMultiMarkerMapContainer(props.events, 'homeMap', 5)}
+      {createMultiMarkerMapContainer(events, 'homeMap', 5)}
     </div>
   );
 }

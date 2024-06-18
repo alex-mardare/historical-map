@@ -1,10 +1,21 @@
 import axios, { AxiosError } from "axios"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { urlsDictionary } from "../../models/constants/constants"
 import { DataCreateUpdate } from "../../models/types/hooksDataTypes"
 import { objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess } from "../../partials/notifications"
 
+
+function useEffectOnceWrapper(hookMethod: () => void) {
+    const hasMounted = useRef(false)
+
+    useEffect(() => {
+        if (!hasMounted.current) {
+            hookMethod()
+            hasMounted.current = true
+        }
+    }, [hookMethod])
+}
 
 async function objectDelete(objectId: number, objectName: string, objectTypeName: string) {
     try {
@@ -82,4 +93,4 @@ function usePutObject(objectName: string): DataCreateUpdate {
     return { submitData, error }
 }
 
-export { objectDelete, usePostObject, usePutObject }
+export { objectDelete, useEffectOnceWrapper, usePostObject, usePutObject }

@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
+import { useEffectOnceWrapper } from './generalHooks'
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
 import { FIGURES_FULL_URL } from '../../models/constants/urls'
 import { HistoricalFigure } from '../../models/types/historicalFigure'
@@ -11,7 +12,7 @@ import { objectLoadingError, objectListLoadingError } from '../../partials/notif
 function useGetFigure(figureId: string | undefined): HistoricalFigure | null {
     const [figure, setFigure] = useState(null)
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         async function fetchData() {
             try {
                 const response = await axios.get(FIGURES_FULL_URL + figureId)
@@ -23,7 +24,7 @@ function useGetFigure(figureId: string | undefined): HistoricalFigure | null {
         }
 
         fetchData()
-    }, [figureId])
+    })
 
     return figure
 }
@@ -40,9 +41,9 @@ function useGetFigures(): DataGetFigures {
         }
     }
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         fetchFigures()
-    }, [])
+    })
 
     return {
         figures,

@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
+import { useEffectOnceWrapper } from './generalHooks'
 import { EVENT_CATEGORY_NAME } from '../../models/constants/constants'
 import { EVENT_CATEGORIES_FULL_URL } from '../../models/constants/urls'
 import { DataGetEventCategories } from '../../models/types/hooksDataTypes'
@@ -19,9 +20,9 @@ function useGetEventCategories(): DataGetEventCategories {
         }
     }
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         fetchEventCategories()
-    }, [])
+    })
 
     return {
         eventCategories,

@@ -11,7 +11,6 @@ import FigureDetails from './components/pages/figures/FigureDetails'
 import FiguresList from './components/pages/figures/FiguresList'
 import HistoricalStateDetails from './components/pages/historical-states/HistoricalStateDetails'
 import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList'
-import { useGetEvents } from './components/utils/hooks/eventsHooks'
 
 import './App.css' 
 
@@ -22,8 +21,6 @@ function App() {
   const [collapsed, setCollapsed] = useState(false)
   const [openKeys, setOpenKeys] = useState(['0'])
   const [width, setWidth] = useState(205)
-
-  const { events } = useGetEvents()
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed)
@@ -63,7 +60,7 @@ function App() {
           </Sider>
           <Content>
             <Routes>
-              <Route element={<Home {...{events}} />} path="/" />
+              <Route element={<Home />} path="/" />
               <Route element={<EventsList />} path={HISTORICAL_EVENTS_SECTION} />
               <Route element={<EventDetails />} path={HISTORICAL_EVENTS_SECTION + "/:eventId"} />
               <Route element={<FiguresList />} path={HISTORICAL_FIGURES_SECTION} />

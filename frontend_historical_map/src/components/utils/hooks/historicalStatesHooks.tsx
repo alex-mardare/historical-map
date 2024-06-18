@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
+import { useEffectOnceWrapper } from './generalHooks'
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
 import { HISTORICAL_STATES_FULL_URL } from '../../models/constants/urls'
 import { HistoricalState, HistoricalStateOption } from '../../models/types/historicalState'
@@ -14,7 +15,7 @@ const useGetHistoricalStatesOptions = () => {
     const [historicalStates, setHistoricalStates] = useState<HistoricalStateOption[]>([])
     const [loadingDataHistoricalStates, setLoadingDataHistoricalStates] = useState(true)
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         setLoadingDataHistoricalStates(true)
         axios.get(HISTORICAL_STATES_FULL_URL)
             .then(res => {
@@ -26,7 +27,7 @@ const useGetHistoricalStatesOptions = () => {
                 setErrorHistoricalStates(errorHistoricalStates)
                 setLoadingDataHistoricalStates(false)
             })
-    }, [errorHistoricalStates])
+    })
 
     return { errorHistoricalStates, historicalStates, loadingDataHistoricalStates }
 }
@@ -34,7 +35,7 @@ const useGetHistoricalStatesOptions = () => {
 function useGetHistoricalState(historicalStateId: string | undefined): HistoricalState | null {
     const [historicalState, setHistoricalState] = useState(null)
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         async function fetchData() {
             try {
                 const response = await axios.get(HISTORICAL_STATES_FULL_URL + historicalStateId)
@@ -46,7 +47,7 @@ function useGetHistoricalState(historicalStateId: string | undefined): Historica
         }
 
         fetchData()
-    }, [historicalStateId])
+    })
 
     return historicalState
 }
@@ -63,9 +64,9 @@ function useGetHistoricalStates(): DataGetHistoricalStates {
         }
     }
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         fetchHistoricalStates()
-    }, [])
+    })
 
     return {
         historicalStates,

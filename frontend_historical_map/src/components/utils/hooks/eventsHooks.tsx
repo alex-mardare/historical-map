@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
+import { useEffectOnceWrapper } from './generalHooks'
 import { EVENT_NAME } from '../../models/constants/constants'
 import { DEV_API_EVENTS_APP_BASE_URL } from '../../models/constants/urls'
 import { objectLoadingError, objectListLoadingError } from '../../partials/notifications'
@@ -33,7 +34,7 @@ function useEventCoordinates(event: HistoricalEvent | null) {
 function useGetEvent(eventId: string | undefined): HistoricalEvent | null {
     const [event, setEvent] = useState(null)
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         async function fetchData() {
             try {
                 const response = await axios.get(DEV_API_EVENTS_APP_BASE_URL + eventId)
@@ -45,7 +46,7 @@ function useGetEvent(eventId: string | undefined): HistoricalEvent | null {
         }
 
         fetchData()
-    }, [eventId])
+    })
 
     return event
 }
@@ -62,9 +63,9 @@ function useGetEvents(): DataGetEvents {
         }
     }
 
-    useEffect(() => {
+    useEffectOnceWrapper(() => {
         fetchEvents()
-    }, [])
+    })
 
     return {
         events,
