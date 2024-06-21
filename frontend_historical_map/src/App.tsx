@@ -20,15 +20,6 @@ const { Content, Sider } = Layout
 function App() {
   const [collapsed, setCollapsed] = useState(false)
   const [openKeys, setOpenKeys] = useState(['0'])
-  const [width, setWidth] = useState(205)
-
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed)
-
-    if (!collapsed) {
-      setWidth(width)
-    }
-  }
 
   const onOpenChangeMenu: MenuProps['onOpenChange'] = (menuKeys) => {
     const latestOpenKey = menuKeys.find((key) => openKeys.indexOf(key) === -1)
@@ -45,13 +36,14 @@ function App() {
         <Layout>
           <Sider
             collapsible 
-            collapsed={collapsed} 
-            onCollapse={toggleCollapsed} 
-            width={width}
+            collapsed={collapsed}
+            collapsedWidth={100} 
+            onCollapse={() => setCollapsed(!collapsed)} 
+            width={230}
           >
             <Menu 
               defaultSelectedKeys={['1']} 
-              items={menuItems} 
+              items={menuItems}
               mode="inline" 
               openKeys={openKeys}
               onOpenChange={onOpenChangeMenu} 

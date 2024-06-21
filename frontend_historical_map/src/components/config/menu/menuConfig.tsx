@@ -1,22 +1,22 @@
-import type { MenuProps } from 'antd';
-import React from 'react';
+import type { MenuProps } from 'antd'
+import React from 'react'
 
-import { CountriesMenuItem, EventsMenuItem, EventsMenuSubItemList, EventsMenuSubItemMap, FiguresMenuItem, FiguresMenuSubItemList, HistoricalStatesSubItem } from '../../partials/menuItems';
+import { CountriesMenuItem, EventsMenuItem, EventsMenuSubItemList, EventsMenuSubItemMap, FiguresMenuItem, FiguresMenuSubItemList, HistoricalStatesSubItem } from '../../partials/menuItems'
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = Required<MenuProps>['items'][number]
 
 function getItem(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
-  children?: MenuItem[],
+  children?: MenuItem[]
 ): MenuItem {
   return {
     key,
     icon,
     children,
-    label,
-  } as MenuItem;
+    label
+  } as MenuItem
 }
 
 const menuItems: MenuItem[] = [
@@ -30,7 +30,7 @@ const menuItems: MenuItem[] = [
   getItem('Countries', '3', <CountriesMenuItem />, [
     getItem('Historical States', '3.1', <HistoricalStatesSubItem />),
   ])
-];
+]
 
 const rootMenuKeys = ['1', '2', '3']
 
