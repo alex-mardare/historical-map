@@ -25,8 +25,8 @@ export default function EventDetails(){
   let event = useGetEvent(eventId)
 
   const useDetailPageHandlersProps = {detailsPageObject: event, objectDeleteHook: objectDelete, objectTypeName: EVENT_NAME, returnPage: HISTORICAL_EVENTS_SECTION}
-  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
-    handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
+  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, isLoadingDeleteButton,
+    openObjectEditModal, handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
 
   const coordinates = useEventCoordinates(event)
 
@@ -89,6 +89,7 @@ export default function EventDetails(){
         confirmLoadingDelete={confirmLoadingDelete}
         closeObjectDeleteModal={closeObjectDeleteModal}
         handleDeleteModalOk={handleDeleteModalOk}
+        isLoadingDeleteButton={isLoadingDeleteButton}
         objectName={EVENT_NAME}
         openDelete={openDelete}
       />

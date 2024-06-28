@@ -1,5 +1,5 @@
 import { Form } from 'antd'
-import { AxiosResponse } from 'axios'
+import { AxiosResponse, HttpStatusCode } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,6 +17,7 @@ interface DetailsPageHandlersProps {
 export const useDetailPageHandlers = ({detailsPageObject, objectDeleteHook, objectTypeName, returnPage}: DetailsPageHandlersProps) => {
     const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false)
     const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false)
+    const [isLoadingDeleteButton, setIsLoadingDeleteButton] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
     const [openEdit, setOpenEdit] = useState(false)
 
@@ -29,17 +30,24 @@ export const useDetailPageHandlers = ({detailsPageObject, objectDeleteHook, obje
         setOpenDelete(false)  
     }
 
-    const handleDeleteModalOk = () => {
+    const handleDeleteModalOk = async () => {
         try {
+            setIsLoadingDeleteButton(true)
             setConfirmLoadingDelete(true)
-            objectDeleteHook(detailsPageObject.id, detailsPageObject.name, objectTypeName)
             setOpenDelete(false)
+            const response = await objectDeleteHook(detailsPageObject.id, detailsPageObject.name, objectTypeName)
 
-            setTimeout(() => {
-                handleGoBack()
-            }, 1250)
+            if (response?.status === HttpStatusCode.NoContent) {
+                setTimeout(() => {
+                    handleGoBack()
+                }, 1250)
+            }
+            else {
+                setIsLoadingDeleteButton(false)
+            }
         }
         catch(error) {
+            setIsLoadingDeleteButton(false)
             setConfirmLoadingDelete(false)
             setOpenDelete(true)
             console.log(error)
@@ -91,6 +99,7 @@ export const useDetailPageHandlers = ({detailsPageObject, objectDeleteHook, obje
         handleDeleteModalOk,
         handleEditModalOk,
         handleGoBack,
+        isLoadingDeleteButton,
         onFinishEdit,
         openDelete,
         openEdit,

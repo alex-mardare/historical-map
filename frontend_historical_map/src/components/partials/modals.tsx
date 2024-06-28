@@ -1,4 +1,4 @@
-import { Modal } from 'antd'
+import { Button, Modal } from 'antd'
 import React, { ReactElement } from 'react'
 
 import { entitiesDictionary } from './notifications'
@@ -9,6 +9,7 @@ interface DeleteModalProps {
     confirmLoadingDelete: any,
     closeObjectDeleteModal: any,
     handleDeleteModalOk: any,
+    isLoadingDeleteButton: boolean,
     objectName: string,
     openDelete: any
 }
@@ -24,11 +25,13 @@ interface FormModalProps {
 }
 
 
-const DeleteModal: React.FC<DeleteModalProps> = ({closeObjectDeleteModal, confirmLoadingDelete, handleDeleteModalOk, objectName, openDelete}) => (
+const DeleteModal: React.FC<DeleteModalProps> = ({closeObjectDeleteModal, confirmLoadingDelete, handleDeleteModalOk, isLoadingDeleteButton, objectName, openDelete}) => (
     <Modal
         confirmLoading={confirmLoadingDelete}
-        okButtonProps={{danger:true}}
-        okText='Delete'
+        footer={[
+            <Button key='cancel' onClick={closeObjectDeleteModal}>Cancel</Button>,
+            <Button danger loading={isLoadingDeleteButton} key='delete' onClick={handleDeleteModalOk} type='primary'>Delete</Button>
+        ]}
         onCancel={closeObjectDeleteModal}
         onOk={handleDeleteModalOk}
         open={openDelete}
@@ -38,8 +41,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({closeObjectDeleteModal, confir
     </Modal>
 )
 
-const FormModal: React.FC<FormModalProps> = ({confirmLoading, formComponent, closeObjectModal, handleModalOk, modalTitle, objectName, openModal}) => {
-    return (<Modal
+const FormModal: React.FC<FormModalProps> = ({confirmLoading, formComponent, closeObjectModal, handleModalOk, modalTitle, objectName, openModal}) => (
+    <Modal
         confirmLoading={confirmLoading}
         okText='Save'
         onCancel={closeObjectModal}
@@ -48,7 +51,7 @@ const FormModal: React.FC<FormModalProps> = ({confirmLoading, formComponent, clo
         title={`${modalTitle + ' ' + capitaliseWord(entitiesDictionary[objectName])}`}
     >
         {formComponent}
-    </Modal>)
-}
+    </Modal>
+)
 
 export { DeleteModal, FormModal }

@@ -22,8 +22,8 @@ export default function HistoricalStateDetails(){
 
   const useDetailPageHandlersProps = {detailsPageObject: historicalState, objectDeleteHook: objectDelete, objectTypeName: HISTORICAL_STATE_NAME, 
     returnPage: HISTORICAL_STATES_SECTION}
-  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
-    handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
+  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, isLoadingDeleteButton,
+    openObjectEditModal, handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
   
   //#region DISPLAY FUNCTIONALITY
   const displayTitleSection = (historicalState: HistoricalState | null) => {
@@ -63,6 +63,7 @@ export default function HistoricalStateDetails(){
         confirmLoadingDelete={confirmLoadingDelete}
         closeObjectDeleteModal={closeObjectDeleteModal}
         handleDeleteModalOk={handleDeleteModalOk}
+        isLoadingDeleteButton={isLoadingDeleteButton}
         objectName={HISTORICAL_STATE_NAME}
         openDelete={openDelete}
       />

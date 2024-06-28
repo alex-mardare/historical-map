@@ -19,7 +19,7 @@ function useEffectOnceWrapper(hookMethod: () => void) {
 
 async function objectDelete(objectId: number, objectName: string, objectTypeName: string) {
     try {
-        const response = await axios.delete(urlsDictionary[objectName] + objectId)
+        const response = await axios.delete(urlsDictionary[objectTypeName] + objectId)
         objectDeletionSuccess(objectTypeName, objectName)
         return response
     }

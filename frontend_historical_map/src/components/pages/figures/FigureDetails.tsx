@@ -22,8 +22,8 @@ export default function FigureDetails(){
 
   const useDetailPageHandlersProps = {detailsPageObject: figure, objectDeleteHook: objectDelete, objectTypeName: HISTORICAL_FIGURE_NAME, 
     returnPage: HISTORICAL_FIGURES_SECTION}
-  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, openObjectEditModal, 
-    handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
+  const { closeObjectDeleteModal, closeObjectEditModal, confirmLoadingDelete, confirmLoadingEdit, form, handleDeleteModalOk, handleGoBack, isLoadingDeleteButton,
+    openObjectEditModal, handleEditModalOk, onFinishEdit, openDelete, openEdit, openObjectDeleteModal } = useDetailPageHandlers(useDetailPageHandlersProps)
   
   //#region DISPLAY FUNCTIONALITY
   const displayTitleSection = (figure: HistoricalFigure | null) => {
@@ -80,6 +80,7 @@ export default function FigureDetails(){
         confirmLoadingDelete={confirmLoadingDelete}
         closeObjectDeleteModal={closeObjectDeleteModal}
         handleDeleteModalOk={handleDeleteModalOk}
+        isLoadingDeleteButton={isLoadingDeleteButton}
         objectName={HISTORICAL_FIGURE_NAME}
         openDelete={openDelete}
       />
