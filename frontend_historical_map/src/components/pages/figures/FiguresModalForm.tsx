@@ -41,34 +41,6 @@ export default function FiguresModalForm(props:FigurelModalProp) {
             props.onFinish(values)
         }
     }
-
-    const onChangeBirthHistoricalState = (value: any, option: any) => {
-        setBirthHistoricalStateOption(value)
-        setBirthPresentCountryOption(undefined)
-
-        props.form.setFieldsValue({ birthHistoricalStateId: value })
-        props.form.resetFields(['birthPresentCountryId'])
-    }
-
-    const onChangeBirthPresentCountry = (value: any, option: any) => {
-        setBirthPresentCountryOption(value)
-
-        props.form.setFieldsValue({ birthPresentCountryId: value })
-    }
-
-    const onChangeDeathHistoricalState = (value: any, option: any) => {
-        setDeathHistoricalStateOption(value)
-        setDeathPresentCountryOption(undefined)
-
-        props.form.setFieldsValue({ deathHistoricalStateId: value })
-        props.form.resetFields(['deathPresentCountryId'])
-    }
-
-    const onChangeDeathPresentCountry = (value: any, option: any) => {
-        setDeathPresentCountryOption(value)
-
-        props.form.setFieldsValue({ deathPresentCountryId: value })
-    }
     
     return (
         <div>
@@ -83,18 +55,23 @@ export default function FiguresModalForm(props:FigurelModalProp) {
                   <Input />
               </Form.Item>
               <Form.Item initialValue={birthHistoricalStateOption} label='Historical State' name='birthHistoricalStateId' rules={[{ required: true }]}>
-                <HistoricalStatesDropdown {...{ historicalStates }} 
-                    onChangeHistoricalState={onChangeBirthHistoricalState}
+                <HistoricalStatesDropdown
+                    form={props.form}
+                    presentCountryFormName='birthPresentCountryId'
                     selectedValue={birthHistoricalStateOption} 
                     selectId={'birthHistoricalStateId'}
+                    setHistoricalStateOption={setBirthHistoricalStateOption}
+                    setPresentCountryOption={setBirthPresentCountryOption}
+                    {...{ historicalStates }}
                 />
               </Form.Item>
               <Form.Item initialValue={birthPresentCountryOption} label='Present Country' name='birthPresentCountryId' rules={[{ required: true }]}>
-                <PresentCountriesDropdown 
-                    onChangePresentCountry={onChangeBirthPresentCountry}
+                <PresentCountriesDropdown
+                    form={props.form}
                     presentCountries={birthPresentCountries} 
                     selectedValue={birthPresentCountryOption} 
                     selectId={'birthPresentCountryId'}
+                    setPresentCountryOption={setBirthPresentCountryOption}
                 />
               </Form.Item>
 
@@ -103,18 +80,23 @@ export default function FiguresModalForm(props:FigurelModalProp) {
                   <Input />
               </Form.Item>
               <Form.Item initialValue={deathHistoricalStateOption} label='Historical State' name='deathHistoricalStateId'>
-                <HistoricalStatesDropdown {...{ historicalStates }} 
-                        onChangeHistoricalState={onChangeDeathHistoricalState}
-                        selectedValue={deathHistoricalStateOption} 
-                        selectId={'deathHistoricalStateId'}
-                    />
+                <HistoricalStatesDropdown
+                    form={props.form}
+                    presentCountryFormName='deathPresentCountryId'
+                    selectedValue={deathHistoricalStateOption} 
+                    selectId={'deathHistoricalStateId'}
+                    setHistoricalStateOption={setDeathHistoricalStateOption}
+                    setPresentCountryOption={setDeathPresentCountryOption}
+                    {...{ historicalStates }} 
+                />
               </Form.Item>
               <Form.Item initialValue={deathPresentCountryOption} label='Present Country' name='deathPresentCountryId'>
                 <PresentCountriesDropdown 
-                        onChangePresentCountry={onChangeDeathPresentCountry}
-                        presentCountries={deathPresentCountries} 
-                        selectedValue={deathPresentCountryOption} 
-                        selectId={'deathPresentCountryId'}
+                    form={props.form}
+                    presentCountries={deathPresentCountries} 
+                    selectedValue={deathPresentCountryOption} 
+                    selectId={'deathPresentCountryId'}
+                    setPresentCountryOption={setDeathPresentCountryOption}
                 />
               </Form.Item>
           </Form>

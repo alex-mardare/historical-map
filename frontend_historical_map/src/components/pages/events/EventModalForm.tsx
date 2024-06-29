@@ -44,20 +44,6 @@ export default function EventModalForm(props:EventModalProp) {
         }
     }
 
-    const onChangeHistoricalState = (value: any, option: any) => {
-        setHistoricalStateOption(value)
-        setPresentCountryOption(undefined)
-
-        props.form.setFieldsValue({ historicalStateId: value })
-        props.form.resetFields(['presentCountryId'])
-    }
-
-    const onChangePresentCountry = (value: any, option: any) => {
-        setPresentCountryOption(value)
-        
-        props.form.setFieldsValue({ presentCountryId: value })
-    }
-
     return (
       <div>
         <Form form={props.form} labelCol={{span: 6}} onFinish={handleSubmit} validateMessages={formValidationMessages} wrapperCol={{span: 16}}>
@@ -90,10 +76,21 @@ export default function EventModalForm(props:EventModalProp) {
                 />
             </Form.Item>
             <Form.Item initialValue={historicalStateOption} label='Historical State' name='historicalStateId' rules={[{ required: true }]}>
-                <HistoricalStatesDropdown {...{ historicalStates, onChangeHistoricalState }} selectedValue={historicalStateOption} selectId={'historicalStateId'}/>
+                <HistoricalStatesDropdown 
+                    form={props.form} 
+                    presentCountryFormName='presentCountryId'
+                    selectedValue={historicalStateOption}
+                    selectId={'historicalStateId'}
+                    {...{  historicalStates, setHistoricalStateOption, setPresentCountryOption }} 
+                />
             </Form.Item>
             <Form.Item initialValue={presentCountryOption} label='Present Country' name='presentCountryId' rules={[{ required: true }]}>
-                <PresentCountriesDropdown {...{ onChangePresentCountry, presentCountries }} selectedValue={presentCountryOption} selectId={'presentCountryId'} />
+                <PresentCountriesDropdown 
+                    form={props.form}
+                    selectedValue={presentCountryOption} 
+                    selectId={'presentCountryId'} 
+                    {...{ presentCountries, setPresentCountryOption }} 
+                />
             </Form.Item>
         </Form>
       </div>  

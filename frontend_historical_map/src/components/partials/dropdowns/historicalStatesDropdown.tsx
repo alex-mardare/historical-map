@@ -6,18 +6,24 @@ import { DefaultOptionType } from 'antd/es/select'
 
 
 type HistoricalStatesDropdownProps = {
+    form: any,
     historicalStates: HistoricalStateOption[],
-    onChangeHistoricalState: (value: any, option: any) => void
+    presentCountryFormName: string,
     selectedValue: number | undefined,
-    selectId: string
+    selectId: string,
+    setHistoricalStateOption: (value: any) => void,
+    setPresentCountryOption: (value: any) => void
 }
 
 export const HistoricalStatesDropdown = (props: HistoricalStatesDropdownProps) => {
-    const { onChangeHistoricalState, historicalStates, selectedValue, selectId } = props
+    const { form, historicalStates, presentCountryFormName, selectedValue, selectId, setHistoricalStateOption, setPresentCountryOption } = props
 
-    const searchHistoricalStatesDropdown = (input: string, option: DefaultOptionType | undefined) => {
-        const historicalState = historicalStates.filter(hs => hs.value === option?.value).at(0)
-        return historicalState?.label.toLocaleLowerCase().includes(input.toLocaleLowerCase()) || false
+    const onChangeHistoricalState = (value: any) => {
+        setHistoricalStateOption(value)
+        setPresentCountryOption(undefined)
+
+        form.setFieldsValue({ historicalStateId: value })
+        form.resetFields([presentCountryFormName])
     }
 
     const optionRender = (option: any) => {
@@ -29,12 +35,17 @@ export const HistoricalStatesDropdown = (props: HistoricalStatesDropdownProps) =
         )
     }
 
+    const searchHistoricalStatesDropdown = (input: string, option: DefaultOptionType | undefined) => {
+        const historicalState = historicalStates.filter(hs => hs.value === option?.value).at(0)
+        return historicalState?.label.toLocaleLowerCase().includes(input.toLocaleLowerCase()) || false
+    }
+
     return (
         <Select
             filterOption={(input, option) => searchHistoricalStatesDropdown(input, option)}
             id={selectId}
             onChange={(value: any, option) => {
-                onChangeHistoricalState(value, option)
+                onChangeHistoricalState(value)
             }}
             optionRender={optionRender}
             options={historicalStates}

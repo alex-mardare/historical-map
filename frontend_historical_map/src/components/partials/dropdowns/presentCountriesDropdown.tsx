@@ -4,14 +4,21 @@ import React from 'react'
 import { PresentCountry } from '../../models/types/presentCountry'
 
 type PresentCountriesDropdownProps = {
-    onChangePresentCountry: (value: any, option: any) => void
+    form: any,
     presentCountries: PresentCountry[],
     selectedValue: number | undefined,
-    selectId: string
+    selectId: string,
+    setPresentCountryOption: (value: any) => void
 }
 
 export const PresentCountriesDropdown = (props: PresentCountriesDropdownProps) => {
-    const { onChangePresentCountry, presentCountries, selectedValue, selectId } = props
+    const { form, presentCountries, selectedValue, selectId, setPresentCountryOption } = props
+
+    const onChangePresentCountry = (value: any) => {
+        setPresentCountryOption(value)
+        
+        form.setFieldsValue({ [selectId]: value })
+    }
 
     return (
         <Select

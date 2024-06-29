@@ -2,12 +2,12 @@ import axios from 'axios'
 import { useState } from 'react'
 
 import { useEffectOnceWrapper } from './generalHooks'
+import { transformHistoricalStatesForSelector } from '../display/historicalStateSelector'
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
 import { HISTORICAL_STATES_FULL_URL } from '../../models/constants/urls'
 import { HistoricalState, HistoricalStateOption } from '../../models/types/historicalState'
 import { DataGetHistoricalStates } from '../../models/types/hooksDataTypes'
 import { objectLoadingError, objectListLoadingError } from '../../partials/notifications'
-import { transformHistoricalStatesForSelector } from '../selectors/historicalStateSelector'
 
 
 const useGetHistoricalStatesOptions = () => {
