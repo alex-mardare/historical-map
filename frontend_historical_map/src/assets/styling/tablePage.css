@@ -1,21 +1,8 @@
-.mainDivTablePage {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+.ant-table-thead th {
+  text-align: center !important;
 }
 
 .tableDiv {
-    flex: 1;
-    padding: 10px;
-}
-
-.topBarTablePage {
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px;
-}
-
-.ant-table-thead th {
-    text-align: center !important;
+  flex: 1;
+  padding: 10px;
 }

@@ -1,61 +1,74 @@
-import { Button, Input, Table } from 'antd'
+import { Button, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 
+import { searchFiltering } from '../utils/searchFiltering'
 import { FormModal } from './modals'
+import { SearchBar } from './searchBar'
 
+import '../../assets/styling/listPage.css'
 import '../../assets/styling/tablePage.css'
 
-
-const { Search } = Input
-
 interface TablePageProps {
-    closeObjectModal: () => void,
-    columnsConfig: ColumnsType<any>,
-    confirmLoading: boolean,
-    filteredObjectsArray: any[] | undefined,
-    formComponent: ReactElement,
-    handleModalOk: () => void,
-    handleSearch: (value:string) => void,
-    objectName: string,
-    openModal: boolean,
-    showModal: () => void
+  closeObjectModal: () => void
+  columnsConfig: ColumnsType<any>
+  confirmLoading: boolean
+  formComponent: ReactElement
+  handleModalOk: () => void
+  objectName: string
+  openModal: boolean
+  showModal: () => void
+  tableObjectsList: any[] | undefined
 }
 
-const TableComponent: React.FC<TablePageProps> = ({closeObjectModal, columnsConfig, confirmLoading, filteredObjectsArray, formComponent, handleModalOk, handleSearch, 
-    objectName, openModal, showModal}) => {
-        return (
-            <div className='mainDivTablePage'>
-                <div className='topBarTablePage'>
-                    <Search
-                        allowClear
-                        enterButton
-                        onChange={(e) => handleSearch(e.target.value)} 
-                        placeholder='Search' 
-                        style={{ maxWidth: 400, paddingRight: '5px' }}
-                        />
-                    <Button onClick={showModal} type='primary'>Create</Button>
-                    <FormModal
-                        closeObjectModal={closeObjectModal}
-                        confirmLoading={confirmLoading}
-                        formComponent={formComponent}                
-                        handleModalOk={handleModalOk}
-                        modalTitle='Create'
-                        objectName={objectName}
-                        openModal={openModal}
-                    />
-                    </div>
-                    <div className='tableDiv'>
-                    <Table 
-                        columns={columnsConfig}
-                        dataSource={filteredObjectsArray}
-                        pagination={{ hideOnSinglePage:true }}
-                        rowKey={(object) => object.id}
-                        size='middle'
-                    />
-                </div>
-            </div>
-        )
+const TableComponent: React.FC<TablePageProps> = ({
+  closeObjectModal,
+  columnsConfig,
+  confirmLoading,
+  tableObjectsList,
+  formComponent,
+  handleModalOk,
+  objectName,
+  openModal,
+  showModal
+}) => {
+  const [searchText, setSearchText] = useState('')
+  let filteredTableObjectsList = tableObjectsList?.filter((object) => {
+    return searchFiltering(object, searchText)
+  })
+
+  const handleSearch = (value: string) => {
+    setSearchText(value)
+  }
+
+  return (
+    <div className="mainDivListPage">
+      <div className="topBarListPage">
+        <SearchBar handleSearch={handleSearch} />
+        <Button onClick={showModal} type="primary">
+          Create
+        </Button>
+        <FormModal
+          closeObjectModal={closeObjectModal}
+          confirmLoading={confirmLoading}
+          formComponent={formComponent}
+          handleModalOk={handleModalOk}
+          modalTitle="Create"
+          objectName={objectName}
+          openModal={openModal}
+        />
+      </div>
+      <div className="tableDiv">
+        <Table
+          columns={columnsConfig}
+          dataSource={filteredTableObjectsList}
+          pagination={{ hideOnSinglePage: true }}
+          rowKey={(object) => object.id}
+          size="middle"
+        />
+      </div>
+    </div>
+  )
 }
 
 export { TableComponent }

@@ -3,17 +3,22 @@ import React, { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import { menuItems, rootMenuKeys } from './components/config/menu/menuConfig'
-import { HISTORICAL_EVENTS_SECTION, HISTORICAL_FIGURES_SECTION, HISTORICAL_STATES_SECTION } from './components/models/constants/urls'
-import Home from './components/pages/Home'
+import {
+  EVENT_CATEGORIES_SECTION,
+  HISTORICAL_EVENTS_SECTION,
+  HISTORICAL_FIGURES_SECTION,
+  HISTORICAL_STATES_SECTION
+} from './components/models/constants/urls'
+import EventCategoriesList from './components/pages/event-categories/EventCategoriesList'
 import EventDetails from './components/pages/events/EventDetails'
 import EventsList from './components/pages/events/EventsList'
 import FigureDetails from './components/pages/figures/FigureDetails'
 import FiguresList from './components/pages/figures/FiguresList'
 import HistoricalStateDetails from './components/pages/historical-states/HistoricalStateDetails'
 import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList'
+import Home from './components/pages/Home'
 
-import './App.css' 
-
+import './App.css'
 
 const { Content, Sider } = Layout
 
@@ -35,30 +40,52 @@ function App() {
       <div className="App">
         <Layout>
           <Sider
-            collapsible 
+            collapsible
             collapsed={collapsed}
-            collapsedWidth={100} 
-            onCollapse={() => setCollapsed(!collapsed)} 
+            collapsedWidth={100}
+            onCollapse={() => setCollapsed(!collapsed)}
             width={230}
           >
-            <Menu 
-              defaultSelectedKeys={['1']} 
+            <Menu
+              defaultSelectedKeys={['1']}
               items={menuItems}
-              mode="inline" 
+              mode="inline"
               openKeys={openKeys}
-              onOpenChange={onOpenChangeMenu} 
-              theme='dark' 
-              />
+              onOpenChange={onOpenChangeMenu}
+              theme="dark"
+            />
           </Sider>
           <Content>
             <Routes>
               <Route element={<Home />} path="/" />
-              <Route element={<EventsList />} path={HISTORICAL_EVENTS_SECTION} />
-              <Route element={<EventDetails />} path={HISTORICAL_EVENTS_SECTION + "/:eventId"} />
-              <Route element={<FiguresList />} path={HISTORICAL_FIGURES_SECTION} />
-              <Route element={<FigureDetails />} path={HISTORICAL_FIGURES_SECTION + "/:figureId"}  />
-              <Route element={<HistoricalStatesList />} path={HISTORICAL_STATES_SECTION} />
-              <Route element={<HistoricalStateDetails />} path={HISTORICAL_STATES_SECTION + "/:historicalStateId"} />
+              <Route
+                element={<EventsList />}
+                path={HISTORICAL_EVENTS_SECTION}
+              />
+              <Route
+                element={<EventDetails />}
+                path={HISTORICAL_EVENTS_SECTION + '/:eventId'}
+              />
+              <Route
+                element={<FiguresList />}
+                path={HISTORICAL_FIGURES_SECTION}
+              />
+              <Route
+                element={<FigureDetails />}
+                path={HISTORICAL_FIGURES_SECTION + '/:figureId'}
+              />
+              <Route
+                element={<HistoricalStatesList />}
+                path={HISTORICAL_STATES_SECTION}
+              />
+              <Route
+                element={<HistoricalStateDetails />}
+                path={HISTORICAL_STATES_SECTION + '/:historicalStateId'}
+              />
+              <Route
+                element={<EventCategoriesList />}
+                path={EVENT_CATEGORIES_SECTION}
+              />
             </Routes>
           </Content>
         </Layout>

@@ -1,0 +1,12 @@
+.mainDivListPage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.topBarListPage {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}

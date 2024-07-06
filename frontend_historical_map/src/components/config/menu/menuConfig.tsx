@@ -1,7 +1,17 @@
 import type { MenuProps } from 'antd'
 import React from 'react'
 
-import { CountriesMenuItem, EventsMenuItem, EventsMenuSubItemList, EventsMenuSubItemMap, FiguresMenuItem, FiguresMenuSubItemList, HistoricalStatesSubItem } from '../../partials/menuItems'
+import {
+  CountriesMenuItem,
+  EventCategoriesSubItem,
+  EventPropertiesMenuItem,
+  EventsMenuItem,
+  EventsMenuSubItemList,
+  EventsMenuSubItemMap,
+  FiguresMenuItem,
+  FiguresMenuSubItemList,
+  HistoricalStatesSubItem
+} from '../../partials/menuItems'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -20,18 +30,21 @@ function getItem(
 }
 
 const menuItems: MenuItem[] = [
-  getItem('Historical Events', '1', <EventsMenuItem/>, [
+  getItem('Historical Events', '1', <EventsMenuItem />, [
     getItem('Map', '1.1', <EventsMenuSubItemMap />),
     getItem('Events List', '1.2', <EventsMenuSubItemList />)
   ]),
   getItem('Historical Figures', '2', <FiguresMenuItem />, [
-    getItem('Figures List', '2.1', <FiguresMenuSubItemList />),
+    getItem('Figures List', '2.1', <FiguresMenuSubItemList />)
   ]),
   getItem('Countries', '3', <CountriesMenuItem />, [
-    getItem('Historical States', '3.1', <HistoricalStatesSubItem />),
+    getItem('Historical States', '3.1', <HistoricalStatesSubItem />)
+  ]),
+  getItem('Event Properties', '4', <EventPropertiesMenuItem />, [
+    getItem('Event Categories', '4.1', <EventCategoriesSubItem />)
   ])
 ]
 
-const rootMenuKeys = ['1', '2', '3']
+const rootMenuKeys = ['1', '2', '3', '4']
 
 export { menuItems, rootMenuKeys }
