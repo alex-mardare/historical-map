@@ -59,6 +59,10 @@ function App() {
             <Routes>
               <Route element={<Home />} path="/" />
               <Route
+                element={<EventCategoriesList />}
+                path={EVENT_CATEGORIES_SECTION}
+              />
+              <Route
                 element={<EventsList />}
                 path={HISTORICAL_EVENTS_SECTION}
               />
@@ -81,10 +85,6 @@ function App() {
               <Route
                 element={<HistoricalStateDetails />}
                 path={HISTORICAL_STATES_SECTION + '/:historicalStateId'}
-              />
-              <Route
-                element={<EventCategoriesList />}
-                path={EVENT_CATEGORIES_SECTION}
               />
             </Routes>
           </Content>

@@ -2,7 +2,7 @@ import { Card, List } from 'antd'
 import React, { useState } from 'react'
 import { EventCategory } from '../../models/types/eventCategory'
 import { SearchBar } from '../../partials/searchBar'
-import { useGetEventCategories } from '../../utils/hooks/eventPropertiesHooks'
+import { useGetEventCategories } from '../../utils/hooks/eventCategoriesHooks'
 import { searchFiltering } from '../../utils/searchFiltering'
 
 import '../../../assets/styling/listPage.css'
