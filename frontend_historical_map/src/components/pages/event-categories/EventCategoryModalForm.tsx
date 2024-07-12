@@ -10,15 +10,17 @@ type EventCategoryModalProp = {
   onFinish?: (values: any) => void
 }
 
-export default function HistoricalStateModalForm(
-  props: EventCategoryModalProp
-) {
-  const displayIdFormItem = (historicalState: EventCategory | null) => {
-    if (historicalState !== null) {
+export default function EventCategoryModalForm({
+  eventCategory,
+  form,
+  onFinish
+}: EventCategoryModalProp) {
+  const displayIdFormItem = (eventCategory: EventCategory | null) => {
+    if (eventCategory !== null) {
       return (
         <Form.Item
           hidden={true}
-          initialValue={props.eventCategory?.id}
+          initialValue={eventCategory?.id}
           label="Id"
           name="id"
         >
@@ -29,23 +31,23 @@ export default function HistoricalStateModalForm(
   }
 
   const handleSubmit = (values: any) => {
-    if (props.onFinish) {
-      props.onFinish(values)
+    if (onFinish) {
+      onFinish(values)
     }
   }
 
   return (
     <div>
       <Form
-        form={props.form}
         labelCol={{ span: 7 }}
         onFinish={handleSubmit}
         validateMessages={formValidationMessages}
         wrapperCol={{ span: 16 }}
+        {...{ form }}
       >
-        {displayIdFormItem(props.eventCategory)}
+        {displayIdFormItem(eventCategory)}
         <Form.Item
-          initialValue={props.eventCategory?.name}
+          initialValue={eventCategory?.name}
           label="Name"
           name="name"
           rules={[{ required: true }]}

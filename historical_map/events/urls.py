@@ -6,6 +6,7 @@ urlpatterns = [
     path('<int:pk>', views.HistoricalEventItem.as_view(), name='event-item'),
 
     path('event-categories/',views.EventCategoryList.as_view(), name='event-category-list'),
+    path('event-categories/<int:pk>', views.EventCategoryItem.as_view(), name='event-category-item'),
 
     path('figures/', views.HistoricalFigureListPost.as_view(), name='figure-list'),
     path('figures/<int:pk>', views.HistoricalFigureItem.as_view(), name='figure-item'),

@@ -9,6 +9,10 @@ class EventCategoryList(generics.ListCreateAPIView):
     pagination_class = NoPagination
     queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
+
+class EventCategoryItem(generics.RetrieveUpdateDestroyAPIView):
+    queryset = EventCategory.objects.all()
+    serializer_class = EventCategorySerializer
 #endregion
 
 

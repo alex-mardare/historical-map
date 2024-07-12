@@ -1,8 +1,7 @@
-import { Card, List } from 'antd'
+import { List } from 'antd'
 import React, { useState } from 'react'
 
 import { EVENT_CATEGORY_NAME } from '../../models/constants/constants'
-import { EventCategory } from '../../models/types/eventCategory'
 import { CreateButton } from '../../partials/createButton'
 import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
 import { SearchBar } from '../../partials/searchBar'
@@ -11,6 +10,7 @@ import { searchFiltering } from '../../utils/searchFiltering'
 import EventCategoryModalForm from './EventCategoryModalForm'
 
 import '../../../assets/styling/listPage.css'
+import EventCategoryDetails from './EventCategoryDetails'
 
 export default function EventCategoriesList() {
   const { eventCategories, refreshFunction } = useGetEventCategories()
@@ -39,34 +39,18 @@ export default function EventCategoriesList() {
     setSearchText(value)
   }
 
-  const displayEventCategory = (eventCategory: EventCategory) => {
-    return (
-      <List.Item>
-        <Card
-          key={eventCategory.id}
-          hoverable={true}
-          title={eventCategory.name}
-        />
-      </List.Item>
-    )
-  }
-
-  const eventCategoryModalForm = () => {
-    return (
-      <EventCategoryModalForm
-        eventCategory={null}
-        onFinish={onFormSubmit}
-        {...{ form }}
-      />
-    )
-  }
-
   return (
     <div className="mainDivListPage">
       <div className="topBarListPage">
         <SearchBar {...{ handleSearch }} />
         <CreateButton
-          formComponent={eventCategoryModalForm()}
+          formComponent={
+            <EventCategoryModalForm
+              eventCategory={null}
+              onFinish={onFormSubmit}
+              {...{ form }}
+            />
+          }
           objectName={EVENT_CATEGORY_NAME}
           {...{
             closeObjectModal,
@@ -81,7 +65,10 @@ export default function EventCategoriesList() {
         <List
           dataSource={filteredTableObjectsList}
           grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }}
-          renderItem={displayEventCategory}
+          pagination={{ defaultPageSize: 18, hideOnSinglePage: true }}
+          renderItem={(eventCategory) => (
+            <EventCategoryDetails {...{ eventCategory }} />
+          )}
         />
       </div>
     </div>

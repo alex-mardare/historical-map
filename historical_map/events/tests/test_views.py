@@ -12,9 +12,11 @@ class BaseViewTestClass(TestCase):
 class EventCategoryViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.url_list = reverse('event-category-list')
-        EventCategory.objects.create(name='Event category 1')
+        self.event_category = EventCategory.objects.create(name='Event category 1')
         EventCategory.objects.create(name='Event category 2')
+
+        self.url_list = reverse('event-category-list')
+        self.url_item = reverse('event-category-item', kwargs={'pk':self.event_category.id})
 
     def test_get_list(self):
         response = self.client.get(self.url_list)
@@ -40,6 +42,42 @@ class EventCategoryViewTestClass(BaseViewTestClass):
         response = self.client.post(self.url_list, data=event_category.data, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], event_category.data['name'])
+
+    def test_delete_item(self):
+        response = self.client.delete(self.url_item)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertIsNone(response.data)
+
+    def test_delete_item_non_existent(self):
+        response = self.client.delete(reverse('event-category-item', kwargs={'pk':self.event_category.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
+
+    def test_put_item(self):
+        updated_event_category = {'name': 'EventCategory updated'}
+        serializer = EventCategorySerializer(data=updated_event_category)
+        serializer.is_valid()
+
+        response = self.client.put(self.url_item, serializer.data, content_type='application/json')
+        self.assertEqual(response.data['name'], updated_event_category['name'])
+
+    def test_put_item_non_existent(self):
+        response = self.client.put(reverse('event-category-item', kwargs={'pk':self.event_category.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
+
+    def test_patch_item(self):
+        updated_event_category = {'name': 'EventCategory updated'}
+        serializer = EventCategorySerializer(data=updated_event_category)
+        serializer.is_valid()
+
+        response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
+        self.assertEqual(response.data['name'], updated_event_category['name'])
+
+    def test_patch_item_non_existent(self):
+        response = self.client.patch(reverse('event-category-item', kwargs={'pk':self.event_category.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
 
 
 class HistoricalStateViewTestClass(BaseViewTestClass):
@@ -93,27 +131,27 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
 
     def test_put_item(self):
         updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
-
         serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
         serializer.is_valid()
+
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_state['name'])
 
     def test_put_item_non_existent(self):
-        response = self.client.put(reverse('event-item', kwargs={'pk':self.historical_state.id - 1}))
+        response = self.client.put(reverse('historical-state-item', kwargs={'pk':self.historical_state.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
 
     def test_patch_item(self):
         updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
         serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
-
         serializer.is_valid()
+
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_state['name'])
 
     def test_patch_item_non_existent(self):
-        response = self.client.patch(reverse('event-item', kwargs={'pk':self.historical_state.id - 1}))
+        response = self.client.patch(reverse('historical-state-item', kwargs={'pk':self.historical_state.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
 
