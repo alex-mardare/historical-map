@@ -5,10 +5,10 @@ from .paginations import NoPagination
 from .serializers import *
 
 #region EVENT CATEGORY ENDPOINTS
-class EventCategoryList(generics.ListAPIView):
+class EventCategoryList(generics.ListCreateAPIView):
     pagination_class = NoPagination
     queryset = EventCategory.objects.all()
-    serializer_class = EventCategoryGetAllSerializer
+    serializer_class = EventCategorySerializer
 #endregion
 
 

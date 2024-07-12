@@ -5,7 +5,7 @@ from .models import EventCategory, HistoricalEvent, HistoricalFigure, Historical
 
 
 #region EVENT CATEGORY SERIALIZERS
-class EventCategoryGetAllSerializer(serializers.ModelSerializer):
+class EventCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = EventCategory
         fields = ['id', 'name']
@@ -63,7 +63,7 @@ class HistoricalEventDeletePostUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(e)
         
 class HistoricalEventGetSerializer(serializers.ModelSerializer):
-    eventCategory = EventCategoryGetAllSerializer(many=False, source='eventCategoryId')
+    eventCategory = EventCategorySerializer(many=False, source='eventCategoryId')
     historicalState = HistoricalStatePropertySerializer(many=False, source='historicalStateId')
     presentCountry = PresentCountryPropertySerializer(many=False, source='presentCountryId')
 

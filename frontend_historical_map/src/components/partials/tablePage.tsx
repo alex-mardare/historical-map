@@ -1,9 +1,9 @@
-import { Button, Table } from 'antd'
+import { Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import React, { ReactElement, useState } from 'react'
 
 import { searchFiltering } from '../utils/searchFiltering'
-import { FormModal } from './modals'
+import { CreateButton } from './createButton'
 import { SearchBar } from './searchBar'
 
 import '../../assets/styling/listPage.css'
@@ -44,18 +44,17 @@ const TableComponent: React.FC<TablePageProps> = ({
   return (
     <div className="mainDivListPage">
       <div className="topBarListPage">
-        <SearchBar handleSearch={handleSearch} />
-        <Button onClick={showModal} type="primary">
-          Create
-        </Button>
-        <FormModal
-          closeObjectModal={closeObjectModal}
-          confirmLoading={confirmLoading}
-          formComponent={formComponent}
-          handleModalOk={handleModalOk}
-          modalTitle="Create"
-          objectName={objectName}
-          openModal={openModal}
+        <SearchBar {...{ handleSearch }} />
+        <CreateButton
+          {...{
+            closeObjectModal,
+            confirmLoading,
+            formComponent,
+            handleModalOk,
+            objectName,
+            openModal,
+            showModal
+          }}
         />
       </div>
       <div className="tableDiv">

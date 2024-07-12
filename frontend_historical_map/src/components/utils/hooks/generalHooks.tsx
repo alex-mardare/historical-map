@@ -1,96 +1,113 @@
-import axios, { AxiosError } from "axios"
-import { useEffect, useRef, useState } from "react"
+import axios, { AxiosError } from 'axios'
+import { useEffect, useRef, useState } from 'react'
 
-import { urlsDictionary } from "../../models/constants/constants"
-import { DataCreateUpdate } from "../../models/types/hooksDataTypes"
-import { objectCreationError, objectCreationSuccess, objectDeletionError, objectDeletionSuccess, objectEditError, objectEditSuccess } from "../../partials/notifications"
-
+import { urlsDictionary } from '../../models/constants/constants'
+import { DataCreateUpdate } from '../../models/types/hooksDataTypes'
+import {
+  objectCreationError,
+  objectCreationSuccess,
+  objectDeletionError,
+  objectDeletionSuccess,
+  objectEditError,
+  objectEditSuccess
+} from '../../partials/notifications'
 
 function useEffectOnceWrapper(hookMethod: () => void) {
-    const hasMounted = useRef(false)
+  const hasMounted = useRef(false)
 
-    useEffect(() => {
-        if (!hasMounted.current) {
-            hookMethod()
-            hasMounted.current = true
-        }
-    }, [hookMethod])
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hookMethod()
+      hasMounted.current = true
+    }
+  }, [hookMethod])
 }
 
-async function objectDelete(objectId: number, objectName: string, objectTypeName: string) {
-    try {
-        const response = await axios.delete(urlsDictionary[objectTypeName] + objectId)
-        objectDeletionSuccess(objectTypeName, objectName)
-        return response
-    }
-    catch(error) {
-        objectDeletionError(objectTypeName, objectName)
-    }
+async function objectDelete(
+  objectId: number,
+  objectName: string,
+  objectTypeName: string
+) {
+  try {
+    const response = await axios.delete(
+      urlsDictionary[objectTypeName] + objectId
+    )
+    objectDeletionSuccess(objectTypeName, objectName)
+    return response
+  } catch (error) {
+    objectDeletionError(objectTypeName, objectName)
+  }
 }
 
 function usePostObject(objectName: string): DataCreateUpdate {
-    const [error, setError] = useState<AxiosError | null>(null)
+  const [error, setError] = useState<AxiosError | null>(null)
 
-    const submitData = async (
-        formData: any,
-        setConfirmLoading: (loading: boolean) => void,
-        setOpen: (open: boolean) => void
-      ): Promise<any> => {
-        setError(null)
+  const submitData = async (
+    formData: any,
+    setConfirmLoading: (loading: boolean) => void,
+    setOpen: (open: boolean) => void
+  ): Promise<any> => {
+    setError(null)
 
-        try {
-            setConfirmLoading(true)
-            const response = await axios.post(urlsDictionary[objectName], formData)
+    try {
+      setConfirmLoading(true)
+      const response = await axios.post(urlsDictionary[objectName], formData)
 
-            setConfirmLoading(false)
-            setOpen(false)
+      setConfirmLoading(false)
+      setOpen(false)
 
-            objectCreationSuccess(objectName, formData.name)
-            return response.data
-        } catch (error) {
-            setConfirmLoading(false)
-            setOpen(true)
+      objectCreationSuccess(objectName, formData.name)
+      return response.data
+    } catch (error) {
+      setConfirmLoading(false)
+      setOpen(true)
 
-            setError(error as AxiosError<any>)
-            objectCreationError(objectName)
-            throw error
-        }
+      setError(error as AxiosError<any>)
+      objectCreationError(objectName)
+      throw error
     }
+  }
 
-    return { submitData, error }
+  return { submitData, error }
 }
 
 function usePutObject(objectName: string): DataCreateUpdate {
-    const [error, setError] = useState<AxiosError | null>(null)
+  const [error, setError] = useState<AxiosError | null>(null)
 
-    const submitData = async (formData: any, setConfirmLoading: (loading: boolean) => void, setOpen: (open: boolean) => void): Promise<any> => {
-        setError(null)
+  const submitData = async (
+    formData: any,
+    setConfirmLoading: (loading: boolean) => void,
+    setOpen: (open: boolean) => void
+  ): Promise<any> => {
+    setError(null)
 
-        try {
-            setConfirmLoading(true)
-            
-            if (formData.time !== undefined) {
-                formData.time = formData.time.format('HH:mm:ss')
-            }
-            const response = await axios.patch(urlsDictionary[objectName] + formData.id, formData)
+    try {
+      setConfirmLoading(true)
 
-            setConfirmLoading(false)
-            setOpen(false)
+      if (formData.time !== undefined) {
+        formData.time = formData.time.format('HH:mm:ss')
+      }
+      const response = await axios.patch(
+        urlsDictionary[objectName] + formData.id,
+        formData
+      )
 
-            objectEditSuccess(objectName, formData.name)
-            return response.data
-        } catch (error) {
+      setConfirmLoading(false)
+      setOpen(false)
 
-            setConfirmLoading(false)
-            setOpen(true)
+      objectEditSuccess(objectName, formData.name)
+      return response.data
+    } catch (error) {
+      setConfirmLoading(false)
+      setOpen(true)
 
-            setError(error as AxiosError<any>)
-            objectEditError(objectName, formData.name)
-            throw error
-        }
+      setError(error as AxiosError<any>)
+      objectEditError(objectName, formData.name)
+      throw error
     }
+  }
 
-    return { submitData, error }
+  return { submitData, error }
 }
 
 export { objectDelete, useEffectOnceWrapper, usePostObject, usePutObject }

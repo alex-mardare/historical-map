@@ -2,7 +2,7 @@ import React from 'react'
 
 import { columnsConfig } from '../../config/tables/historicalStatesListColumnsConfig'
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
-import { useTablePadeHandlers } from '../../partials/handlers/tablePageHandlers'
+import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
 import { TableComponent } from '../../partials/tablePage'
 import { useGetHistoricalStates } from '../../utils/hooks/historicalStatesHooks'
 import HistoricalStateModalForm from './HistoricalStateModalForm'
@@ -10,7 +10,7 @@ import HistoricalStateModalForm from './HistoricalStateModalForm'
 export default function HistoricalStatesList() {
   const { historicalStates, refreshFunction } = useGetHistoricalStates()
 
-  const useTablePadeHandlersProps = {
+  const useModalsHandlersProps = {
     objectName: HISTORICAL_STATE_NAME,
     refreshFunction,
     tableObjects: historicalStates
@@ -23,7 +23,7 @@ export default function HistoricalStatesList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useTablePadeHandlers(useTablePadeHandlersProps)
+  } = useModalsHandlers(useModalsHandlersProps)
 
   const historicalStatesModalForm = () => {
     return (
@@ -37,15 +37,17 @@ export default function HistoricalStatesList() {
 
   return (
     <TableComponent
-      closeObjectModal={closeObjectModal}
-      columnsConfig={columnsConfig}
-      confirmLoading={confirmLoading}
       formComponent={historicalStatesModalForm()}
-      handleModalOk={handleModalOk}
       objectName={HISTORICAL_STATE_NAME}
-      openModal={openModal}
-      showModal={showModal}
       tableObjectsList={historicalStates}
+      {...{
+        closeObjectModal,
+        columnsConfig,
+        confirmLoading,
+        handleModalOk,
+        openModal,
+        showModal
+      }}
     />
   )
 }

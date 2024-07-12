@@ -2,7 +2,7 @@ import React from 'react'
 
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig'
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
-import { useTablePadeHandlers } from '../../partials/handlers/tablePageHandlers'
+import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
 import { TableComponent } from '../../partials/tablePage'
 import { useGetFigures } from '../../utils/hooks/figuresHooks'
 import FiguresModalForm from './FiguresModalForm'
@@ -10,7 +10,7 @@ import FiguresModalForm from './FiguresModalForm'
 export default function FiguresList() {
   const { figures, refreshFunction } = useGetFigures()
 
-  const useTablePadeHandlersProps = {
+  const useModalsHandlersProps = {
     objectName: HISTORICAL_FIGURE_NAME,
     refreshFunction: refreshFunction,
     tableObjects: figures
@@ -23,7 +23,7 @@ export default function FiguresList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useTablePadeHandlers(useTablePadeHandlersProps)
+  } = useModalsHandlers(useModalsHandlersProps)
 
   const figuresModalForm = () => {
     return (
@@ -33,15 +33,17 @@ export default function FiguresList() {
 
   return (
     <TableComponent
-      closeObjectModal={closeObjectModal}
-      columnsConfig={columnsConfig}
-      confirmLoading={confirmLoading}
       formComponent={figuresModalForm()}
-      handleModalOk={handleModalOk}
       objectName={HISTORICAL_FIGURE_NAME}
-      openModal={openModal}
-      showModal={showModal}
       tableObjectsList={figures}
+      {...{
+        closeObjectModal,
+        columnsConfig,
+        confirmLoading,
+        handleModalOk,
+        openModal,
+        showModal
+      }}
     />
   )
 }

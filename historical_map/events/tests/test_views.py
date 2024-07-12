@@ -12,26 +12,34 @@ class BaseViewTestClass(TestCase):
 class EventCategoryViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.url = reverse('event-category-list')
+        self.url_list = reverse('event-category-list')
         EventCategory.objects.create(name='Event category 1')
         EventCategory.objects.create(name='Event category 2')
 
     def test_get_list(self):
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotIn('next', response.data)
         self.assertNotIn('previous', response.data)
         
         event_category_list = EventCategory.objects.all()
-        serializer = EventCategoryGetAllSerializer(event_category_list, many=True)
+        serializer = EventCategorySerializer(event_category_list, many=True)
         self.assertEqual(response.data, serializer.data)
 
     def test_get_list_no_object(self):
         EventCategory.objects.all().delete()
-        response = self.client.get(self.url)
+        response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
+
+    def test_post_event_category(self):
+        event_category = EventCategorySerializer(data={'name': 'Event category'})
+        event_category.is_valid()
+
+        response = self.client.post(self.url_list, data=event_category.data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['name'], event_category.data['name'])
 
 
 class HistoricalStateViewTestClass(BaseViewTestClass):

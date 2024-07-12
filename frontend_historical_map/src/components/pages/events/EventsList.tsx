@@ -2,7 +2,7 @@ import React from 'react'
 
 import { columnsConfig } from '../../config/tables/eventsListColumnsConfig'
 import { EVENT_NAME } from '../../models/constants/constants'
-import { useTablePadeHandlers } from '../../partials/handlers/tablePageHandlers'
+import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
 import { TableComponent } from '../../partials/tablePage'
 import { useGetEvents } from '../../utils/hooks/eventsHooks'
 import EventModalForm from './EventModalForm'
@@ -10,7 +10,7 @@ import EventModalForm from './EventModalForm'
 export default function EventsList() {
   const { events, refreshFunction } = useGetEvents()
 
-  const useTablePadeHandlersProps = {
+  const useModalsHandlersProps = {
     objectName: EVENT_NAME,
     refreshFunction,
     tableObjects: events
@@ -23,23 +23,25 @@ export default function EventsList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useTablePadeHandlers(useTablePadeHandlersProps)
+  } = useModalsHandlers(useModalsHandlersProps)
 
   const eventsModalForm = () => {
-    return <EventModalForm event={null} form={form} onFinish={onFormSubmit} />
+    return <EventModalForm event={null} onFinish={onFormSubmit} {...{ form }} />
   }
 
   return (
     <TableComponent
-      closeObjectModal={closeObjectModal}
-      columnsConfig={columnsConfig}
-      confirmLoading={confirmLoading}
       formComponent={eventsModalForm()}
-      handleModalOk={handleModalOk}
       objectName={EVENT_NAME}
-      openModal={openModal}
-      showModal={showModal}
       tableObjectsList={events}
+      {...{
+        closeObjectModal,
+        columnsConfig,
+        confirmLoading,
+        handleModalOk,
+        openModal,
+        showModal
+      }}
     />
   )
 }

@@ -8,20 +8,20 @@ from ..serializers import *
 class EventCategorySerializersTestClass(TestCase):
     def test_serialization(self):
         event_category = EventCategory.objects.create(name='Event category')
-        serializer = EventCategoryGetAllSerializer(event_category)
+        serializer = EventCategorySerializer(event_category)
         expected_data = {'id': event_category.id, 'name': event_category.name}
 
         self.assertEqual(serializer.data, expected_data)
 
     def test_serialization_valid_data(self):
         valid_event_category = {'name': 'Event category'}
-        serializer = EventCategoryGetAllSerializer(data=valid_event_category)
+        serializer = EventCategorySerializer(data=valid_event_category)
 
         self.assertTrue(serializer.is_valid())
 
     def test_validation_name_exceeds_max_length(self):
         invalid_event_category = {'name': 'e' * 256}
-        serializer = EventCategoryGetAllSerializer(data=invalid_event_category)
+        serializer = EventCategorySerializer(data=invalid_event_category)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('name', serializer.errors)
@@ -29,7 +29,7 @@ class EventCategorySerializersTestClass(TestCase):
 
     def test_validation_name_not_present(self):
         invalid_event_category = {'other':'property'}
-        serializer = EventCategoryGetAllSerializer(data=invalid_event_category)
+        serializer = EventCategorySerializer(data=invalid_event_category)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('name', serializer.errors)

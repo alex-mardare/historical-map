@@ -4,15 +4,15 @@ import { useState } from 'react'
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
 import { usePostObject } from '../../utils/hooks/generalHooks'
 
-interface TablePageHandlersProps {
+interface ModalsHandlersProps {
   objectName: string
   refreshFunction: () => void
 }
 
-export const useTablePadeHandlers = ({
+export const useModalsHandlers = ({
   objectName,
   refreshFunction
-}: TablePageHandlersProps) => {
+}: ModalsHandlersProps) => {
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [openModal, setOpenModal] = useState(false)
 
