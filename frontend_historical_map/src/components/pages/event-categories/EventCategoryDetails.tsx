@@ -6,7 +6,7 @@ import { EVENT_CATEGORY_NAME } from '../../models/constants/constants'
 import { EVENT_CATEGORIES_SECTION } from '../../models/constants/urls'
 import { EventCategory } from '../../models/types/eventCategory'
 import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
-import { FormModal } from '../../partials/modals'
+import { DeleteModal, FormModal } from '../../partials/modals'
 import { objectDelete } from '../../utils/hooks/generalHooks'
 import EventCategoryModalForm from './EventCategoryModalForm'
 
@@ -24,11 +24,16 @@ export default function EventCategoryDetails({
     returnPage: EVENT_CATEGORIES_SECTION
   }
   const {
-    confirmLoadingEdit,
+    closeObjectDeleteModal,
     closeObjectEditModal,
+    confirmLoadingDelete,
+    confirmLoadingEdit,
     form,
+    handleDeleteModalOk,
     handleEditModalOk,
+    isLoadingDeleteButton,
     onFinishEdit,
+    openDelete,
     openEdit,
     openObjectEditModal,
     openObjectDeleteModal
@@ -58,6 +63,17 @@ export default function EventCategoryDetails({
         modalTitle="Edit"
         objectName={EVENT_CATEGORY_NAME}
         openModal={openEdit}
+      />
+
+      <DeleteModal
+        objectName={EVENT_CATEGORY_NAME}
+        {...{
+          confirmLoadingDelete,
+          closeObjectDeleteModal,
+          handleDeleteModalOk,
+          isLoadingDeleteButton,
+          openDelete
+        }}
       />
     </List.Item>
   )

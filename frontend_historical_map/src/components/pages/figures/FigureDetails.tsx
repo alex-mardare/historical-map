@@ -32,10 +32,10 @@ export default function FigureDetails() {
     confirmLoadingEdit,
     form,
     handleDeleteModalOk,
+    handleEditModalOk,
     handleGoBack,
     isLoadingDeleteButton,
     openObjectEditModal,
-    handleEditModalOk,
     onFinishEdit,
     openDelete,
     openEdit,
@@ -113,10 +113,14 @@ export default function FigureDetails() {
       />
 
       <DeleteModal
-        closeObjectDeleteModal={closeObjectDeleteModal}
-        isLoadingDeleteButton={isLoadingDeleteButton}
         objectName={HISTORICAL_FIGURE_NAME}
-        {...{ confirmLoadingDelete, handleDeleteModalOk, openDelete }}
+        {...{
+          closeObjectDeleteModal,
+          confirmLoadingDelete,
+          handleDeleteModalOk,
+          isLoadingDeleteButton,
+          openDelete
+        }}
       />
     </>
   )
