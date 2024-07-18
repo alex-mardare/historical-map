@@ -1,4 +1,5 @@
 export interface PresentCountry {
-    id: number,
-    name: string
+  flagUrl: string
+  id: number
+  name: string
 }

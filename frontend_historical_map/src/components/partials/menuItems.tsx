@@ -7,7 +7,8 @@ import {
   EVENT_CATEGORIES_SECTION,
   HISTORICAL_EVENTS_SECTION,
   HISTORICAL_FIGURES_SECTION,
-  HISTORICAL_STATES_SECTION
+  HISTORICAL_STATES_SECTION,
+  PRESENT_COUNTRIES_SECTION
 } from '../models/constants/urls'
 
 //#region COUNTRIES MENU
@@ -22,7 +23,10 @@ const CountriesMenuItem = (props: Partial<CustomIconComponentProps>) => (
     {...props}
   />
 )
+
 const HistoricalStatesSubItem = () => <Link to={HISTORICAL_STATES_SECTION} />
+
+const PresentCountriesSubItem = () => <Link to={PRESENT_COUNTRIES_SECTION} />
 //#endregion
 
 //#region EVENTS MENU
@@ -84,5 +88,6 @@ export {
   EventsMenuSubItemMap,
   EventsMenuSubItemList,
   FiguresMenuItem,
-  FiguresMenuSubItemList
+  FiguresMenuSubItemList,
+  PresentCountriesSubItem
 }

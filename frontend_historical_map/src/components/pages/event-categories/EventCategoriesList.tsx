@@ -7,10 +7,10 @@ import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
 import { SearchBar } from '../../partials/searchBar'
 import { useGetEventCategories } from '../../utils/hooks/eventCategoriesHooks'
 import { searchFiltering } from '../../utils/searchFiltering'
+import EventCategoryDetails from './EventCategoryDetails'
 import EventCategoryModalForm from './EventCategoryModalForm'
 
 import '../../../assets/styling/listPage.css'
-import EventCategoryDetails from './EventCategoryDetails'
 
 export default function EventCategoriesList() {
   const { eventCategories, refreshFunction } = useGetEventCategories()

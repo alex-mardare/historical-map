@@ -16,7 +16,7 @@ class EventCategorySerializer(serializers.ModelSerializer):
 class PresentCountryGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
-        fields = ['code', 'id', 'name']
+        fields = ['code', 'flagUrl', 'id', 'name']
 
 class PresentCountryPropertySerializer(serializers.ModelSerializer):
     class Meta:

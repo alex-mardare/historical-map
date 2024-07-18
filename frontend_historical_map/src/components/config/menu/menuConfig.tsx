@@ -10,7 +10,8 @@ import {
   EventsMenuSubItemMap,
   FiguresMenuItem,
   FiguresMenuSubItemList,
-  HistoricalStatesSubItem
+  HistoricalStatesSubItem,
+  PresentCountriesSubItem
 } from '../../partials/menuItems'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -38,7 +39,8 @@ const menuItems: MenuItem[] = [
     getItem('Figures List', '2.1', <FiguresMenuSubItemList />)
   ]),
   getItem('Countries', '3', <CountriesMenuItem />, [
-    getItem('Historical States', '3.1', <HistoricalStatesSubItem />)
+    getItem('Historical States', '3.1', <HistoricalStatesSubItem />),
+    getItem('Present Countries', '3.2', <PresentCountriesSubItem />)
   ]),
   getItem('Event Properties', '4', <EventPropertiesMenuItem />, [
     getItem('Event Categories', '4.1', <EventCategoriesSubItem />)

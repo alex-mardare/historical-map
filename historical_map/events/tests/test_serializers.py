@@ -142,26 +142,28 @@ class HistoricalStateSerializerTestClass(TestCase):
 class PresentCountrySerializerTestClass(TestCase):
 #region PresentCountryGetAllSerializer
     def test_serialization_get_all(self):
-        present_country = PresentCountry.objects.create(code='PC', name='Present country')
+        present_country = PresentCountry.objects.create(code='PC', flagUrl='link', name='Present country')
         serializer = PresentCountryGetAllSerializer(present_country)
-        expected_data = {'code': present_country.code, 'id': present_country.id, 'name': present_country.name}
+        expected_data = {'code': present_country.code, 'flagUrl': present_country.flagUrl, 'id': present_country.id, 'name': present_country.name}
 
         self.assertEqual(serializer.data, expected_data)
 
     def test_serialization_valid_data_get_all(self):
-        valid_present_country = {'code':'PC', 'name': 'Present country'}
+        valid_present_country = {'code':'PC', 'flagUrl': 'link', 'name': 'Present country'}
         serializer = PresentCountryGetAllSerializer(data=valid_present_country)
 
         self.assertTrue(serializer.is_valid())
 
     def test_validation_properties_exceed_max_length(self):
-        invalid_present_country = {'code':'PC'*3, 'name': 'Present country'*20}
+        invalid_present_country = {'code':'PC'*3, 'flagUrl': 'f' * 256, 'name': 'P'*256}
         serializer = PresentCountryGetAllSerializer(data=invalid_present_country)
 
         self.assertFalse(serializer.is_valid())
         self.assertIn('code', serializer.errors)
+        self.assertIn('flagUrl', serializer.errors)
         self.assertIn('name', serializer.errors)
         self.assertTrue(any('max_length' in error.code for error in serializer.errors['code']))
+        self.assertTrue(any('max_length' in error.code for error in serializer.errors['flagUrl']))
         self.assertTrue(any('max_length' in error.code for error in serializer.errors['name']))
 
     def test_validation_properties_not_present(self):

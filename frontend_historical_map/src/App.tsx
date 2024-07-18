@@ -7,7 +7,8 @@ import {
   EVENT_CATEGORIES_SECTION,
   HISTORICAL_EVENTS_SECTION,
   HISTORICAL_FIGURES_SECTION,
-  HISTORICAL_STATES_SECTION
+  HISTORICAL_STATES_SECTION,
+  PRESENT_COUNTRIES_SECTION
 } from './components/models/constants/urls'
 import EventCategoriesList from './components/pages/event-categories/EventCategoriesList'
 import EventDetails from './components/pages/events/EventDetails'
@@ -17,6 +18,7 @@ import FiguresList from './components/pages/figures/FiguresList'
 import HistoricalStateDetails from './components/pages/historical-states/HistoricalStateDetails'
 import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList'
 import Home from './components/pages/Home'
+import PresentCountriesList from './components/pages/present-countries/PresentCountriesList'
 
 import './App.css'
 
@@ -85,6 +87,10 @@ function App() {
               <Route
                 element={<HistoricalStateDetails />}
                 path={HISTORICAL_STATES_SECTION + '/:historicalStateId'}
+              />
+              <Route
+                element={<PresentCountriesList />}
+                path={PRESENT_COUNTRIES_SECTION}
               />
             </Routes>
           </Content>
