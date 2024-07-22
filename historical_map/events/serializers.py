@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 
-from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalState, PresentCountry
+from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 
 
 #region EVENT CATEGORY SERIALIZERS
@@ -70,6 +70,19 @@ class HistoricalEventGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEvent
         fields = ['approximateRealLocation', 'date', 'description', 'eventCategory', 'historicalState', 'id', 'latitude', 'longitude', 'name', 'presentCountry', 'time']
+#endregion
+
+
+#region HISTORICAL FIGURE ROLE SERIALIZERS
+class HistoricalFigureRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalFigureRole
+        fields = ['description', 'id', 'name']
+
+class HistoricalFigureRolePropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoricalFigureRole
+        fields = ['id', 'name']
 #endregion
 
 

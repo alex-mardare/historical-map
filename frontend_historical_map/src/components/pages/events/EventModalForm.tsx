@@ -19,12 +19,16 @@ type EventModalProp = {
   onFinish?: (values: any) => void
 }
 
-export default function EventModalForm(props: EventModalProp) {
+export default function EventModalForm({
+  event,
+  form,
+  onFinish
+}: EventModalProp) {
   const [historicalStateOption, setHistoricalStateOption] = useState(
-    props.event?.historicalState?.id
+    event?.historicalState?.id
   )
   const [presentCountryOption, setPresentCountryOption] = useState(
-    props.event?.presentCountry?.id
+    event?.presentCountry?.id
   )
 
   const { eventCategories } = useGetEventCategories()
@@ -34,12 +38,7 @@ export default function EventModalForm(props: EventModalProp) {
   const displayIdFormItem = (event: HistoricalEvent | null) => {
     if (event !== null) {
       return (
-        <Form.Item
-          hidden={true}
-          initialValue={props.event?.id}
-          label="Id"
-          name="id"
-        >
+        <Form.Item hidden={true} initialValue={event?.id} label="Id" name="id">
           <Input />
         </Form.Item>
       )
@@ -47,23 +46,23 @@ export default function EventModalForm(props: EventModalProp) {
   }
 
   const handleSubmit = (values: any) => {
-    if (props.onFinish) {
-      props.onFinish(values)
+    if (onFinish) {
+      onFinish(values)
     }
   }
 
   return (
     <div>
       <Form
-        form={props.form}
+        form={form}
         labelCol={{ span: 6 }}
         onFinish={handleSubmit}
         validateMessages={formValidationMessages}
         wrapperCol={{ span: 16 }}
       >
-        {displayIdFormItem(props.event)}
+        {displayIdFormItem(event)}
         <Form.Item
-          initialValue={props.event?.name}
+          initialValue={event?.name}
           label="Name"
           name="name"
           rules={[{ required: true }]}
@@ -71,7 +70,7 @@ export default function EventModalForm(props: EventModalProp) {
           <Input />
         </Form.Item>
         <Form.Item
-          initialValue={props.event?.description}
+          initialValue={event?.description}
           label="Description"
           name="description"
           rules={[{ required: true }]}
@@ -79,7 +78,7 @@ export default function EventModalForm(props: EventModalProp) {
           <TextArea rows={4} />
         </Form.Item>
         <Form.Item
-          initialValue={props.event?.date}
+          initialValue={event?.date}
           label="Date"
           name="date"
           rules={[{ required: true }, { validator: dateFieldValidator }]}
@@ -87,16 +86,14 @@ export default function EventModalForm(props: EventModalProp) {
           <Input />
         </Form.Item>
         <Form.Item
-          initialValue={
-            props.event?.time ? dayjs(props.event?.time, 'HH:mm:ss') : null
-          }
+          initialValue={event?.time ? dayjs(event?.time, 'HH:mm:ss') : null}
           label="Time"
           name="time"
         >
           <TimePicker format={TIME_FORMAT} />
         </Form.Item>
         <Form.Item
-          initialValue={props.event?.latitude}
+          initialValue={event?.latitude}
           label="Latitude"
           name="latitude"
         >
@@ -108,7 +105,7 @@ export default function EventModalForm(props: EventModalProp) {
           />
         </Form.Item>
         <Form.Item
-          initialValue={props.event?.longitude}
+          initialValue={event?.longitude}
           label="Longitude"
           name="longitude"
         >
@@ -120,7 +117,7 @@ export default function EventModalForm(props: EventModalProp) {
           />
         </Form.Item>
         <Form.Item
-          initialValue={props.event?.eventCategory.id}
+          initialValue={event?.eventCategory.id}
           label="Event Category"
           name="eventCategoryId"
           rules={[{ required: true }]}
@@ -142,7 +139,7 @@ export default function EventModalForm(props: EventModalProp) {
           rules={[{ required: true }]}
         >
           <HistoricalStatesDropdown
-            form={props.form}
+            form={form}
             presentCountryFormName="presentCountryId"
             selectedValue={historicalStateOption}
             selectId={'historicalStateId'}
@@ -160,7 +157,7 @@ export default function EventModalForm(props: EventModalProp) {
           rules={[{ required: true }]}
         >
           <PresentCountriesDropdown
-            form={props.form}
+            form={form}
             selectedValue={presentCountryOption}
             selectId={'presentCountryId'}
             {...{ presentCountries, setPresentCountryOption }}

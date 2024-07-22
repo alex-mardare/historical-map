@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from .models import HistoricalEvent, HistoricalFigure, HistoricalState
+from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 from .paginations import NoPagination
 from .serializers import *
 
@@ -58,19 +58,30 @@ class HistoricalFigureListPost(generics.ListCreateAPIView):
 #endregion
 
 
+#region HISTORICAL FIGURE ROLE ENDPOINTS
+class HistoricalFigureRoleList(generics.ListCreateAPIView):
+    pagination_class = NoPagination
+    queryset = HistoricalFigureRole.objects.all()
+    serializer_class = HistoricalFigureRoleSerializer
+    
+class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
+    queryset = HistoricalFigureRole.objects.all()
+    serializer_class = HistoricalFigureRoleSerializer
+#endregion
+
+
 #region HISTORICAL STATE ENDPOINTS 
 class HistoricalStateListPost(generics.ListCreateAPIView):
     pagination_class = NoPagination
     queryset = HistoricalState.objects.all()
-    serializer_class = HistoricalStateGetSerializer
+    serializer_class = HistoricalStateDeletePostUpdateSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return HistoricalStateDeletePostUpdateSerializer
+        if self.request.method == 'GET':
+            return HistoricalStateGetSerializer
         return super().get_serializer_class()
     
 class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
-    pagination_class = NoPagination
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateDeletePostUpdateSerializer
 

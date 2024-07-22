@@ -7,6 +7,7 @@ import {
   EVENT_CATEGORIES_SECTION,
   HISTORICAL_EVENTS_SECTION,
   HISTORICAL_FIGURES_SECTION,
+  HISTORICAL_FIGURE_ROLES_SECTION,
   HISTORICAL_STATES_SECTION,
   PRESENT_COUNTRIES_SECTION
 } from './components/models/constants/urls'
@@ -21,6 +22,7 @@ import Home from './components/pages/Home'
 import PresentCountriesList from './components/pages/present-countries/PresentCountriesList'
 
 import './App.css'
+import FigureRolesList from './components/pages/figure-roles/FigureRolesList'
 
 const { Content, Sider } = Layout
 
@@ -71,6 +73,10 @@ function App() {
               <Route
                 element={<EventDetails />}
                 path={HISTORICAL_EVENTS_SECTION + '/:eventId'}
+              />
+              <Route
+                element={<FigureRolesList />}
+                path={HISTORICAL_FIGURE_ROLES_SECTION}
               />
               <Route
                 element={<FiguresList />}

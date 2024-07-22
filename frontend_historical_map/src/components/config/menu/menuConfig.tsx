@@ -8,6 +8,8 @@ import {
   EventsMenuItem,
   EventsMenuSubItemList,
   EventsMenuSubItemMap,
+  FigurePropertiesMenuItem,
+  FigureRolesSubItem,
   FiguresMenuItem,
   FiguresMenuSubItemList,
   HistoricalStatesSubItem,
@@ -44,9 +46,12 @@ const menuItems: MenuItem[] = [
   ]),
   getItem('Event Properties', '4', <EventPropertiesMenuItem />, [
     getItem('Event Categories', '4.1', <EventCategoriesSubItem />)
+  ]),
+  getItem('Figure Properties', '5', <FigurePropertiesMenuItem />, [
+    getItem('Figulre Roles', '5.1', <FigureRolesSubItem />)
   ])
 ]
 
-const rootMenuKeys = ['1', '2', '3', '4']
+const rootMenuKeys = ['1', '2', '3', '4', '5']
 
 export { menuItems, rootMenuKeys }

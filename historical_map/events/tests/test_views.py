@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalState, PresentCountry
+from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 from ..serializers import *
 
 class BaseViewTestClass(TestCase):
@@ -432,5 +432,77 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
 
     def test_patch_item_non_existent(self):
         response = self.client.patch(reverse('figure-item', kwargs={'pk':self.historical_figure.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
+
+
+class HistoricalFigureRoleViewTestClass(BaseViewTestClass):
+    @classmethod
+    def setUp(self):
+        self.figure_role = HistoricalFigureRole.objects.create(description='Figure role description', name='Figure role 1')
+        HistoricalFigureRole.objects.create(name='Figure role 2')
+
+        self.url_list = reverse('figure-role-list')
+        self.url_item = reverse('figure-role-item', kwargs={'pk':self.figure_role.id})
+
+    def test_get_list(self):
+        response = self.client.get(self.url_list)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotIn('next', response.data)
+        self.assertNotIn('previous', response.data)
+        
+        figure_role_list = HistoricalFigureRole.objects.all()
+        serializer = HistoricalFigureRoleSerializer(figure_role_list, many=True)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_get_list_no_object(self):
+        HistoricalFigureRole.objects.all().delete()
+        response = self.client.get(self.url_list)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, [])
+
+    def test_post_figure_role(self):
+        figure_role = HistoricalFigureRoleSerializer(data={'description': 'Figure role description post', 'name': 'Figure role post'})
+        figure_role.is_valid()
+
+        response = self.client.post(self.url_list, data=figure_role.data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['description'], figure_role.data['description'])
+        self.assertEqual(response.data['name'], figure_role.data['name'])
+
+    def test_delete_item(self):
+        response = self.client.delete(self.url_item)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertIsNone(response.data)
+
+    def test_delete_item_non_existent(self):
+        response = self.client.delete(reverse('figure-role-item', kwargs={'pk':self.figure_role.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
+
+    def test_put_item(self):
+        updated_figure_role = {'name': 'Figure role updated'}
+        serializer = HistoricalFigureRoleSerializer(data=updated_figure_role)
+        serializer.is_valid()
+
+        response = self.client.put(self.url_item, serializer.data, content_type='application/json')
+        self.assertEqual(response.data['name'], updated_figure_role['name'])
+
+    def test_put_item_non_existent(self):
+        response = self.client.put(reverse('figure-role-item', kwargs={'pk':self.figure_role.id - 1}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['detail'].code, 'not_found')
+
+    def test_patch_item(self):
+        updated_figure_role = {'name': 'Figure role updated'}
+        serializer = HistoricalFigureRoleSerializer(data=updated_figure_role)
+        serializer.is_valid()
+
+        response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
+        self.assertEqual(response.data['name'], updated_figure_role['name'])
+
+    def test_patch_item_non_existent(self):
+        response = self.client.patch(reverse('figure-role-item', kwargs={'pk':self.figure_role.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')

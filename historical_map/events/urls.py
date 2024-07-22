@@ -11,6 +11,9 @@ urlpatterns = [
     path('figures/', views.HistoricalFigureListPost.as_view(), name='figure-list'),
     path('figures/<int:pk>', views.HistoricalFigureItem.as_view(), name='figure-item'),
 
+    path('figure-roles/', views.HistoricalFigureRoleList.as_view(), name='figure-role-list'),
+    path('figure-roles/<int:pk>', views.HistoricalFigureRoleItem.as_view(), name='figure-role-item'),
+
     path('historical-states/', views.HistoricalStateListPost.as_view(), name='historical-state-list'),
     path('historical-states/<int:pk>', views.HistoricalStateItem.as_view(), name='historical-state-item'),
 

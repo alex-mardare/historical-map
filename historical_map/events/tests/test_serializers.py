@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from django.test import TestCase
 
-from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalState, PresentCountry
+from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 from ..serializers import *
 
 
@@ -433,6 +433,56 @@ class HistoricalFigureSerializerClass(TestCase):
                                    'deathHistoricalState': OrderedDict([('id', self.historical_state.id), ('name', self.historical_state.name)]), 
                                    'deathPresentCountry': OrderedDict([('id', self.present_country.id), ('name', self.present_country.name)]), 'name': 'Historical Figure'}
         serializer = HistoricalFigureGetSerializer(data=valid_historical_figure)
+
+        self.assertTrue(serializer.is_valid())
+#endregion
+
+
+class HistoricalFigureRoleSerializersTestClass(TestCase):
+#region HistoricalFigureRoleSerializer
+    def test_serialization(self):
+        figure_role = HistoricalFigureRole.objects.create(description='Figure role description', name='Figure role')
+        serializer = HistoricalFigureRoleSerializer(figure_role)
+        expected_data = {'id': figure_role.id, 'description': figure_role.description, 'name': figure_role.name}
+
+        self.assertEqual(serializer.data, expected_data)
+
+    def test_serialization_valid_data(self):
+        valid_figure_role = {'name': 'Figure role'}
+        serializer = HistoricalFigureRoleSerializer(data=valid_figure_role)
+
+        self.assertTrue(serializer.is_valid())
+
+    def test_validation_properties_exceeds_max_length(self):
+        invalid_figure_role = {'description': 'd' * 1001, 'name': 'f' * 256}
+        serializer = HistoricalFigureRoleSerializer(data=invalid_figure_role)
+
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('description', serializer.errors)
+        self.assertIn('name', serializer.errors)
+        self.assertTrue(any('max_length' in error.code for error in serializer.errors['description']))
+        self.assertTrue(any('max_length' in error.code for error in serializer.errors['name']))
+
+    def test_validation_name_not_present(self):
+        invalid_figure_role = {'other':'property'}
+        serializer = HistoricalFigureRoleSerializer(data=invalid_figure_role)
+
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('name', serializer.errors)
+        self.assertTrue(any('required' in error.code for error in serializer.errors['name']))
+#endregion
+
+#region HistoricalFigureRolePropertySerializer
+    def test_serialization_property(self):
+        figure_role = HistoricalFigureRole.objects.create(name='Figure role')
+        serializer = HistoricalFigureRolePropertySerializer(figure_role)
+        expected_data = {'id': figure_role.id, 'name': figure_role.name}
+
+        self.assertEqual(serializer.data, expected_data)
+
+    def test_serialization_valid_data_property(self):
+        valid_figure_role = {'name': 'Figure role'}
+        serializer = HistoricalFigureRolePropertySerializer(data=valid_figure_role)
 
         self.assertTrue(serializer.is_valid())
 #endregion

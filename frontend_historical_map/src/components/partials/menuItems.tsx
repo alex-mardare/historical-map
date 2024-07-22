@@ -7,6 +7,7 @@ import {
   EVENT_CATEGORIES_SECTION,
   HISTORICAL_EVENTS_SECTION,
   HISTORICAL_FIGURES_SECTION,
+  HISTORICAL_FIGURE_ROLES_SECTION,
   HISTORICAL_STATES_SECTION,
   PRESENT_COUNTRIES_SECTION
 } from '../models/constants/urls'
@@ -79,6 +80,22 @@ const FiguresMenuItem = (props: Partial<CustomIconComponentProps>) => (
 const FiguresMenuSubItemList = () => <Link to={HISTORICAL_FIGURES_SECTION} />
 //#endregion
 
+//#region EVENT PROPERTIES MENU
+const FigurePropertiesMenuItem = (props: Partial<CustomIconComponentProps>) => (
+  <Icon
+    component={() => (
+      <img
+        src={`${process.env.PUBLIC_URL}/figure-properties.png`}
+        alt="Historical figures properties menu item"
+      />
+    )}
+    {...props}
+  />
+)
+
+const FigureRolesSubItem = () => <Link to={HISTORICAL_FIGURE_ROLES_SECTION} />
+//#endregion
+
 export {
   CountriesMenuItem,
   HistoricalStatesSubItem,
@@ -89,5 +106,7 @@ export {
   EventsMenuSubItemList,
   FiguresMenuItem,
   FiguresMenuSubItemList,
+  FigurePropertiesMenuItem,
+  FigureRolesSubItem,
   PresentCountriesSubItem
 }

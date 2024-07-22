@@ -1,41 +1,47 @@
-import { AxiosError } from "axios"
+import { AxiosError } from 'axios'
 
-import { HistoricalEvent } from "./historicalEvent"
-import { HistoricalFigure } from "./historicalFigure"
-import { HistoricalState } from "./historicalState"
-import { PresentCountry } from "./presentCountry"
-import { EventCategory } from "./eventCategory"
+import { EventCategory } from './eventCategory'
+import { HistoricalEvent } from './historicalEvent'
+import { HistoricalFigure } from './historicalFigure'
+import { HistoricalFigureRole } from './historicalFigureRole'
+import { HistoricalState } from './historicalState'
+import { PresentCountry } from './presentCountry'
 
 export type DataCreateUpdate = {
-  error: AxiosError | null,
+  error: AxiosError | null
   submitData: (
-      formData: any, 
-      setConfirmLoading: (loading: boolean) => void,
-      setOpen: (open: boolean) => void
+    formData: any,
+    setConfirmLoading: (loading: boolean) => void,
+    setOpen: (open: boolean) => void
   ) => Promise<any>
 }
 
 export type DataGetEventCategories = {
-  eventCategories: EventCategory[],
+  eventCategories: EventCategory[]
   refreshFunction: () => void
 }
 
 export type DataGetEvents = {
-  events: HistoricalEvent[],
+  events: HistoricalEvent[]
+  refreshFunction: () => void
+}
+
+export type DataGetFigureRoles = {
+  figureRoles: HistoricalFigureRole[]
   refreshFunction: () => void
 }
 
 export type DataGetFigures = {
-  figures: HistoricalFigure[],
+  figures: HistoricalFigure[]
   refreshFunction: () => void
 }
 
 export type DataGetHistoricalStates = {
-  historicalStates: HistoricalState[],
+  historicalStates: HistoricalState[]
   refreshFunction: () => void
 }
 
 export type DataGetPresentCountries = {
-  presentCountries: PresentCountry[],
+  presentCountries: PresentCountry[]
   refreshFunction: () => void
 }
