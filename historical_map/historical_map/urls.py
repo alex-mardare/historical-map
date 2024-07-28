@@ -16,7 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from events.views import CustomLogout
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/logout/', CustomLogout.as_view(), name='custom-logout'),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/events/', include('events.urls')),
 ]

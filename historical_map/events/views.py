@@ -1,4 +1,9 @@
-from rest_framework import generics
+from django.contrib.auth import logout as django_logout
+from django.shortcuts import redirect
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 from .paginations import NoPagination
@@ -7,10 +12,12 @@ from .serializers import *
 #region EVENT CATEGORY ENDPOINTS
 class EventCategoryList(generics.ListCreateAPIView):
     pagination_class = NoPagination
+    permission_classes = [IsAuthenticated]
     queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
 
 class EventCategoryItem(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
 #endregion
@@ -18,6 +25,7 @@ class EventCategoryItem(generics.RetrieveUpdateDestroyAPIView):
 
 #region HISTORICAL EVENT ENDPOINTS
 class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventDeletePostUpdateSerializer
 
@@ -27,6 +35,7 @@ class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
 
 class HistoricalEventListPost(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventDeletePostUpdateSerializer
     
@@ -39,6 +48,7 @@ class HistoricalEventListPost(generics.ListCreateAPIView):
 
 #region HISTORICAL FIGURE ENDPOINTS
 class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureDeletePostUpdateSerializer
 
@@ -48,6 +58,7 @@ class HistoricalFigureItem(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
 
 class HistoricalFigureListPost(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalFigure.objects.all()
     serializer_class = HistoricalFigureDeletePostUpdateSerializer
 
@@ -61,10 +72,12 @@ class HistoricalFigureListPost(generics.ListCreateAPIView):
 #region HISTORICAL FIGURE ROLE ENDPOINTS
 class HistoricalFigureRoleList(generics.ListCreateAPIView):
     pagination_class = NoPagination
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
     
 class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalFigureRole.objects.all()
     serializer_class = HistoricalFigureRoleSerializer
 #endregion
@@ -73,6 +86,7 @@ class HistoricalFigureRoleItem(generics.RetrieveUpdateDestroyAPIView):
 #region HISTORICAL STATE ENDPOINTS 
 class HistoricalStateListPost(generics.ListCreateAPIView):
     pagination_class = NoPagination
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateDeletePostUpdateSerializer
 
@@ -82,6 +96,7 @@ class HistoricalStateListPost(generics.ListCreateAPIView):
         return super().get_serializer_class()
     
 class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = HistoricalState.objects.all()
     serializer_class = HistoricalStateDeletePostUpdateSerializer
 
@@ -95,6 +110,7 @@ class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
 #region PRESENT COUNTRY ENDPOINTS
 class PresentCountryList(generics.ListAPIView):
     pagination_class = NoPagination
+    permission_classes = [IsAuthenticated]
     queryset = PresentCountry.objects.all()
     serializer_class = PresentCountryGetAllSerializer
 
@@ -107,4 +123,16 @@ class PresentCountryList(generics.ListAPIView):
             queryset = historicalState.get_present_countries()
         
         return queryset
+#endregion
+
+
+#region USER MANAGEMENT
+class CustomLogout(APIView):
+    def get(self, request):
+        django_logout(request)
+        return redirect('/api-auth/login/')
+
+    def post(self, request):
+        django_logout(request)
+        return Response(status=status.HTTP_200_OK)
 #endregion
