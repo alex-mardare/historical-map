@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -9,16 +10,22 @@ from ..serializers import *
 class BaseViewTestClass(TestCase):
     client = APIClient()
 
+
 class EventCategoryViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.event_category = EventCategory.objects.create(name='Event category 1')
-        EventCategory.objects.create(name='Event category 2')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.event_category = EventCategory.objects.create(createdBy=self.user_profile, name='Event category 1', updatedBy=self.user_profile)
+        EventCategory.objects.create(createdBy=self.user_profile, name='Event category 2', updatedBy=self.user_profile)
 
         self.url_list = reverse('event-category-list')
         self.url_item = reverse('event-category-item', kwargs={'pk':self.event_category.id})
 
+    def tearDown(self):
+        EventCategory.objects.all().delete()
+
     def test_get_list(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotIn('next', response.data)
@@ -30,6 +37,7 @@ class EventCategoryViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         EventCategory.objects.all().delete()
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -39,16 +47,19 @@ class EventCategoryViewTestClass(BaseViewTestClass):
         event_category = EventCategorySerializer(data={'name': 'Event category'})
         event_category.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=event_category.data, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], event_category.data['name'])
 
     def test_delete_item(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(self.url_item)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNone(response.data)
 
     def test_delete_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(reverse('event-category-item', kwargs={'pk':self.event_category.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -58,10 +69,12 @@ class EventCategoryViewTestClass(BaseViewTestClass):
         serializer = EventCategorySerializer(data=updated_event_category)
         serializer.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_event_category['name'])
 
     def test_put_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.put(reverse('event-category-item', kwargs={'pk':self.event_category.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -71,10 +84,12 @@ class EventCategoryViewTestClass(BaseViewTestClass):
         serializer = EventCategorySerializer(data=updated_event_category)
         serializer.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_event_category['name'])
 
     def test_patch_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.patch(reverse('event-category-item', kwargs={'pk':self.event_category.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -83,14 +98,21 @@ class EventCategoryViewTestClass(BaseViewTestClass):
 class HistoricalStateViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.historical_state = HistoricalState.objects.create(dateFrom='1234', dateTo='1245', name='Historical State 1')
-        self.present_country = PresentCountry.objects.create(code='PC', name='Present country')
-        HistoricalState.objects.create(dateFrom='2345', dateTo='2356', name='Historical State 2')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State 1', 
+                                                               updatedBy=self.user_profile)
+        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present country', updatedBy=self.user_profile)
+        HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='2345', dateTo='2356', name='Historical State 2', updatedBy=self.user_profile)
 
         self.url_list = reverse('historical-state-list')
         self.url_item = reverse('historical-state-item', kwargs={'pk':self.historical_state.id})
 
+    def tearDown(self):
+        HistoricalState.objects.all().delete()
+        PresentCountry.objects.all().delete()
+
     def test_get_list(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotIn('next', response.data)
@@ -102,6 +124,7 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         HistoricalState.objects.all().delete()
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -112,6 +135,7 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
                                                                            'presentCountries': [self.present_country.id]})
         historical_state.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=historical_state.data, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['dateFrom'], historical_state.data['dateFrom'])
@@ -120,11 +144,13 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['presentCountries'], historical_state.data['presentCountries'])
 
     def test_delete_item(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(self.url_item)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNone(response.data)
 
     def test_delete_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(reverse('historical-state-item', kwargs={'pk':self.historical_state.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -134,10 +160,12 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
         serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
         serializer.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_state['name'])
 
     def test_put_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.put(reverse('historical-state-item', kwargs={'pk':self.historical_state.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -147,10 +175,12 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
         serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
         serializer.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_state['name'])
 
     def test_patch_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.patch(reverse('historical-state-item', kwargs={'pk':self.historical_state.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -159,14 +189,22 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
 class PresentCountryViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.url = reverse('present-country-list')
-        self.present_country = PresentCountry.objects.create(code='PC1', name='Present Country 1')
-        PresentCountry.objects.create(code='PC2', name='Present Country 2')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.present_country = PresentCountry.objects.create(code='PC1', createdBy=self.user_profile, name='Present Country 1', updatedBy=self.user_profile)
+        PresentCountry.objects.create(code='PC2', createdBy=self.user_profile, name='Present Country 2', updatedBy=self.user_profile)
 
-        self.historical_state = HistoricalState.objects.create(dateFrom='1234', dateTo='1245', name='Historical State 1')
+        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State 1', 
+                                                               updatedBy=self.user_profile)
         self.historical_state.presentCountries.add(self.present_country)
 
+        self.url = reverse('present-country-list')
+
+    def tearDown(self):
+        HistoricalState.objects.all().delete()
+        PresentCountry.objects.all().delete()
+
     def test_get_list_no_historical_state_parameter(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotIn('next', response.data)
@@ -178,6 +216,7 @@ class PresentCountryViewTestClass(BaseViewTestClass):
         self.assertEqual(len(response.data), 2)
 
     def test_get_list_with_historical_state_parameter(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url, data={'histStateId': self.historical_state.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
@@ -188,6 +227,7 @@ class PresentCountryViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         PresentCountry.objects.all().delete()
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -197,19 +237,29 @@ class PresentCountryViewTestClass(BaseViewTestClass):
 class HistoricalEventViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.event_category = EventCategory.objects.create(name='Event category')
-        self.historical_state = HistoricalState.objects.create(dateFrom='1234', dateTo='1245', name='Historical State')
-        self.present_country = PresentCountry.objects.create(code='PC', name='Present Country')
-        self.historical_event = HistoricalEvent.objects.create(date='1234', description='description', eventCategoryId=self.event_category, 
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.event_category = EventCategory.objects.create(createdBy=self.user_profile, name='Event category', updatedBy=self.user_profile)
+        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State', 
+                                                               updatedBy=self.user_profile)
+        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present Country', updatedBy=self.user_profile)
+        self.historical_event = HistoricalEvent.objects.create(createdBy=self.user_profile, date='1234', description='description', eventCategoryId=self.event_category, 
                                                                historicalStateId=self.historical_state, latitude=12.345678, longitude=23.456789, name='Historical event', 
-                                                               presentCountryId=self.present_country, time='12:34')
-        HistoricalEvent.objects.create(date='2345', description='some more description', eventCategoryId=self.event_category, historicalStateId=self.historical_state, 
-                                       latitude=12.345678, longitude=23.456789, name='Historical event with no time', presentCountryId=self.present_country)
+                                                               presentCountryId=self.present_country, time='12:34', updatedBy=self.user_profile)
+        HistoricalEvent.objects.create(createdBy=self.user_profile, date='2345', description='some more description', eventCategoryId=self.event_category, 
+                                       historicalStateId=self.historical_state, latitude=12.345678, longitude=23.456789, name='Historical event with no time', 
+                                       presentCountryId=self.present_country, updatedBy=self.user_profile)
         
         self.url_list = reverse('event-list')
         self.url_item = reverse('event-item', kwargs={'pk':self.historical_event.id})
+
+    def tearDown(self):
+        HistoricalEvent.objects.all().delete()
+        EventCategory.objects.all().delete()
+        HistoricalState.objects.all().delete()
+        PresentCountry.objects.all().delete()
         
     def test_get_list(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('next', response.data)
@@ -224,6 +274,7 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         HistoricalEvent.objects.all().delete()
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -234,6 +285,7 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
                                                                             'historicalStateId': self.historical_state.id, 'latitude': 12.34, 'longitude': 23.45, 
                                                                             'name': 'Historical event with coordinates', 'presentCountryId': self.present_country.id})
         historical_event.is_valid()
+        self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=historical_event.data, content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -252,6 +304,7 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
                                                                             'historicalStateId': self.historical_state.id, 'name': 'Historical event without coordinates', 
                                                                             'presentCountryId': self.present_country.id})
         historical_event.is_valid()
+        self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=historical_event.data, content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -266,6 +319,7 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['presentCountryId'], historical_event.data['presentCountryId'])
 
     def test_get_item(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_item)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -283,16 +337,19 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['presentCountry']['name'], self.present_country.name)
 
     def test_get_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(reverse('event-item', kwargs={'pk':self.historical_event.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
 
     def test_delete_item(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(self.url_item)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNone(response.data)
 
     def test_delete_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(reverse('event-item', kwargs={'pk':self.historical_event.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -303,10 +360,13 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
                                     'time':'12:34'}
         serializer = HistoricalEventDeletePostUpdateSerializer(data=updated_historical_event)
         serializer.is_valid()
+
+        self.client.force_login(self.user_profile)
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_event['name'])
 
     def test_put_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.put(reverse('event-item', kwargs={'pk':self.historical_event.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -317,10 +377,13 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
                                     'time':'12:34'}
         serializer = HistoricalEventDeletePostUpdateSerializer(data=updated_historical_event)
         serializer.is_valid()
+
+        self.client.force_login(self.user_profile)
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_event['name'])
 
     def test_patch_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.patch(reverse('event-item', kwargs={'pk':self.historical_event.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -329,17 +392,26 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
 class HistoricalFigureViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.historical_state = HistoricalState.objects.create(dateFrom='1234', dateTo='1245', name='Historical State')
-        self.present_country = PresentCountry.objects.create(code='PC', name='Present Country')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State', 
+                                                               updatedBy=self.user_profile)
+        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present Country', updatedBy=self.user_profile)
         self.historical_figure = HistoricalFigure.objects.create(birthDate='1234', birthHistoricalStateId=self.historical_state, birthPresentCountryId=self.present_country, 
-                                                                 deathDate='1345-01-02', deathHistoricalStateId=self.historical_state, deathPresentCountryId=self.present_country, 
-                                                                 name='Historical Figure')
-        HistoricalFigure.objects.create(birthDate='1234', birthHistoricalStateId=self.historical_state, birthPresentCountryId=self.present_country, name='Alive Historical Figure')
+                                                                 createdBy=self.user_profile, deathDate='1345-01-02', deathHistoricalStateId=self.historical_state, 
+                                                                 deathPresentCountryId=self.present_country, name='Historical Figure', updatedBy=self.user_profile)
+        HistoricalFigure.objects.create(birthDate='1234', birthHistoricalStateId=self.historical_state, birthPresentCountryId=self.present_country, 
+                                        createdBy=self.user_profile, name='Alive Historical Figure', updatedBy=self.user_profile)
         
         self.url_list = reverse('figure-list')
         self.url_item = reverse('figure-item', kwargs={'pk':self.historical_figure.id})
+
+    def tearDown(self):
+        HistoricalFigure.objects.all().delete()
+        HistoricalState.objects.all().delete()
+        PresentCountry.objects.all().delete()
         
     def test_get_list(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('next', response.data)
@@ -354,6 +426,7 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         HistoricalFigure.objects.all().delete()
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -365,6 +438,7 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
                                                                              'deathHistoricalStateId': self.historical_state.id, 'deathPresentCountryId': self.present_country.id, 
                                                                              'name': 'Historical Figure Post'})
         historical_figure.is_valid()
+        self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=historical_figure.data, content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -377,6 +451,7 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['name'], historical_figure.data['name'])
 
     def test_get_item(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_item)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -393,16 +468,19 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['name'], self.historical_figure.name)
 
     def test_get_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(reverse('figure-item', kwargs={'pk':self.historical_figure.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
 
     def test_delete_item(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(self.url_item)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNone(response.data)
 
     def test_delete_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(reverse('figure-item', kwargs={'pk':self.historical_figure.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -413,10 +491,12 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
                                      'name': 'Historical Figure Updated'}
         serializer = HistoricalFigureDeletePostUpdateSerializer(data=updated_historical_figure)
         serializer.is_valid()
+        self.client.force_login(self.user_profile)
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_figure['name'])
 
     def test_put_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.put(reverse('figure-item', kwargs={'pk':self.historical_figure.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -427,10 +507,12 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
                                      'name': 'Historical Figure Updated'}
         serializer = HistoricalFigureDeletePostUpdateSerializer(data=updated_historical_figure)
         serializer.is_valid()
+        self.client.force_login(self.user_profile)
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_figure['name'])
 
     def test_patch_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.patch(reverse('figure-item', kwargs={'pk':self.historical_figure.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -439,13 +521,19 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
 class HistoricalFigureRoleViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.figure_role = HistoricalFigureRole.objects.create(description='Figure role description', name='Figure role 1')
-        HistoricalFigureRole.objects.create(name='Figure role 2')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.figure_role = HistoricalFigureRole.objects.create(createdBy=self.user_profile, description='Figure role description', name='Figure role 1', 
+                                                               updatedBy=self.user_profile)
+        HistoricalFigureRole.objects.create(createdBy=self.user_profile, name='Figure role 2', updatedBy=self.user_profile)
 
         self.url_list = reverse('figure-role-list')
         self.url_item = reverse('figure-role-item', kwargs={'pk':self.figure_role.id})
 
+    def tearDown(self):
+        HistoricalFigureRole.objects.all().delete()
+
     def test_get_list(self):
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotIn('next', response.data)
@@ -457,6 +545,7 @@ class HistoricalFigureRoleViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         HistoricalFigureRole.objects.all().delete()
+        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -466,17 +555,20 @@ class HistoricalFigureRoleViewTestClass(BaseViewTestClass):
         figure_role = HistoricalFigureRoleSerializer(data={'description': 'Figure role description post', 'name': 'Figure role post'})
         figure_role.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=figure_role.data, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['description'], figure_role.data['description'])
         self.assertEqual(response.data['name'], figure_role.data['name'])
 
     def test_delete_item(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(self.url_item)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNone(response.data)
 
     def test_delete_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.delete(reverse('figure-role-item', kwargs={'pk':self.figure_role.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -486,10 +578,12 @@ class HistoricalFigureRoleViewTestClass(BaseViewTestClass):
         serializer = HistoricalFigureRoleSerializer(data=updated_figure_role)
         serializer.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_figure_role['name'])
 
     def test_put_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.put(reverse('figure-role-item', kwargs={'pk':self.figure_role.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')
@@ -499,10 +593,12 @@ class HistoricalFigureRoleViewTestClass(BaseViewTestClass):
         serializer = HistoricalFigureRoleSerializer(data=updated_figure_role)
         serializer.is_valid()
 
+        self.client.force_login(self.user_profile)
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_figure_role['name'])
 
     def test_patch_item_non_existent(self):
+        self.client.force_login(self.user_profile)
         response = self.client.patch(reverse('figure-role-item', kwargs={'pk':self.figure_role.id - 1}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['detail'].code, 'not_found')

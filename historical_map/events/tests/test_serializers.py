@@ -1,5 +1,7 @@
 from collections import OrderedDict
+from django.contrib.auth.models import User
 from django.test import TestCase
+from unittest.mock import patch
 
 from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 from ..serializers import *
@@ -7,7 +9,8 @@ from ..serializers import *
 
 class EventCategorySerializersTestClass(TestCase):
     def test_serialization(self):
-        event_category = EventCategory.objects.create(name='Event category')
+        user_profile = User.objects.create(username='test_user', password='test_password')
+        event_category = EventCategory.objects.create(createdBy=user_profile, name='Event category', updatedBy=user_profile)
         serializer = EventCategorySerializer(event_category)
         expected_data = {'id': event_category.id, 'name': event_category.name}
 
@@ -38,11 +41,13 @@ class EventCategorySerializersTestClass(TestCase):
 
 class HistoricalStateSerializerTestClass(TestCase):
     def setUp(self):
-        self.present_country = PresentCountry.objects.create(code='PC', name='Present country')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.present_country = PresentCountry.objects.create(createdBy=self.user_profile, code='PC', name='Present country', updatedBy=self.user_profile)
 
 #region HistoricalStateGetSerializer
     def test_serialization_get_all(self):
-        historical_state = HistoricalState.objects.create(dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state')
+        historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state', 
+                                                          updatedBy=self.user_profile)
         serializer = HistoricalStateGetSerializer(historical_state)
         expected_data = {'id': historical_state.id, 'presentCountries': [], 'name': historical_state.name, 'dateFrom': historical_state.dateFrom, 
                          'dateTo': historical_state.dateTo, 'flagUrl': None}
@@ -91,7 +96,8 @@ class HistoricalStateSerializerTestClass(TestCase):
         
 #region HistoricalStatePropertySerializer
     def test_serialization_property(self):
-        historical_state = HistoricalState.objects.create(dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state')
+        historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state', 
+                                                          updatedBy=self.user_profile)
         serializer = HistoricalStatePropertySerializer(historical_state)
         expected_data = {'id': historical_state.id, 'name': historical_state.name}
 
@@ -106,7 +112,8 @@ class HistoricalStateSerializerTestClass(TestCase):
 
 #region HistoricalStateDeletePostUpdateSerializer
     def test_serialization(self):
-        historical_state = HistoricalState.objects.create(dateFrom='1234-05-06', dateTo='2345-06-07', flagUrl='', name='Historical state')
+        historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234-05-06', dateTo='2345-06-07', flagUrl='', name='Historical state',
+                                                          updatedBy=self.user_profile)
         historical_state.presentCountries.set(PresentCountry.objects.all())
 
         serializer = HistoricalStateDeletePostUpdateSerializer(historical_state)
@@ -140,9 +147,12 @@ class HistoricalStateSerializerTestClass(TestCase):
         
 
 class PresentCountrySerializerTestClass(TestCase):
+    def setUp(self):
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+
 #region PresentCountryGetAllSerializer
     def test_serialization_get_all(self):
-        present_country = PresentCountry.objects.create(code='PC', flagUrl='link', name='Present country')
+        present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, flagUrl='link', name='Present country', updatedBy=self.user_profile)
         serializer = PresentCountryGetAllSerializer(present_country)
         expected_data = {'code': present_country.code, 'flagUrl': present_country.flagUrl, 'id': present_country.id, 'name': present_country.name}
 
@@ -179,7 +189,7 @@ class PresentCountrySerializerTestClass(TestCase):
         
 #region PresentCountryPropertySerializer
     def test_serialization_property(self):
-        present_country = PresentCountry.objects.create(code='PC', name='Present country')
+        present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present country', updatedBy=self.user_profile)
         serializer = PresentCountryPropertySerializer(present_country)
         expected_data = {'id': present_country.id, 'name': present_country.name}
 
@@ -196,14 +206,17 @@ class PresentCountrySerializerTestClass(TestCase):
 class HistoricalEventSerializerClass(TestCase):
     @classmethod
     def setUp(self):
-        self.event_category = EventCategory.objects.create(name='Event category')
-        self.historical_state = HistoricalState.objects.create(dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state')
-        self.present_country = PresentCountry.objects.create(code='PC', name='Present country')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.event_category = EventCategory.objects.create(createdBy=self.user_profile, name='Event category', updatedBy=self.user_profile)
+        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state', 
+                                                               updatedBy=self.user_profile)
+        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present country', updatedBy=self.user_profile)
 
 #region HistoricalEventDeletePostUpdateSerializer
     def test_serialization_delete_post_update(self):
-        historical_event = HistoricalEvent.objects.create(date='1234', description='description', eventCategoryId=self.event_category, historicalStateId=self.historical_state, 
-                                                          latitude=12.345678, longitude=23.456789, name='Historical event', presentCountryId=self.present_country, time='12:34')
+        historical_event = HistoricalEvent.objects.create(createdBy=self.user_profile, date='1234', description='description', eventCategoryId=self.event_category, 
+                                                          historicalStateId=self.historical_state, latitude=12.345678, longitude=23.456789, name='Historical event', 
+                                                          presentCountryId=self.present_country, time='12:34', updatedBy=self.user_profile)
         serializer = HistoricalEventDeletePostUpdateSerializer(historical_event)
         expected_data = {'id': historical_event.id, 'name': historical_event.name, 'date': historical_event.date, 'time': historical_event.time, 
                          'description': historical_event.description, 'latitude': str(historical_event.latitude), 'longitude': str(historical_event.longitude), 
@@ -290,28 +303,34 @@ class HistoricalEventSerializerClass(TestCase):
     def test_validation_create_event_coordinates(self):
         historical_event = {'date': '1234', 'description': 'description', 'eventCategoryId': self.event_category.id, 'historicalStateId': self.historical_state.id, 
                             'latitude': 12.345678, 'longitude': 23.456789, 'name':'Historical event', 'presentCountryId': self.present_country.id, 'time': '12:34'}
-        serializer = HistoricalEventDeletePostUpdateSerializer(data=historical_event)
 
-        if serializer.is_valid():
-            instance = serializer.save()
-            self.assertIsInstance(instance, HistoricalEvent)
-            self.assertEqual(instance.approximateRealLocation, True)
+        with patch('events.models.get_current_user', return_value=self.user_profile):
+            serializer = HistoricalEventDeletePostUpdateSerializer(data=historical_event)
+            if serializer.is_valid():
+                instance = serializer.save()
+                self.assertIsInstance(instance, HistoricalEvent)
+                self.assertEqual(instance.approximateRealLocation, True)
+                self.assertEqual(instance.createdBy, self.user_profile)
+                self.assertEqual(instance.updatedBy, self.user_profile)
 
     def test_validation_create_event_no_coordinates(self):
         historical_event = {'date': '1234', 'description': 'description', 'eventCategoryId': self.event_category.id, 'historicalStateId': self.historical_state.id, 
                             'name':'Historical event', 'presentCountryId': self.present_country.id, 'time': '12:34'}
-        serializer = HistoricalEventDeletePostUpdateSerializer(data=historical_event)
-
-        if serializer.is_valid():
-            instance = serializer.save()
-            self.assertIsInstance(instance, HistoricalEvent)
-            self.assertEqual(instance.approximateRealLocation, False)
+        with patch('events.models.get_current_user', return_value=self.user_profile):
+            serializer = HistoricalEventDeletePostUpdateSerializer(data=historical_event)
+            if serializer.is_valid():
+                instance = serializer.save()
+                self.assertIsInstance(instance, HistoricalEvent)
+                self.assertEqual(instance.approximateRealLocation, False)
+                self.assertEqual(instance.createdBy, self.user_profile)
+                self.assertEqual(instance.updatedBy, self.user_profile)
 #endregion
     
 #region HistoricalEventGetSerializer
     def test_serialization_get(self):
-        historical_event = HistoricalEvent.objects.create(date='1234', description='description', eventCategoryId=self.event_category, historicalStateId=self.historical_state, 
-                                                          latitude=12.345678, longitude=23.456789, name='Historical event', presentCountryId=self.present_country, time='12:34')
+        historical_event = HistoricalEvent.objects.create(createdBy=self.user_profile, date='1234', description='description', eventCategoryId=self.event_category, 
+                                                          historicalStateId=self.historical_state, latitude=12.345678, longitude=23.456789, name='Historical event', 
+                                                          presentCountryId=self.present_country, time='12:34', updatedBy=self.user_profile)
         serializer = HistoricalEventGetSerializer(historical_event)
         
         self.assertEqual(serializer.data['approximateRealLocation'], False)
@@ -343,14 +362,16 @@ class HistoricalEventSerializerClass(TestCase):
 class HistoricalFigureSerializerClass(TestCase):
     @classmethod
     def setUp(self):
-        self.historical_state = HistoricalState.objects.create(dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state')
-        self.present_country = PresentCountry.objects.create(code='PC', name='Present country')
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state', 
+                                                               updatedBy=self.user_profile)
+        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present country', updatedBy=self.user_profile)
 
 #region HistoricalFigureDeletePostUpdateSerializer
     def test_serialization_delete_post_update(self):
         historical_figure = HistoricalFigure.objects.create(birthDate='1234', birthHistoricalStateId=self.historical_state, birthPresentCountryId=self.present_country, 
-                                                            deathDate='1345-01-02', deathHistoricalStateId=self.historical_state, deathPresentCountryId=self.present_country, 
-                                                            name='Historical Figure')
+                                                            createdBy=self.user_profile, deathDate='1345-01-02', deathHistoricalStateId=self.historical_state, 
+                                                            deathPresentCountryId=self.present_country, name='Historical Figure', updatedBy=self.user_profile)
         serializer = HistoricalFigureDeletePostUpdateSerializer(historical_figure)
         expected_data = {'birthDate': historical_figure.birthDate, 'birthHistoricalStateId': self.historical_state.id, 'birthPresentCountryId': self.present_country.id, 
                          'deathDate': historical_figure.deathDate, 'deathHistoricalStateId': self.historical_state.id, 'deathPresentCountryId': self.present_country.id, 
@@ -410,8 +431,8 @@ class HistoricalFigureSerializerClass(TestCase):
 #region HistoricalFigureGetSerializer
     def test_serialization_get(self):
         historical_figure = HistoricalFigure.objects.create(birthDate='1234', birthHistoricalStateId=self.historical_state, birthPresentCountryId=self.present_country, 
-                                                            deathDate='1345-01-02', deathHistoricalStateId=self.historical_state, deathPresentCountryId=self.present_country, 
-                                                            name='Historical Figure')
+                                                            createdBy=self.user_profile, deathDate='1345-01-02', deathHistoricalStateId=self.historical_state, 
+                                                            deathPresentCountryId=self.present_country, name='Historical Figure', updatedBy=self.user_profile)
         serializer = HistoricalFigureGetSerializer(historical_figure)
         
         self.assertEqual(serializer.data['birthDate'], historical_figure.birthDate)
@@ -439,9 +460,14 @@ class HistoricalFigureSerializerClass(TestCase):
 
 
 class HistoricalFigureRoleSerializersTestClass(TestCase):
+    @classmethod
+    def setUp(self):
+        self.user_profile = User.objects.create(username='test_user', password='test_password')
+
 #region HistoricalFigureRoleSerializer
     def test_serialization(self):
-        figure_role = HistoricalFigureRole.objects.create(description='Figure role description', name='Figure role')
+        figure_role = HistoricalFigureRole.objects.create(createdBy=self.user_profile, description='Figure role description', name='Figure role', 
+                                                          updatedBy=self.user_profile)
         serializer = HistoricalFigureRoleSerializer(figure_role)
         expected_data = {'id': figure_role.id, 'description': figure_role.description, 'name': figure_role.name}
 
@@ -474,7 +500,7 @@ class HistoricalFigureRoleSerializersTestClass(TestCase):
 
 #region HistoricalFigureRolePropertySerializer
     def test_serialization_property(self):
-        figure_role = HistoricalFigureRole.objects.create(name='Figure role')
+        figure_role = HistoricalFigureRole.objects.create(createdBy=self.user_profile, name='Figure role', updatedBy=self.user_profile)
         serializer = HistoricalFigureRolePropertySerializer(figure_role)
         expected_data = {'id': figure_role.id, 'name': figure_role.name}
 

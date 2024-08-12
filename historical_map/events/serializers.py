@@ -29,14 +29,14 @@ class PresentCountryPropertySerializer(serializers.ModelSerializer):
 class HistoricalStateDeletePostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalState
-        exclude = ['createdAt', 'updatedAt']
+        exclude = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
 
 class HistoricalStateGetSerializer(serializers.ModelSerializer):
     presentCountries = PresentCountryPropertySerializer(many=True)
 
     class Meta:
         model = HistoricalState
-        exclude = ['createdAt', 'updatedAt']
+        exclude = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
 
 class HistoricalStatePropertySerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,7 +49,7 @@ class HistoricalStatePropertySerializer(serializers.ModelSerializer):
 class HistoricalEventDeletePostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEvent
-        exclude=['createdAt', 'updatedAt']
+        exclude = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
 
     def create(self, data):
         try:

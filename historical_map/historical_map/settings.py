@@ -55,6 +55,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
+
+    'events.middleware.CurrentUserMiddleware',
 ]
 
 ROOT_URLCONF = 'historical_map.urls'
