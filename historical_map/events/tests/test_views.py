@@ -4,19 +4,21 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from .data_provider import DataProvider
 from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
 from ..serializers import *
 
 class BaseViewTestClass(TestCase):
     client = APIClient()
+    data_provider = DataProvider()
 
 
 class EventCategoryViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
-        self.event_category = EventCategory.objects.create(createdBy=self.user_profile, name='Event category 1', updatedBy=self.user_profile)
-        EventCategory.objects.create(createdBy=self.user_profile, name='Event category 2', updatedBy=self.user_profile)
+        self.user_profile = self.data_provider.create_user()
+        self.event_category = self.data_provider.create_event_category(name='Event category 1', user_profile=self.user_profile)
+        self.data_provider.create_event_category(name='Event category 2', user_profile=self.user_profile)
 
         self.url_list = reverse('event-category-list')
         self.url_item = reverse('event-category-item', kwargs={'pk':self.event_category.id})
@@ -98,11 +100,10 @@ class EventCategoryViewTestClass(BaseViewTestClass):
 class HistoricalStateViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
-        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State 1', 
-                                                               updatedBy=self.user_profile)
-        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present country', updatedBy=self.user_profile)
-        HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='2345', dateTo='2356', name='Historical State 2', updatedBy=self.user_profile)
+        self.user_profile = self.data_provider.create_user()
+        self.historical_state = self.data_provider.create_historical_state(name='Historical State 1', user_profile=self.user_profile)
+        self.present_country = self.data_provider.create_present_country(code='PC', name='Present country', user_profile=self.user_profile)
+        self.data_provider.create_historical_state(name='Historical State 2', user_profile=self.user_profile)
 
         self.url_list = reverse('historical-state-list')
         self.url_item = reverse('historical-state-item', kwargs={'pk':self.historical_state.id})
@@ -189,12 +190,11 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
 class PresentCountryViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
-        self.present_country = PresentCountry.objects.create(code='PC1', createdBy=self.user_profile, name='Present Country 1', updatedBy=self.user_profile)
-        PresentCountry.objects.create(code='PC2', createdBy=self.user_profile, name='Present Country 2', updatedBy=self.user_profile)
+        self.user_profile = self.data_provider.create_user()
+        self.present_country = self.data_provider.create_present_country(code='PC1', name='Present country 1', user_profile=self.user_profile)
+        self.data_provider.create_present_country(code='PC2', name='Present country 2', user_profile=self.user_profile)
 
-        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State 1', 
-                                                               updatedBy=self.user_profile)
+        self.historical_state = self.data_provider.create_historical_state(name='Historical State', user_profile=self.user_profile)
         self.historical_state.presentCountries.add(self.present_country)
 
         self.url = reverse('present-country-list')
@@ -237,17 +237,14 @@ class PresentCountryViewTestClass(BaseViewTestClass):
 class HistoricalEventViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
-        self.event_category = EventCategory.objects.create(createdBy=self.user_profile, name='Event category', updatedBy=self.user_profile)
-        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State', 
-                                                               updatedBy=self.user_profile)
-        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present Country', updatedBy=self.user_profile)
-        self.historical_event = HistoricalEvent.objects.create(createdBy=self.user_profile, date='1234', description='description', eventCategoryId=self.event_category, 
-                                                               historicalStateId=self.historical_state, latitude=12.345678, longitude=23.456789, name='Historical event', 
-                                                               presentCountryId=self.present_country, time='12:34', updatedBy=self.user_profile)
-        HistoricalEvent.objects.create(createdBy=self.user_profile, date='2345', description='some more description', eventCategoryId=self.event_category, 
-                                       historicalStateId=self.historical_state, latitude=12.345678, longitude=23.456789, name='Historical event with no time', 
-                                       presentCountryId=self.present_country, updatedBy=self.user_profile)
+        self.user_profile = self.data_provider.create_user()
+        self.event_category = self.data_provider.create_event_category(user_profile=self.user_profile)
+        self.historical_state = self.data_provider.create_historical_state(name='Historical State', user_profile=self.user_profile)
+        self.present_country = self.data_provider.create_present_country(code='PC', name='Present Country', user_profile=self.user_profile)
+        self.historical_event = self.data_provider.create_historical_event(event_category=self.event_category, historical_state=self.historical_state, 
+                                                                           present_country=self.present_country, user_profile=self.user_profile)
+        self.data_provider.create_historical_event(event_category=self.event_category, historical_state=self.historical_state, name='Historical event 2',
+                                                   present_country=self.present_country, user_profile=self.user_profile)
         
         self.url_list = reverse('event-list')
         self.url_item = reverse('event-item', kwargs={'pk':self.historical_event.id})
@@ -281,9 +278,10 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['results'], [])
 
     def test_post_event_with_coordinates(self):
-        historical_event = HistoricalEventDeletePostUpdateSerializer(data= {'date': '1234-01-02', 'description': 'post description', 'eventCategoryId': self.event_category.id, 
-                                                                            'historicalStateId': self.historical_state.id, 'latitude': 12.34, 'longitude': 23.45, 
-                                                                            'name': 'Historical event with coordinates', 'presentCountryId': self.present_country.id})
+        historical_event = HistoricalEventDeletePostUpdateSerializer(data= {'date': '1234-01-02', 'description': 'post description', 
+                                                                            'eventCategoryId': self.event_category.id, 'historicalStateId': self.historical_state.id, 
+                                                                            'latitude': 12.34, 'longitude': 23.45, 'name': 'Historical event with coordinates', 
+                                                                            'presentCountryId': self.present_country.id})
         historical_event.is_valid()
         self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=historical_event.data, content_type='application/json')
@@ -300,9 +298,9 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['presentCountryId'], historical_event.data['presentCountryId'])
 
     def test_post_event_no_coordinates(self):
-        historical_event = HistoricalEventDeletePostUpdateSerializer(data= {'date': '1234-01-02', 'description': 'post description', 'eventCategoryId': self.event_category.id, 
-                                                                            'historicalStateId': self.historical_state.id, 'name': 'Historical event without coordinates', 
-                                                                            'presentCountryId': self.present_country.id})
+        historical_event = HistoricalEventDeletePostUpdateSerializer(data= {'date': '1234-01-02', 'description': 'post description', 
+                                                                            'eventCategoryId': self.event_category.id, 'historicalStateId': self.historical_state.id, 
+                                                                            'name': 'Historical event without coordinates', 'presentCountryId': self.present_country.id})
         historical_event.is_valid()
         self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=historical_event.data, content_type='application/json')
@@ -330,8 +328,8 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['eventCategory']['name'], self.event_category.name)
         self.assertEqual(response.data['historicalState']['id'], self.historical_state.id)
         self.assertEqual(response.data['historicalState']['name'], self.historical_state.name)
-        self.assertEqual(response.data['latitude'], str(self.historical_event.latitude))
-        self.assertEqual(response.data['longitude'], str(self.historical_event.longitude))
+        self.assertEqual(response.data['latitude'], format(self.historical_event.latitude, '.6f'))
+        self.assertEqual(response.data['longitude'], format(self.historical_event.longitude, '.6f'))
         self.assertEqual(response.data['name'], self.historical_event.name)
         self.assertEqual(response.data['presentCountry']['id'], self.present_country.id)
         self.assertEqual(response.data['presentCountry']['name'], self.present_country.name)
@@ -355,9 +353,9 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['detail'].code, 'not_found')
 
     def test_put_item(self):
-        updated_historical_event = {'date': '1234-01-02', 'description': 'post description', 'eventCategoryId': self.event_category.id, 'latitude': 12.34, 'longitude': 23.45, 
-                                    'historicalStateId': self.historical_state.id, 'name': 'Historical event updated name', 'presentCountryId': self.present_country.id, 
-                                    'time':'12:34'}
+        updated_historical_event = {'date': '1234-01-02', 'description': 'post description', 'eventCategoryId': self.event_category.id, 'latitude': 12.34, 
+                                    'longitude': 23.45, 'historicalStateId': self.historical_state.id, 'name': 'Historical event updated name', 
+                                    'presentCountryId': self.present_country.id, 'time':'12:34'}
         serializer = HistoricalEventDeletePostUpdateSerializer(data=updated_historical_event)
         serializer.is_valid()
 
@@ -392,15 +390,14 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
 class HistoricalFigureViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
-        self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234', dateTo='1245', name='Historical State', 
-                                                               updatedBy=self.user_profile)
-        self.present_country = PresentCountry.objects.create(code='PC', createdBy=self.user_profile, name='Present Country', updatedBy=self.user_profile)
-        self.historical_figure = HistoricalFigure.objects.create(birthDate='1234', birthHistoricalStateId=self.historical_state, birthPresentCountryId=self.present_country, 
-                                                                 createdBy=self.user_profile, deathDate='1345-01-02', deathHistoricalStateId=self.historical_state, 
-                                                                 deathPresentCountryId=self.present_country, name='Historical Figure', updatedBy=self.user_profile)
-        HistoricalFigure.objects.create(birthDate='1234', birthHistoricalStateId=self.historical_state, birthPresentCountryId=self.present_country, 
-                                        createdBy=self.user_profile, name='Alive Historical Figure', updatedBy=self.user_profile)
+        self.user_profile = self.data_provider.create_user()
+        self.historical_state = self.data_provider.create_historical_state(name='Historical State', user_profile=self.user_profile)
+        self.present_country = self.data_provider.create_present_country(code='PC', name='Present Country', user_profile=self.user_profile)
+        self.historical_figure = self.data_provider.create_historical_figure(birth_historical_state=self.historical_state, birth_present_country=self.present_country,
+                                                                              death_historical_state=self.historical_state, death_present_country=self.present_country,
+                                                                              user_profile=self.user_profile)
+        self.data_provider.create_historical_figure(birth_historical_state=self.historical_state, birth_present_country=self.present_country, deathDate=None,
+                                                    death_historical_state=None, death_present_country=None, user_profile=self.user_profile)
         
         self.url_list = reverse('figure-list')
         self.url_item = reverse('figure-item', kwargs={'pk':self.historical_figure.id})
@@ -521,10 +518,9 @@ class HistoricalFigureViewTestClass(BaseViewTestClass):
 class HistoricalFigureRoleViewTestClass(BaseViewTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
-        self.figure_role = HistoricalFigureRole.objects.create(createdBy=self.user_profile, description='Figure role description', name='Figure role 1', 
-                                                               updatedBy=self.user_profile)
-        HistoricalFigureRole.objects.create(createdBy=self.user_profile, name='Figure role 2', updatedBy=self.user_profile)
+        self.user_profile = self.data_provider.create_user()
+        self.figure_role = self.data_provider.create_historical_figure_role(user_profile=self.user_profile)
+        self.data_provider.create_historical_figure_role(name='Figure role 2', user_profile=self.user_profile)
 
         self.url_list = reverse('figure-role-list')
         self.url_item = reverse('figure-role-item', kwargs={'pk':self.figure_role.id})

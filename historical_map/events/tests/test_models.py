@@ -3,16 +3,17 @@ import re
 import time
 
 from datetime import datetime as dt
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 from unittest import mock
 
-from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalState, PresentCountry, UserProfile
+from .data_provider import DataProvider
+from ..models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry, UserProfile
 from ..validators import dateFormatter, regexDateValidator
 
 class BaseModelTestClass(TestCase):
+    data_provider = DataProvider()
     mocked_time = dt.now(tz=pytz.utc)
     sleep_time = 0.1
 
@@ -39,9 +40,9 @@ class CommonFunctionalityModelsTestClass(TestCase):
 class EventCategoryModelTestClass(BaseModelTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.user_profile = self.data_provider.create_user()
         with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
-            self.event_category = EventCategory.objects.create(createdBy=self.user_profile, name='Event category', updatedBy=self.user_profile)
+            self.event_category = self.data_provider.create_event_category(user_profile=self.user_profile)
 
     def test_name_max_length(self):
         self.assertEqual(255, EventCategory._meta.get_field('name').max_length)
@@ -66,16 +67,14 @@ class EventCategoryModelTestClass(BaseModelTestClass):
 class HistoricalStateModelTestClass(BaseModelTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.user_profile = self.data_provider.create_user()
         with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
-            self.present_country_a = PresentCountry.objects.create(createdBy=self.user_profile, code='AA', name='A country', updatedBy=self.user_profile)
-            self.present_country_b = PresentCountry.objects.create(createdBy=self.user_profile, code='BB', name='B country', updatedBy=self.user_profile)
+            self.present_country_a = self.data_provider.create_present_country(code='AA', name='A country', user_profile=self.user_profile)
+            self.present_country_b = self.data_provider.create_present_country(code='BB', name='B country', user_profile=self.user_profile)
 
-            self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='1234-05-06', dateTo='2345-06-07', name='Historical state', 
-                                                                   updatedBy=self.user_profile)
+            self.historical_state = self.data_provider.create_historical_state(dateTo='2345-06-07', name='Historical state', user_profile=self.user_profile)
             self.historical_state.presentCountries.add(*[self.present_country_a, self.present_country_b])
-            self.historical_state_no_dateTo = HistoricalState.objects.create(createdBy=self.user_profile, dateFrom='123-04-05', name='Historical state no dateTo', 
-                                                                             updatedBy=self.user_profile)
+            self.historical_state_no_dateTo = self.data_provider.create_historical_state(name='Historical state', user_profile=self.user_profile)
 
     def test_max_length_columns(self):
         self.assertEqual(15, HistoricalState._meta.get_field('dateFrom').max_length)
@@ -109,9 +108,9 @@ class HistoricalStateModelTestClass(BaseModelTestClass):
 class PresentCountryModelTestClass(BaseModelTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.user_profile = self.data_provider.create_user()
         with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
-            self.present_country = PresentCountry.objects.create(createdBy=self.user_profile, code='AA', name='A country', updatedBy=self.user_profile)
+            self.present_country = self.data_provider.create_present_country(code='AA', name='A country', user_profile=self.user_profile)
 
     def test_max_length_columns(self):
         self.assertEqual(5, PresentCountry._meta.get_field('code').max_length)
@@ -138,17 +137,17 @@ class PresentCountryModelTestClass(BaseModelTestClass):
 class HistoricalFigureModelTestClass(BaseModelTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.user_profile = self.data_provider.create_user()
         with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
-            self.birth_historical_state = HistoricalState.objects.create(createdBy=self.user_profile, name='Birth historical state', updatedBy=self.user_profile)
-            self.birth_present_country = PresentCountry.objects.create(createdBy=self.user_profile, code='BB', name='D country', updatedBy=self.user_profile)
-            self.death_historical_state = HistoricalState.objects.create(createdBy=self.user_profile, name='Death historical state', updatedBy=self.user_profile)
-            self.death_present_country = PresentCountry.objects.create(createdBy=self.user_profile, code='DD', name='D country', updatedBy=self.user_profile)
+            self.birth_historical_state = self.data_provider.create_historical_state(name='Birth historical state', user_profile=self.user_profile)
+            self.birth_present_country = self.data_provider.create_present_country(code='BB', name='Birth country', user_profile=self.user_profile)
+            self.death_historical_state = self.data_provider.create_historical_state(name='Death historical state', user_profile=self.user_profile)
+            self.death_present_country = self.data_provider.create_present_country(code='DD', name='Death country', user_profile=self.user_profile)
 
-            self.historical_figure = HistoricalFigure.objects.create(birthDate='1234-05-06', birthHistoricalStateId=self.birth_historical_state, 
-                                                                     birthPresentCountryId=self.birth_present_country, createdBy=self.user_profile, deathDate='1345-06-07',
-                                                                     deathHistoricalStateId=self.death_historical_state, deathPresentCountryId=self.death_present_country,
-                                                                     name='Historical figure', updatedBy=self.user_profile)
+            self.historical_figure = self.data_provider.create_historical_figure(birth_historical_state=self.birth_historical_state, 
+                                                                                 birth_present_country=self.birth_present_country, 
+                                                                                 death_historical_state=self.death_historical_state, 
+                                                                                 death_present_country=self.death_present_country, user_profile=self.user_profile)
         
     def test_max_length_columns(self):
         self.assertEqual(15, HistoricalFigure._meta.get_field('birthDate').max_length)
@@ -184,19 +183,40 @@ class HistoricalFigureModelTestClass(BaseModelTestClass):
         self.assertIsNone(self.historical_figure.deathPresentCountryId)
 
 
+class HistoricalFigureRoleModelTestClass(BaseModelTestClass):
+    @classmethod
+    def setUp(self):
+        self.user_profile = self.data_provider.create_user()
+        with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
+            self.historical_figure_role = self.data_provider.create_historical_figure_role(user_profile=self.user_profile)
+
+    def test_name_max_length(self):
+        self.assertEqual(255, HistoricalFigureRole._meta.get_field('name').max_length)
+
+    def test_display_method(self):
+        self.assertEqual(str(self.historical_figure_role), self.historical_figure_role.name)
+
+    def test_auto_add_timestamp_creation(self):
+        self.assertEqual(self.mocked_time, self.historical_figure_role.createdAt)
+
+    def test_auto_add_timestamp_update(self):
+        self.historical_figure_role.name = 'new name'
+        # wait 1 second before storing the data to the database
+        time.sleep(self.sleep_time)
+        self.historical_figure_role.save()
+        self.assertLess(self.historical_figure_role.createdAt, self.historical_figure_role.updatedAt)
+
+
 class HistoricalEventModelTestClass(BaseModelTestClass):
     @classmethod
     def setUp(self):
-        self.user_profile = User.objects.create(username='test_user', password='test_password')
+        self.user_profile = self.data_provider.create_user()
         with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
-            self.event_category = EventCategory.objects.create(createdBy=self.user_profile, name='Event Category', updatedBy=self.user_profile)
-            self.present_country = PresentCountry.objects.create(createdBy=self.user_profile, code='AA', name='A country', updatedBy=self.user_profile)
-            self.historical_state = HistoricalState.objects.create(createdBy=self.user_profile, name='Historical state', updatedBy=self.user_profile)
-            
-            self.historical_event = HistoricalEvent.objects.create(createdBy=self.user_profile, date='1234', description='Historical event description', 
-                                                                   eventCategoryId=self.event_category, historicalStateId=self.historical_state, latitude=123.45, 
-                                                                   longitude=-12.34, name='Historical event', presentCountryId=self.present_country, time='12:34', 
-                                                                   updatedBy=self.user_profile)
+            self.event_category = self.data_provider.create_event_category(user_profile=self.user_profile)
+            self.present_country = self.data_provider.create_present_country(code='AA', name='A country', user_profile=self.user_profile)
+            self.historical_state = self.data_provider.create_historical_state(name='Historical state', user_profile=self.user_profile)
+            self.historical_event = self.data_provider.create_historical_event(event_category=self.event_category, historical_state=self.historical_state, 
+                                                                               present_country=self.present_country, user_profile=self.user_profile)
             
     def test_max_length_columns(self):
         self.assertEqual(15, HistoricalEvent._meta.get_field('date').max_length)
@@ -251,7 +271,7 @@ class HistoricalEventModelTestClass(BaseModelTestClass):
 class UserProfileModelTestClass(BaseModelTestClass):
     @classmethod
     def setUp(self):
-        self.user = User.objects.create_user(username='test_user', password='test_password')
+        self.user = self.data_provider.create_user()
         self.user_profile = UserProfile.objects.filter(user=self.user).first()
 
     def test_creation_user_profile(self):

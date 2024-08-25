@@ -2,12 +2,14 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.test import TestCase
 
+from .data_provider import DataProvider
 from ..models import UserProfile
 
 class UserProfileSignalTestClass(TestCase):
     @classmethod
     def setUp(self):
-        self.user = User.objects.create_user(username='test_user', password='test_password')
+        data_provider = DataProvider()
+        self.user = data_provider.create_user()
 
     def test_user_profile_creation(self):
         self.assertTrue(UserProfile.objects.filter(user=self.user).exists())
