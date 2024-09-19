@@ -2,7 +2,11 @@ import { Layout, Menu, MenuProps } from 'antd'
 import React, { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import { menuItems, rootMenuKeys } from './components/config/menu/menuConfig'
+import {
+  menuItemsLoggedIn,
+  menuItemsNoAccount,
+  rootMenuKeys
+} from './components/config/menu/menuConfig'
 import {
   EVENT_CATEGORIES_SECTION,
   HISTORICAL_EVENTS_SECTION,
@@ -14,22 +18,35 @@ import {
 import EventCategoriesList from './components/pages/event-categories/EventCategoriesList'
 import EventDetails from './components/pages/events/EventDetails'
 import EventsList from './components/pages/events/EventsList'
+import FigureRolesList from './components/pages/figure-roles/FigureRolesList'
 import FigureDetails from './components/pages/figures/FigureDetails'
 import FiguresList from './components/pages/figures/FiguresList'
 import HistoricalStateDetails from './components/pages/historical-states/HistoricalStateDetails'
 import HistoricalStatesList from './components/pages/historical-states/HistoricalStatesList'
 import Home from './components/pages/Home'
+import Login from './components/pages/Login'
 import PresentCountriesList from './components/pages/present-countries/PresentCountriesList'
+import ProtectedRoute from './components/pages/ProtectedRoute'
+import { LoginButton } from './components/partials/buttons/LoginButton'
+import UserProfileDropdown from './components/partials/dropdowns/UserProfileDropdown'
+import useStore from './config/globalStore'
 
-import './App.css'
-import FigureRolesList from './components/pages/figure-roles/FigureRolesList'
+import '../src/assets/styling/App.css'
 
-const { Content, Sider } = Layout
+const { Content, Header, Sider } = Layout
 
 function App() {
+  const { isAuthenticated } = useStore()
+
   const [collapsed, setCollapsed] = useState(false)
   const [openKeys, setOpenKeys] = useState(['0'])
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
 
+  const onMenuItemClick: MenuProps['onClick'] = (e) => {
+    if (isAuthenticated) {
+      setSelectedKeys([e.key as string])
+    }
+  }
   const onOpenChangeMenu: MenuProps['onOpenChange'] = (menuKeys) => {
     const latestOpenKey = menuKeys.find((key) => openKeys.indexOf(key) === -1)
     if (latestOpenKey && rootMenuKeys.indexOf(latestOpenKey!) === -1) {
@@ -43,6 +60,11 @@ function App() {
     <Router>
       <div className="App">
         <Layout>
+          <Header className="navbar">
+            <div className="navbar-right">
+              {!isAuthenticated ? <LoginButton /> : <UserProfileDropdown />}
+            </div>
+          </Header>
           <Sider
             collapsible
             collapsed={collapsed}
@@ -51,53 +73,59 @@ function App() {
             width={230}
           >
             <Menu
-              defaultSelectedKeys={['1']}
-              items={menuItems}
+              defaultSelectedKeys={isAuthenticated ? ['1'] : []}
+              items={isAuthenticated ? menuItemsLoggedIn : menuItemsNoAccount}
               mode="inline"
-              openKeys={openKeys}
+              onClick={onMenuItemClick}
               onOpenChange={onOpenChangeMenu}
+              openKeys={openKeys}
+              selectedKeys={selectedKeys}
               theme="dark"
             />
           </Sider>
           <Content>
             <Routes>
-              <Route element={<Home />} path="/" />
-              <Route
-                element={<EventCategoriesList />}
-                path={EVENT_CATEGORIES_SECTION}
-              />
+              <Route element={<Login />} path="/login" />
               <Route
                 element={<EventsList />}
                 path={HISTORICAL_EVENTS_SECTION}
               />
-              <Route
-                element={<EventDetails />}
-                path={HISTORICAL_EVENTS_SECTION + '/:eventId'}
-              />
-              <Route
-                element={<FigureRolesList />}
-                path={HISTORICAL_FIGURE_ROLES_SECTION}
-              />
-              <Route
-                element={<FiguresList />}
-                path={HISTORICAL_FIGURES_SECTION}
-              />
-              <Route
-                element={<FigureDetails />}
-                path={HISTORICAL_FIGURES_SECTION + '/:figureId'}
-              />
-              <Route
-                element={<HistoricalStatesList />}
-                path={HISTORICAL_STATES_SECTION}
-              />
-              <Route
-                element={<HistoricalStateDetails />}
-                path={HISTORICAL_STATES_SECTION + '/:historicalStateId'}
-              />
-              <Route
-                element={<PresentCountriesList />}
-                path={PRESENT_COUNTRIES_SECTION}
-              />
+
+              <Route element={<ProtectedRoute />}>
+                <Route element={<Home />} path="/" />
+                <Route
+                  element={<EventCategoriesList />}
+                  path={EVENT_CATEGORIES_SECTION}
+                />
+                <Route
+                  element={<EventDetails />}
+                  path={HISTORICAL_EVENTS_SECTION + '/:eventId'}
+                />
+                <Route
+                  element={<FigureRolesList />}
+                  path={HISTORICAL_FIGURE_ROLES_SECTION}
+                />
+                <Route
+                  element={<FiguresList />}
+                  path={HISTORICAL_FIGURES_SECTION}
+                />
+                <Route
+                  element={<FigureDetails />}
+                  path={HISTORICAL_FIGURES_SECTION + '/:figureId'}
+                />
+                <Route
+                  element={<HistoricalStatesList />}
+                  path={HISTORICAL_STATES_SECTION}
+                />
+                <Route
+                  element={<HistoricalStateDetails />}
+                  path={HISTORICAL_STATES_SECTION + '/:historicalStateId'}
+                />
+                <Route
+                  element={<PresentCountriesList />}
+                  path={PRESENT_COUNTRIES_SECTION}
+                />
+              </Route>
             </Routes>
           </Content>
         </Layout>

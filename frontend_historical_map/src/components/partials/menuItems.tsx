@@ -43,6 +43,21 @@ const EventsMenuItem = (props: Partial<CustomIconComponentProps>) => (
   />
 )
 
+const EventsMenuItemNoAccount = (props: Partial<CustomIconComponentProps>) => (
+  <Icon
+    component={() => (
+      <>
+        <img
+          src={`${process.env.PUBLIC_URL}/world.png`}
+          alt="Historical events map menu item"
+        />
+        <Link to={HISTORICAL_EVENTS_SECTION} />
+      </>
+    )}
+    {...props}
+  />
+)
+
 const EventsMenuSubItemMap = () => <Link to="/" />
 
 const EventsMenuSubItemList = () => <Link to={HISTORICAL_EVENTS_SECTION} />
@@ -102,6 +117,7 @@ export {
   EventPropertiesMenuItem,
   EventCategoriesSubItem,
   EventsMenuItem,
+  EventsMenuItemNoAccount,
   EventsMenuSubItemMap,
   EventsMenuSubItemList,
   FiguresMenuItem,

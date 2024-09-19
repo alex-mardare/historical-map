@@ -1,0 +1,36 @@
+import { UserOutlined } from '@ant-design/icons'
+import { Avatar, Dropdown } from 'antd'
+import React from 'react'
+import { useNavigate } from 'react-router'
+
+import useStore from '../../../config/globalStore'
+import { logout } from '../../utils/hooks/generalHooks'
+
+export default function UserProfileDropdown() {
+  const { setIsAuthenticated } = useStore()
+  const navigate = useNavigate()
+
+  const onLogoutClick = () => {
+    logout()
+    setIsAuthenticated()
+    navigate('/login')
+  }
+
+  const menuItemsUserProfile = {
+    items: [
+      {
+        key: '1',
+        label: 'Logout',
+        onClick: onLogoutClick
+      }
+    ]
+  }
+
+  return (
+    <Dropdown menu={menuItemsUserProfile} placement="bottomRight">
+      <div className="user-profile">
+        <Avatar size="large" icon={<UserOutlined />} />
+      </div>
+    </Dropdown>
+  )
+}

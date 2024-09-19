@@ -3,7 +3,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.HistoricalEventListPost.as_view(), name='event-list'),
+    path('', views.HistoricalEventList.as_view(), name='event-list'),
+    path('create', views.HistoricalEventPost.as_view(), name='event-create'),
     path('<int:pk>', views.HistoricalEventItem.as_view(), name='event-item'),
 
     path('event-categories/',views.EventCategoryList.as_view(), name='event-category-list'),

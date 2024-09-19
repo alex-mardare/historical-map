@@ -1,6 +1,6 @@
 import { Button } from 'antd'
 import React, { ReactElement } from 'react'
-import { FormModal } from './modals'
+import { FormModal } from '../modals'
 
 interface CreateButtonProps {
   closeObjectModal: () => void

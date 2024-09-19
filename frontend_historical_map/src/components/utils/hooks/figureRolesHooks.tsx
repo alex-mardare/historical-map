@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { useState } from 'react'
 
+import apiClient from '../../../config/axiosSetup'
 import { HISTORICAL_FIGURE_ROLE_NAME } from '../../models/constants/constants'
-import { FIGURE_ROLES_FULL_URL } from '../../models/constants/urls'
+import { HISTORICAL_FIGURE_ROLES_ENDPOINT } from '../../models/constants/urls'
 import { HistoricalFigureRole } from '../../models/types/historicalFigureRole'
 import { DataGetFigureRoles } from '../../models/types/hooksDataTypes'
 import {
@@ -16,7 +16,7 @@ function useGetFigureRoles(): DataGetFigureRoles {
 
   const fetchFigureRoles = async () => {
     try {
-      const response = await axios.get(FIGURE_ROLES_FULL_URL)
+      const response = await apiClient.get(HISTORICAL_FIGURE_ROLES_ENDPOINT)
       setFigureRoles(response.data)
     } catch (error) {
       objectListLoadingError(HISTORICAL_FIGURE_ROLE_NAME)
@@ -41,7 +41,9 @@ function useGetFigureRole(
   useEffectOnceWrapper(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(FIGURE_ROLES_FULL_URL + figureRoleId)
+        const response = await apiClient.get(
+          HISTORICAL_FIGURE_ROLES_ENDPOINT + figureRoleId
+        )
         setFigureRole(response.data)
       } catch (error) {
         objectLoadingError(HISTORICAL_FIGURE_ROLE_NAME)

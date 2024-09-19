@@ -247,6 +247,7 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
                                                    present_country=self.present_country, user_profile=self.user_profile)
         
         self.url_list = reverse('event-list')
+        self.url_create = reverse('event-create')
         self.url_item = reverse('event-item', kwargs={'pk':self.historical_event.id})
 
     def tearDown(self):
@@ -256,7 +257,6 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
         PresentCountry.objects.all().delete()
         
     def test_get_list(self):
-        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('next', response.data)
@@ -271,7 +271,6 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
 
     def test_get_list_no_object(self):
         HistoricalEvent.objects.all().delete()
-        self.client.force_login(self.user_profile)
         response = self.client.get(self.url_list)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -284,7 +283,7 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
                                                                             'presentCountryId': self.present_country.id})
         historical_event.is_valid()
         self.client.force_login(self.user_profile)
-        response = self.client.post(self.url_list, data=historical_event.data, content_type='application/json')
+        response = self.client.post(self.url_create, data=historical_event.data, content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['approximateRealLocation'], True)
@@ -303,7 +302,7 @@ class HistoricalEventViewTestClass(BaseViewTestClass):
                                                                             'name': 'Historical event without coordinates', 'presentCountryId': self.present_country.id})
         historical_event.is_valid()
         self.client.force_login(self.user_profile)
-        response = self.client.post(self.url_list, data=historical_event.data, content_type='application/json')
+        response = self.client.post(self.url_create, data=historical_event.data, content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['approximateRealLocation'], False)

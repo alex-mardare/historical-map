@@ -1,0 +1,69 @@
+@import 'variables.css';
+
+.App {
+  text-align: center;
+}
+
+/*#region left-side menu*/
+.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+  height: 50px;
+}
+
+.ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title {
+  height: 50px;
+  padding-inline: calc(28% - 8px - 4px);
+}
+
+.ant-menu-submenu.ant-menu-submenu-inline.ant-menu-submenu
+  > .ant-menu-submenu-title {
+  padding-left: 15px !important;
+}
+
+.ant-menu-inline > .ant-menu-item {
+  height: 50px;
+}
+
+.ant-menu-vertical > .ant-menu-item {
+  height: 50px;
+  padding-inline: calc(28% - 8px - 4px);
+}
+/*#endregion*/
+
+.navbar {
+  align-items: center;
+  color: white;
+  display: flex;
+  height: var(--navbar-height);
+  justify-content: flex-end;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar-left .site-logo {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar-right {
+  align-items: center;
+  display: flex;
+}
+
+.user-profile {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+}
+
+.ant-layout-sider {
+  margin-top: var(--navbar-height);
+}
+
+.ant-layout-content {
+  margin-top: var(--navbar-height);
+  padding: 20px;
+}

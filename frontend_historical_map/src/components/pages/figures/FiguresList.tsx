@@ -3,7 +3,7 @@ import React from 'react'
 import { columnsConfig } from '../../config/tables/figuresListColumnsConfig'
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
 import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
-import { TableComponent } from '../../partials/tablePage'
+import { TableComponent } from '../../partials/TablePage'
 import { useGetFigures } from '../../utils/hooks/figuresHooks'
 import FiguresModalForm from './FiguresModalForm'
 

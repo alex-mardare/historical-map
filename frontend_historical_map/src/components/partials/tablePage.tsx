@@ -2,8 +2,9 @@ import { Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import React, { ReactElement, useState } from 'react'
 
+import useStore from '../../config/globalStore'
 import { searchFiltering } from '../utils/searchFiltering'
-import { CreateButton } from './createButton'
+import { CreateButton } from './buttons/CreateButton'
 import { SearchBar } from './searchBar'
 
 import '../../assets/styling/listPage.css'
@@ -32,6 +33,8 @@ const TableComponent: React.FC<TablePageProps> = ({
   openModal,
   showModal
 }) => {
+  const { isAuthenticated } = useStore()
+
   const [searchText, setSearchText] = useState('')
   let filteredTableObjectsList = tableObjectsList?.filter((object) => {
     return searchFiltering(object, searchText)
@@ -45,17 +48,19 @@ const TableComponent: React.FC<TablePageProps> = ({
     <div className="mainDivListPage">
       <div className="topBarListPage">
         <SearchBar {...{ handleSearch }} />
-        <CreateButton
-          {...{
-            closeObjectModal,
-            confirmLoading,
-            formComponent,
-            handleModalOk,
-            objectName,
-            openModal,
-            showModal
-          }}
-        />
+        {isAuthenticated && (
+          <CreateButton
+            {...{
+              closeObjectModal,
+              confirmLoading,
+              formComponent,
+              handleModalOk,
+              objectName,
+              openModal,
+              showModal
+            }}
+          />
+        )}
       </div>
       <div className="tableDiv">
         <Table

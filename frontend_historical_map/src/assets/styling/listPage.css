@@ -1,7 +1,9 @@
+@import 'variables.css';
+
 .mainDivListPage {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: var(--main-div-height);
 }
 
 .topBarListPage {

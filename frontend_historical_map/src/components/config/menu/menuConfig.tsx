@@ -6,6 +6,7 @@ import {
   EventCategoriesSubItem,
   EventPropertiesMenuItem,
   EventsMenuItem,
+  EventsMenuItemNoAccount,
   EventsMenuSubItemList,
   EventsMenuSubItemMap,
   FigurePropertiesMenuItem,
@@ -32,7 +33,7 @@ function getItem(
   } as MenuItem
 }
 
-const menuItems: MenuItem[] = [
+const menuItemsLoggedIn: MenuItem[] = [
   getItem('Historical Events', '1', <EventsMenuItem />, [
     getItem('Map', '1.1', <EventsMenuSubItemMap />),
     getItem('Events List', '1.2', <EventsMenuSubItemList />)
@@ -52,6 +53,10 @@ const menuItems: MenuItem[] = [
   ])
 ]
 
+const menuItemsNoAccount: MenuItem[] = [
+  getItem('Historical Events', '1', <EventsMenuItemNoAccount />)
+]
+
 const rootMenuKeys = ['1', '2', '3', '4', '5']
 
-export { menuItems, rootMenuKeys }
+export { menuItemsLoggedIn, menuItemsNoAccount, rootMenuKeys }

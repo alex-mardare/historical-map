@@ -2,7 +2,7 @@ import { List } from 'antd'
 import React, { useState } from 'react'
 
 import { HISTORICAL_FIGURE_ROLE_NAME } from '../../models/constants/constants'
-import { CreateButton } from '../../partials/createButton'
+import { CreateButton } from '../../partials/buttons/CreateButton'
 import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
 import { SearchBar } from '../../partials/searchBar'
 import { useGetFigureRoles } from '../../utils/hooks/figureRolesHooks'

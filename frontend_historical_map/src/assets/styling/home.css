@@ -1,3 +1,5 @@
-#homeMap{
-    height: 100vh;
+@import 'variables.css';
+
+#homeMap {
+  height: var(--main-div-height);
 }

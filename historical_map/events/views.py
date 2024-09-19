@@ -1,7 +1,7 @@
 from django.contrib.auth import logout as django_logout
 from django.shortcuts import redirect
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -10,13 +10,13 @@ from .paginations import NoPagination
 from .serializers import *
 
 #region EVENT CATEGORY ENDPOINTS
-class EventCategoryList(generics.ListCreateAPIView):
-    pagination_class = NoPagination
+class EventCategoryItem(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
 
-class EventCategoryItem(generics.RetrieveUpdateDestroyAPIView):
+class EventCategoryList(generics.ListCreateAPIView):
+    pagination_class = NoPagination
     permission_classes = [IsAuthenticated]
     queryset = EventCategory.objects.all()
     serializer_class = EventCategorySerializer
@@ -34,15 +34,15 @@ class HistoricalEventItem(generics.RetrieveUpdateDestroyAPIView):
             return HistoricalEventGetSerializer
         return super().get_serializer_class()
 
-class HistoricalEventListPost(generics.ListCreateAPIView):
+class HistoricalEventList(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = HistoricalEvent.objects.all()
+    serializer_class = HistoricalEventGetSerializer
+    
+class HistoricalEventPost(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = HistoricalEvent.objects.all()
     serializer_class = HistoricalEventDeletePostUpdateSerializer
-    
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return HistoricalEventGetSerializer
-        return super().get_serializer_class()
 #endregion
 
 

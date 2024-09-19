@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { useState } from 'react'
 
+import apiClient from '../../../config/axiosSetup'
 import { EVENT_CATEGORY_NAME } from '../../models/constants/constants'
-import { EVENT_CATEGORIES_FULL_URL } from '../../models/constants/urls'
+import { EVENT_CATEGORIES_ENDPOINT } from '../../models/constants/urls'
 import { EventCategory } from '../../models/types/eventCategory'
 import { DataGetEventCategories } from '../../models/types/hooksDataTypes'
 import {
@@ -16,7 +16,7 @@ function useGetEventCategories(): DataGetEventCategories {
 
   const fetchEventCategories = async () => {
     try {
-      const response = await axios.get(EVENT_CATEGORIES_FULL_URL)
+      const response = await apiClient.get(EVENT_CATEGORIES_ENDPOINT)
       setEventCategories(response.data)
     } catch (error) {
       objectListLoadingError(EVENT_CATEGORY_NAME)
@@ -41,8 +41,8 @@ function useGetEventCategory(
   useEffectOnceWrapper(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(
-          EVENT_CATEGORIES_FULL_URL + eventCategoryId
+        const response = await apiClient.get(
+          EVENT_CATEGORIES_ENDPOINT + eventCategoryId
         )
         setEventCategory(response.data)
       } catch (error) {
