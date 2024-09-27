@@ -13,6 +13,7 @@ const HISTORICAL_FIGURE_ROLES_ENDPOINT = '/api/figure-roles/'
 const HISTORICAL_FIGURES_ENDPOINT = '/api/figures/'
 const HISTORICAL_STATES_ENDPOINT = '/api/historical-states/'
 const PRESENT_COUNTRIES_ENDPOINT = '/api/present-countries/'
+const LOGOUT_ENDPOINT = '/api-auth/logout/'
 const TOKEN_ENDPOINT = '/api/token/'
 const TOKEN_REFRESH_ENDPOINT = '/api/token/refresh/'
 
@@ -28,6 +29,7 @@ export {
   HISTORICAL_FIGURES_SECTION,
   HISTORICAL_STATES_ENDPOINT,
   HISTORICAL_STATES_SECTION,
+  LOGOUT_ENDPOINT,
   PRESENT_COUNTRIES_ENDPOINT,
   PRESENT_COUNTRIES_SECTION,
   TOKEN_ENDPOINT,

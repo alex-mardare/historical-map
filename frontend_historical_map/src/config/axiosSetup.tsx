@@ -28,7 +28,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-    const { accessToken } = useStore()
+    const { accessToken } = useStore.getState()
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true

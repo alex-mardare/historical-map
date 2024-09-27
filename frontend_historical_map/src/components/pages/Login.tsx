@@ -1,6 +1,6 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { login } from '../utils/hooks/generalHooks'
@@ -9,13 +9,19 @@ import '../../assets/styling/login.css'
 import useStore from '../../config/globalStore'
 
 export default function Login() {
-  const { setIsAuthenticated } = useStore()
+  const { isAuthenticated, setIsAuthenticated } = useStore()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  })
 
   const onFinish = async () => {
     await login(username, password)

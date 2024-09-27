@@ -3,16 +3,13 @@ import { Avatar, Dropdown } from 'antd'
 import React from 'react'
 import { useNavigate } from 'react-router'
 
-import useStore from '../../../config/globalStore'
 import { logout } from '../../utils/hooks/generalHooks'
 
 export default function UserProfileDropdown() {
-  const { setIsAuthenticated } = useStore()
   const navigate = useNavigate()
 
   const onLogoutClick = () => {
     logout()
-    setIsAuthenticated()
     navigate('/login')
   }
 

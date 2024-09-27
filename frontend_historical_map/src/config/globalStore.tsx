@@ -11,7 +11,7 @@ interface GlobalStore {
 
 const useStore = create<GlobalStore>((set) => ({
   accessToken: null,
-  isAuthenticated: false,
+  isAuthenticated: localStorage.getItem('access_token') !== null,
 
   removeAccessToken: () => {
     set(() => ({ accessToken: null }))

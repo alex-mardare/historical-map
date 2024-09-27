@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 
 import apiClient from '../../../config/axiosSetup'
@@ -8,6 +8,7 @@ import {
   urlsPostDictionary
 } from '../../models/constants/constants'
 import {
+  LOGOUT_ENDPOINT,
   TOKEN_ENDPOINT,
   TOKEN_REFRESH_ENDPOINT
 } from '../../models/constants/urls'
@@ -27,8 +28,11 @@ const login = async (username: string, password: string) => {
       username,
       password
     })
+
     const { setAccessToken } = useStore.getState()
     setAccessToken(response.data.access)
+
+    localStorage.setItem('access_token', response.data.access)
     localStorage.setItem('refresh_token', response.data.refresh)
 
     return response.data
@@ -37,12 +41,21 @@ const login = async (username: string, password: string) => {
   }
 }
 
-const logout = () => {
-  const { removeAccessToken } = useStore.getState()
-  removeAccessToken()
-  localStorage.removeItem('refresh_token')
+const logout = async () => {
+  const refreshToken = localStorage
+  const response = await apiClient.post(LOGOUT_ENDPOINT, {
+    refresh: refreshToken
+  })
 
-  delete axios.defaults.headers.common['Authorization']
+  if (response.status === HttpStatusCode.Ok) {
+    const { removeAccessToken, setIsAuthenticated } = useStore.getState()
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    removeAccessToken()
+    setIsAuthenticated()
+
+    delete axios.defaults.headers.common['Authorization']
+  }
 }
 
 const objectDelete = async (
