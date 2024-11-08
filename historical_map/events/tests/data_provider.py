@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-from events.models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
+from events.models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, HistoricalStatePresentCountryPeriod, PresentCountry
 
 class DataProvider:
     def create_event_category(self, user_profile: User, name: str = 'Event category') -> EventCategory:
@@ -23,6 +23,11 @@ class DataProvider:
     
     def create_historical_state(self, name: str, user_profile: User, dateTo: str = None) -> HistoricalState:
         return HistoricalState.objects.create(createdBy=user_profile, dateFrom='1234-05-06', dateTo=dateTo, name=name, updatedBy=user_profile)
+    
+    def create_historical_state_present_country_period(self, historical_state: HistoricalState, present_country: PresentCountry, user_profile: User, 
+                                                       dateFrom: str='1234-05-06', dateTo: str='2345-06-07') -> HistoricalStatePresentCountryPeriod:
+        return HistoricalStatePresentCountryPeriod.objects.create(createdBy=user_profile, dateFrom=dateFrom, dateTo=dateTo, historicalState=historical_state, 
+                                                                  presentCountry=present_country, updatedBy=user_profile)
     
     def create_present_country(self, code: str, name: str, user_profile: User) -> PresentCountry:
         return PresentCountry.objects.create(createdBy=user_profile, code=code, name=name, updatedBy=user_profile)

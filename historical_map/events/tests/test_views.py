@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -133,11 +132,13 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
 
     def test_post_historical_state(self):
         historical_state = HistoricalStateDeletePostUpdateSerializer(data={'dateFrom': '1234', 'dateTo': '1235', 'name': 'Historical State', 
-                                                                           'presentCountries': [self.present_country.id]})
+                                                                           'presentCountries': [{'dateFrom': '1234', 'dateTo': '1235', 
+                                                                                                 'presentCountry': self.present_country.id}]})
         historical_state.is_valid()
-
+        
         self.client.force_login(self.user_profile)
         response = self.client.post(self.url_list, data=historical_state.data, content_type='application/json')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['dateFrom'], historical_state.data['dateFrom'])
         self.assertEqual(response.data['dateTo'], historical_state.data['dateTo'])
@@ -157,13 +158,18 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['detail'].code, 'not_found')
 
     def test_put_item(self):
-        updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
+        updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 
+                                    'presentCountries': [{'dateFrom': '1234', 'dateTo': '1236', 'presentCountry': self.present_country.id}]}
         serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
         serializer.is_valid()
 
         self.client.force_login(self.user_profile)
         response = self.client.put(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_state['name'])
+        self.assertEqual(len(response.data['presentCountries']), 1)
+        self.assertEqual(response.data['presentCountries'][0]['dateFrom'], updated_historical_state['presentCountries'][0]['dateFrom'])
+        self.assertEqual(response.data['presentCountries'][0]['dateTo'], updated_historical_state['presentCountries'][0]['dateTo'])
+        self.assertEqual(response.data['presentCountries'][0]['presentCountry'], updated_historical_state['presentCountries'][0]['presentCountry'])
 
     def test_put_item_non_existent(self):
         self.client.force_login(self.user_profile)
@@ -172,13 +178,18 @@ class HistoricalStateViewTestClass(BaseViewTestClass):
         self.assertEqual(response.data['detail'].code, 'not_found')
 
     def test_patch_item(self):
-        updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 'presentCountries': [self.present_country.id]}
+        updated_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState updated', 
+                                    'presentCountries': [{'dateFrom': '1234', 'dateTo': '1236', 'presentCountry': self.present_country.id}]}
         serializer = HistoricalStateDeletePostUpdateSerializer(data=updated_historical_state)
         serializer.is_valid()
 
         self.client.force_login(self.user_profile)
         response = self.client.patch(self.url_item, serializer.data, content_type='application/json')
         self.assertEqual(response.data['name'], updated_historical_state['name'])
+        self.assertEqual(len(response.data['presentCountries']), 1)
+        self.assertEqual(response.data['presentCountries'][0]['dateFrom'], updated_historical_state['presentCountries'][0]['dateFrom'])
+        self.assertEqual(response.data['presentCountries'][0]['dateTo'], updated_historical_state['presentCountries'][0]['dateTo'])
+        self.assertEqual(response.data['presentCountries'][0]['presentCountry'], updated_historical_state['presentCountries'][0]['presentCountry'])
 
     def test_patch_item_non_existent(self):
         self.client.force_login(self.user_profile)
@@ -195,7 +206,8 @@ class PresentCountryViewTestClass(BaseViewTestClass):
         self.data_provider.create_present_country(code='PC2', name='Present country 2', user_profile=self.user_profile)
 
         self.historical_state = self.data_provider.create_historical_state(name='Historical State', user_profile=self.user_profile)
-        self.historical_state.presentCountries.add(self.present_country)
+        self.data_provider.create_historical_state_present_country_period(historical_state=self.historical_state, present_country=self.present_country, 
+                                                                          user_profile=self.user_profile)
 
         self.url = reverse('present-country-list')
 

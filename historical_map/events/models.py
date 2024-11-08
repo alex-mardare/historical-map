@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator, ValidationError
 from django.db import models
+from django.db.models import Q
 
 from .middleware import get_current_user
 from .validators import dateFormatter, regexDateValidator
@@ -45,7 +46,7 @@ class HistoricalState(AuditableModel):
     dateFrom = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     dateTo = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
     flagUrl = models.CharField(blank=True, max_length=255, null=True)
-    presentCountries = models.ManyToManyField('events.PresentCountry', related_name='presentCountries')
+    presentCountries = models.ManyToManyField('events.PresentCountry', related_name='presentCountries', through='events.HistoricalStatePresentCountryPeriod')
 
     def __str__(self):
         displayName = self.name
@@ -71,6 +72,34 @@ class PresentCountry(AuditableModel):
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "present countries"
+
+class HistoricalStatePresentCountryPeriod(AuditableModel):
+    historicalState = models.ForeignKey(HistoricalState, on_delete=models.CASCADE)
+    presentCountry = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
+    dateFrom = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    dateTo = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['historicalState', 'presentCountry', 'dateFrom', 'dateTo'], 
+                                               name='unique_historical_state_present_country_period')]
+
+    def save(self, *args, **kwargs):
+        if not self.dateFrom and not self.dateTo:
+            raise ValidationError('At least one fo the dates must be specified.')
+
+        if self.dateFrom and self.dateTo and self.dateFrom > self.dateTo:
+            raise ValidationError('Starting date must be before the end date.')
+
+        relatedEntries = HistoricalStatePresentCountryPeriod.objects.filter(
+            Q(historicalState=self.historicalState) & Q(presentCountry=self.presentCountry) & Q(dateFrom__lt=self.dateTo) & Q(dateTo__gt=self.dateFrom)
+        )
+        if self.pk:
+            relatedEntries = relatedEntries.exclude(pk=self.pk)
+        if relatedEntries.exists():
+            raise ValidationError(f'There is an overlapping entry for {self.historicalState.name} and {self.presentCountry.name} ' + 
+                                  f'for the period {self.dateFrom} - {self.dateTo}.')
+
+        super().save(*args, **kwargs)
 
 
 class HistoricalFigure(AuditableModel):

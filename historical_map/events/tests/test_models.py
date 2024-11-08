@@ -73,8 +73,12 @@ class HistoricalStateModelTestClass(BaseModelTestClass):
             self.present_country_b = self.data_provider.create_present_country(code='BB', name='B country', user_profile=self.user_profile)
 
             self.historical_state = self.data_provider.create_historical_state(dateTo='2345-06-07', name='Historical state', user_profile=self.user_profile)
-            self.historical_state.presentCountries.add(*[self.present_country_a, self.present_country_b])
             self.historical_state_no_dateTo = self.data_provider.create_historical_state(name='Historical state', user_profile=self.user_profile)
+
+            self.data_provider.create_historical_state_present_country_period(historical_state=self.historical_state, present_country=self.present_country_a, 
+                                                                              user_profile=self.user_profile)
+            self.data_provider.create_historical_state_present_country_period(historical_state=self.historical_state, present_country=self.present_country_b, 
+                                                                              user_profile=self.user_profile)
 
     def test_max_length_columns(self):
         self.assertEqual(15, HistoricalState._meta.get_field('dateFrom').max_length)
@@ -132,6 +136,49 @@ class PresentCountryModelTestClass(BaseModelTestClass):
         time.sleep(self.sleep_time)
         self.present_country.save()
         self.assertLess(self.present_country.createdAt, self.present_country.updatedAt)
+
+
+class HistoricalStatePresentCountryPeriod(BaseModelTestClass):
+    @classmethod
+    def setUp(self):
+        self.user_profile = self.data_provider.create_user()
+        with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
+            self.present_country = self.data_provider.create_present_country(code='AA', name='A country', user_profile=self.user_profile)
+            self.historical_state = self.data_provider.create_historical_state(dateTo='2345-06-07', name='Historical state', user_profile=self.user_profile)
+            self.historical_state_period = self.data_provider.create_historical_state_present_country_period(dateFrom=self.historical_state.dateFrom, 
+                                                                                                             dateTo=self.historical_state.dateTo, 
+                                                                                                             historical_state=self.historical_state, 
+                                                                                                             present_country=self.present_country, 
+                                                                                                             user_profile=self.user_profile)
+
+    def test_max_length_columns(self):
+        self.assertEqual(15, HistoricalState._meta.get_field('dateFrom').max_length)
+        self.assertEqual(15, HistoricalState._meta.get_field('dateTo').max_length)
+
+    def test_foreign_keys(self):
+        self.assertEqual(self.historical_state_period.historicalState, self.historical_state)
+        self.assertEqual(self.historical_state_period.presentCountry, self.present_country)
+
+    def test_uniqueness_constraint(self):
+        with self.assertRaises(ValidationError) as constraint_error:
+            self.data_provider.create_historical_state_present_country_period(dateFrom=self.historical_state.dateFrom, dateTo=self.historical_state.dateTo, 
+                                                                              historical_state=self.historical_state, present_country=self.present_country, 
+                                                                              user_profile=self.user_profile)
+        self.assertEqual(constraint_error.exception.message, f'There is an overlapping entry for {self.historical_state.name} and {self.present_country.name} ' + 
+                                  f'for the period {self.historical_state.dateFrom} - {self.historical_state.dateTo}.')
+        
+    def test_no_date_present(self):
+        with self.assertRaises(ValidationError) as constraint_error:
+            self.data_provider.create_historical_state_present_country_period(dateFrom=None, dateTo=None, historical_state=self.historical_state, 
+                                                                              present_country=self.present_country, user_profile=self.user_profile)
+        self.assertEqual(constraint_error.exception.message, 'At least one fo the dates must be specified.')
+
+    def test_date_from_before_date_to(self):
+        with self.assertRaises(ValidationError) as constraint_error:
+            self.data_provider.create_historical_state_present_country_period(dateFrom=self.historical_state.dateTo, dateTo=self.historical_state.dateFrom, 
+                                                                              historical_state=self.historical_state, present_country=self.present_country, 
+                                                                              user_profile=self.user_profile)
+        self.assertEqual(constraint_error.exception.message, 'Starting date must be before the end date.')
 
 
 class HistoricalFigureModelTestClass(BaseModelTestClass):

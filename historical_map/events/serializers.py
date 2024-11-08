@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from rest_framework import serializers
 
-from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
+from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, HistoricalStatePresentCountryPeriod, PresentCountry
 
 
 #region EVENT CATEGORY SERIALIZERS
@@ -25,14 +25,65 @@ class PresentCountryPropertySerializer(serializers.ModelSerializer):
 #endregion
 
 
+#region HISTORICAL STATE PRESENT COUNTRY PERIOD SERIALIZERS
+class HistoricalStatePresentCountryPeriodGetSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='presentCountry.id', read_only=True)
+    name = serializers.CharField(source='presentCountry.name', read_only=True)
+
+    class Meta:
+        model = HistoricalStatePresentCountryPeriod
+        fields = ['dateFrom', 'dateTo', 'id', 'name']
+
+class HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(serializers.ModelSerializer):
+    presentCountry = serializers.PrimaryKeyRelatedField(queryset=PresentCountry.objects.all())
+
+    class Meta:
+        model = HistoricalStatePresentCountryPeriod
+        fields = ['dateFrom', 'dateTo', 'presentCountry']
+#endregion
+
+
 #region HISTORICAL STATE SERIALIZERS
 class HistoricalStateDeletePostUpdateSerializer(serializers.ModelSerializer):
+    presentCountries = HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(many=True, source='historicalstatepresentcountryperiod_set')
+
     class Meta:
         model = HistoricalState
         exclude = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
 
+    def create(self, validated_data):
+        present_countries = validated_data.pop('historicalstatepresentcountryperiod_set')
+        historical_state = HistoricalState.objects.create(**validated_data)
+
+        for present_country in present_countries:
+            HistoricalStatePresentCountryPeriod.objects.create(historicalState=historical_state, presentCountry=present_country['presentCountry'], 
+                                                               dateFrom=present_country['dateFrom'], dateTo=present_country['dateTo'])
+
+        return historical_state
+    
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.dateFrom = validated_data.get('dateFrom', instance.dateFrom)
+        instance.dateTo = validated_data.get('dateTo', instance.dateTo)
+        instance.flagUrl = validated_data.get('flagUrl', instance.flagUrl)
+
+        present_countries = validated_data.pop('historicalstatepresentcountryperiod_set')
+
+        for present_country in present_countries:
+            present_country_instance = instance.historicalstatepresentcountryperiod_set.filter(presentCountry=present_country['presentCountry']).first()
+            if present_country_instance is None:
+                HistoricalStatePresentCountryPeriod.objects.create(historicalState=instance, presentCountry=present_country['presentCountry'], 
+                                                               dateFrom=present_country['dateFrom'], dateTo=present_country['dateTo'])
+            else:
+                present_country_instance.dateFrom = present_country['dateFrom']
+                present_country_instance.dateTo = present_country['dateTo']
+                present_country_instance.save()        
+       
+        instance.save()
+        return instance
+
 class HistoricalStateGetSerializer(serializers.ModelSerializer):
-    presentCountries = PresentCountryPropertySerializer(many=True)
+    presentCountries = HistoricalStatePresentCountryPeriodGetSerializer(many=True, source='historicalstatepresentcountryperiod_set')
 
     class Meta:
         model = HistoricalState

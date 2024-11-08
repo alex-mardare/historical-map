@@ -46,6 +46,7 @@ class EventCategorySerializersTestClass(BaseModelTestClass):
 
 
 class HistoricalStateSerializerTestClass(BaseModelTestClass):
+    @classmethod
     def setUp(self):
         self.user_profile = self.data_provider.create_user()
         self.present_country = self.data_provider.create_present_country(code='PC', name='Present country', user_profile=self.user_profile)
@@ -53,9 +54,13 @@ class HistoricalStateSerializerTestClass(BaseModelTestClass):
 #region HistoricalStateGetSerializer
     def test_serialization_get_all(self):
         historical_state = self.data_provider.create_historical_state(name='Historical state', user_profile=self.user_profile)
+        historical_state_period = self.data_provider.create_historical_state_present_country_period(historical_state=historical_state, present_country=self.present_country, 
+                                                                                                    user_profile=self.user_profile)
         serializer = HistoricalStateGetSerializer(historical_state)
-        expected_data = {'id': historical_state.id, 'presentCountries': [], 'name': historical_state.name, 'dateFrom': historical_state.dateFrom, 
-                         'dateTo': historical_state.dateTo, 'flagUrl': None}
+        expected_data = {'id': historical_state.id, 'presentCountries': [OrderedDict([('dateFrom', historical_state_period.dateFrom), 
+                                                                                      ('dateTo', historical_state_period.dateTo), ('id', self.present_country.id),
+                                                                                      ('name', self.present_country.name)])],
+                         'name': historical_state.name, 'dateFrom': historical_state.dateFrom, 'dateTo': historical_state.dateTo, 'flagUrl': None}
 
         self.assertEqual(serializer.data, expected_data)
 
@@ -117,39 +122,28 @@ class HistoricalStateSerializerTestClass(BaseModelTestClass):
 #region HistoricalStateDeletePostUpdateSerializer
     def test_serialization(self):
         historical_state = self.data_provider.create_historical_state(name='Historical state', user_profile=self.user_profile)
-        historical_state.presentCountries.set([self.present_country])
+        self.data_provider.create_historical_state_present_country_period(historical_state=historical_state, present_country=self.present_country, 
+                                                                          user_profile=self.user_profile)
 
         serializer = HistoricalStateDeletePostUpdateSerializer(historical_state)
-        expected_data = {'id': historical_state.id, 'name': historical_state.name, 'dateFrom': historical_state.dateFrom, 'dateTo': historical_state.dateTo, 
-                         'flagUrl': historical_state.flagUrl, 'presentCountries': [self.present_country.id]}
+        expected_data = {'id': historical_state.id, 'presentCountries': [OrderedDict([('dateFrom', '1234-05-06'), ('dateTo', '2345-06-07'), 
+                                                                                      ('presentCountry', self.present_country.id)])],
+                         'name': historical_state.name, 'dateFrom': historical_state.dateFrom, 'dateTo': historical_state.dateTo, 
+                         'flagUrl': historical_state.flagUrl}
 
         self.assertEqual(serializer.data, expected_data)
 
     def test_serialization_valid_data(self):
-        valid_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState', 'presentCountries': [self.present_country.id]}
+        valid_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState', 
+                                  'presentCountries': [OrderedDict([('dateFrom', '1234-05-06'), ('dateTo', '2345-06-07'), ('presentCountry', self.present_country.id)])]}
         serializer = HistoricalStateDeletePostUpdateSerializer(data=valid_historical_state)
 
         self.assertTrue(serializer.is_valid())
-
-    def test_serialization_presentCountries_not_present(self):
-        valid_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState'}
-        serializer = HistoricalStateDeletePostUpdateSerializer(data=valid_historical_state)
-
-        self.assertFalse(serializer.is_valid())
-        self.assertIn('presentCountries', serializer.errors)
-        self.assertTrue(any('required' in error.code for error in serializer.errors['presentCountries']))
-
-    def test_serialization_presentCountries_invalid(self):
-        valid_historical_state = {'dateFrom': '1234', 'dateTo': '1235', 'name': 'HistoricalState', 'presentCountries': [self.present_country.id - 1]}
-        serializer = HistoricalStateDeletePostUpdateSerializer(data=valid_historical_state)
-
-        self.assertFalse(serializer.is_valid())
-        self.assertIn('presentCountries', serializer.errors)
-        self.assertTrue(any('does_not_exist' in error.code for error in serializer.errors['presentCountries']))
 #endregion
         
 
 class PresentCountrySerializerTestClass(BaseModelTestClass):
+    @classmethod
     def setUp(self):
         self.user_profile = self.data_provider.create_user()
 
@@ -510,4 +504,29 @@ class HistoricalFigureRoleSerializersTestClass(BaseModelTestClass):
         serializer = HistoricalFigureRolePropertySerializer(data=valid_figure_role)
 
         self.assertTrue(serializer.is_valid())
+#endregion
+
+
+class HistoricalStatePresentCountryPeriodSerializersTestClass(BaseModelTestClass):
+    @classmethod
+    def setUp(self):
+        self.user_profile = self.data_provider.create_user()
+        self.present_country = self.data_provider.create_present_country(code='AA', name='A country', user_profile=self.user_profile)
+        self.historical_state = self.data_provider.create_historical_state(dateTo='2345-06-07', name='Historical state', user_profile=self.user_profile)
+        self.historical_state_period = self.data_provider.create_historical_state_present_country_period(historical_state=self.historical_state, 
+                                                                                                         present_country=self.present_country, 
+                                                                                                         user_profile=self.user_profile)
+#region HistoricalStatePresentCountryPeriodGetSerializer        
+    def test_serializer_get(self):
+        serializer = HistoricalStatePresentCountryPeriodGetSerializer(self.historical_state_period)
+        expected_data = {'dateFrom': self.historical_state_period.dateFrom, 'dateTo': self.historical_state_period.dateTo, 'id': self.present_country.id, 
+                         'name': self.present_country.name}
+        self.assertEqual(serializer.data, expected_data)
+#endregion
+
+#region HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer
+    def test_serializer_delete_post_update(self):
+        serializer = HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(self.historical_state_period)
+        expected_data = {'dateFrom': self.historical_state_period.dateFrom, 'dateTo': self.historical_state_period.dateTo, 'presentCountry': self.present_country.id}
+        self.assertEqual(serializer.data, expected_data)
 #endregion
