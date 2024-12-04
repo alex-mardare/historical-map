@@ -7,18 +7,21 @@ const HISTORICAL_FIGURES_SECTION = 'figures'
 const HISTORICAL_STATES_SECTION = 'historical-states'
 const PRESENT_COUNTRIES_SECTION = 'present-countries'
 
+const AUTH_CHECK_ENDPOINT = '/api-auth/check/'
 const EVENT_CATEGORIES_ENDPOINT = '/api/events/event-categories/'
 const HISTORICAL_EVENTS_ENDPOINT = '/api/events/historical-events/'
 const HISTORICAL_FIGURE_ROLES_ENDPOINT = '/api/events/figure-roles/'
 const HISTORICAL_FIGURES_ENDPOINT = '/api/events/historical-figures/'
 const HISTORICAL_STATES_ENDPOINT = '/api/events/historical-states/'
 const PRESENT_COUNTRIES_ENDPOINT = '/api/events/present-countries/'
+const LOGIN_ENDPOINT = '/login/'
 const LOGOUT_ENDPOINT = '/api-auth/logout/'
 const TOKEN_ENDPOINT = '/api/token/'
 const TOKEN_REFRESH_ENDPOINT = '/api/token/refresh/'
 
 export {
   DEV_BASE_URL,
+  AUTH_CHECK_ENDPOINT,
   EVENT_CATEGORIES_ENDPOINT,
   EVENT_CATEGORIES_SECTION,
   HISTORICAL_EVENTS_ENDPOINT,
@@ -29,6 +32,7 @@ export {
   HISTORICAL_FIGURES_SECTION,
   HISTORICAL_STATES_ENDPOINT,
   HISTORICAL_STATES_SECTION,
+  LOGIN_ENDPOINT,
   LOGOUT_ENDPOINT,
   PRESENT_COUNTRIES_ENDPOINT,
   PRESENT_COUNTRIES_SECTION,

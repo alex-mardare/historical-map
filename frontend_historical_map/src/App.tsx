@@ -1,5 +1,5 @@
 import { Layout, Menu, MenuProps } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import {
@@ -13,6 +13,7 @@ import {
   HISTORICAL_FIGURES_SECTION,
   HISTORICAL_FIGURE_ROLES_SECTION,
   HISTORICAL_STATES_SECTION,
+  LOGIN_ENDPOINT,
   PRESENT_COUNTRIES_SECTION
 } from './components/models/constants/urls'
 import EventCategoriesList from './components/pages/event-categories/EventCategoriesList'
@@ -27,8 +28,10 @@ import Home from './components/pages/Home'
 import Login from './components/pages/Login'
 import PresentCountriesList from './components/pages/present-countries/PresentCountriesList'
 import ProtectedRoute from './components/pages/ProtectedRoute'
+import Spinner from './components/pages/Spinner'
 import { LoginButton } from './components/partials/buttons/LoginButton'
 import UserProfileDropdown from './components/partials/dropdowns/UserProfileDropdown'
+import { initialiseAuth } from './config/auth'
 import useStore from './config/globalStore'
 
 import '../src/assets/styling/App.css'
@@ -36,11 +39,20 @@ import '../src/assets/styling/App.css'
 const { Content, Header, Sider } = Layout
 
 function App() {
-  const { isAuthenticated } = useStore()
+  const { isAuthenticated, setIsAuthenticated } = useStore()
 
   const [collapsed, setCollapsed] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [openKeys, setOpenKeys] = useState(['0'])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  console.log('selectedKeys', selectedKeys)
+
+  useEffect(() => {
+    const initAuth = async () => {
+      await initialiseAuth(setIsAuthenticated, setIsLoading)
+    }
+    initAuth()
+  }, [setIsAuthenticated])
 
   const onMenuItemClick: MenuProps['onClick'] = (e) => {
     if (isAuthenticated) {
@@ -54,6 +66,10 @@ function App() {
     } else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
     }
+  }
+
+  if (isLoading) {
+    return <Spinner />
   }
 
   return (
@@ -85,13 +101,13 @@ function App() {
           </Sider>
           <Content>
             <Routes>
-              <Route element={<Login />} path="/login" />
+              <Route element={<Login />} path={LOGIN_ENDPOINT} />
               <Route
                 element={<EventsList />}
                 path={HISTORICAL_EVENTS_SECTION}
               />
 
-              <Route element={<ProtectedRoute />}>
+              <Route element={<ProtectedRoute {...{ isAuthenticated }} />}>
                 <Route element={<Home />} path="/" />
                 <Route
                   element={<EventCategoriesList />}

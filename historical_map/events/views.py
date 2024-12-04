@@ -4,6 +4,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.views import APIView
 
 from .models import EventCategory, HistoricalEvent, HistoricalFigure, HistoricalFigureRole, HistoricalState, PresentCountry
@@ -128,6 +129,12 @@ class PresentCountryList(generics.ListAPIView):
 
 
 #region USER MANAGEMENT
+class AuthCheck(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({'isAuthenticated': True}, status=status.HTTP_200_OK)
+
 class CustomLogout(APIView):
     permission_classes = [AllowAny]
     
@@ -142,7 +149,31 @@ class CustomLogout(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            response.delete_cookie('access_token')
+            return response
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == status.HTTP_200_OK:
+            access_token = response.data.get('access')
+
+            response.set_cookie(httponly=True, key='access_token', max_age=3600, samesite='Lax', secure=True, value=access_token)
+
+        return response
+    
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == status.HTTP_200_OK:
+            access_token = response.data.get('access')
+
+            response.set_cookie(httponly=True, key='access_token', max_age=3600, samesite='Lax', secure=True, value=access_token)
+
+        return response
 #endregion

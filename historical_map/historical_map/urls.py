@@ -15,15 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from events.views import CustomLogout
+from events.views import AuthCheck, CustomLogout, CustomTokenObtainPairView, CustomTokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/logout/', CustomLogout.as_view(), name='custom-logout'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-auth/check/', AuthCheck.as_view(), name='auth-check'),
     path('api/events/', include('events.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
 ]

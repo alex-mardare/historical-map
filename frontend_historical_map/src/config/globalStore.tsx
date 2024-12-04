@@ -1,28 +1,16 @@
 import { create } from 'zustand'
 
 interface GlobalStore {
-  accessToken: string | null
   isAuthenticated: boolean
 
-  removeAccessToken: () => void
-  setAccessToken: (token: string) => void
-  setIsAuthenticated: () => void
+  setIsAuthenticated: (authState: boolean) => void
 }
 
 const useStore = create<GlobalStore>((set) => ({
-  accessToken: null,
-  isAuthenticated: localStorage.getItem('access_token') !== null,
+  isAuthenticated: false,
 
-  removeAccessToken: () => {
-    set(() => ({ accessToken: null }))
-  },
-  setAccessToken: (token: string) => {
-    set(() => ({ accessToken: token }))
-  },
-  setIsAuthenticated: () =>
-    set(() => ({
-      isAuthenticated: localStorage.getItem('access_token') !== null
-    }))
+  setIsAuthenticated: (authState: boolean) =>
+    set({ isAuthenticated: authState })
 }))
 
 export default useStore

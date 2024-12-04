@@ -9,7 +9,7 @@ import '../../assets/styling/login.css'
 import useStore from '../../config/globalStore'
 
 export default function Login() {
-  const { isAuthenticated, setIsAuthenticated } = useStore()
+  const { isAuthenticated } = useStore()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -26,11 +26,10 @@ export default function Login() {
   const onFinish = async () => {
     await login(username, password)
       .then(() => {
-        setIsAuthenticated()
         navigate('/')
       })
       .catch(() => {
-        setError('Invalid credentials')
+        setError('Invalid credentials.')
       })
   }
   return (

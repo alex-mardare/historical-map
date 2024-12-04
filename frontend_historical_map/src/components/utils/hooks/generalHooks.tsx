@@ -1,4 +1,4 @@
-import axios, { AxiosError, HttpStatusCode } from 'axios'
+import { AxiosError, HttpStatusCode } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 
 import apiClient from '../../../config/axiosSetup'
@@ -7,11 +7,7 @@ import {
   urlsDictionary,
   urlsPostDictionary
 } from '../../models/constants/constants'
-import {
-  LOGOUT_ENDPOINT,
-  TOKEN_ENDPOINT,
-  TOKEN_REFRESH_ENDPOINT
-} from '../../models/constants/urls'
+import { LOGOUT_ENDPOINT, TOKEN_ENDPOINT } from '../../models/constants/urls'
 import { DataCreateUpdate } from '../../models/types/hooksDataTypes'
 import {
   objectCreationError,
@@ -24,37 +20,32 @@ import {
 
 const login = async (username: string, password: string) => {
   try {
-    const response = await apiClient.post(TOKEN_ENDPOINT, {
-      username,
-      password
-    })
-
-    const { setAccessToken } = useStore.getState()
-    setAccessToken(response.data.access)
-
-    localStorage.setItem('access_token', response.data.access)
-    localStorage.setItem('refresh_token', response.data.refresh)
-
-    return response.data
+    await apiClient
+      .post(TOKEN_ENDPOINT, {
+        username,
+        password
+      })
+      .then((response) => {
+        if (response.status === HttpStatusCode.Ok) {
+          useStore.getState().setIsAuthenticated(true)
+        }
+      })
   } catch (error: any) {
-    throw new Error('Login failed, error: ', error.message)
+    useStore.getState().setIsAuthenticated(false)
+    throw new Error('Login failed: ', error.message)
   }
 }
 
 const logout = async () => {
-  const refreshToken = localStorage
-  const response = await apiClient.post(LOGOUT_ENDPOINT, {
-    refresh: refreshToken
-  })
-
-  if (response.status === HttpStatusCode.Ok) {
-    const { removeAccessToken, setIsAuthenticated } = useStore.getState()
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
-    removeAccessToken()
-    setIsAuthenticated()
-
-    delete axios.defaults.headers.common['Authorization']
+  try {
+    await apiClient.post(LOGOUT_ENDPOINT).then((response) => {
+      if (response.status === HttpStatusCode.Ok) {
+        useStore.getState().setIsAuthenticated(false)
+      }
+    })
+  } catch (error: any) {
+    useStore.getState().setIsAuthenticated(false)
+    throw new Error('Logout failed: ', error.message)
   }
 }
 
@@ -71,23 +62,6 @@ const objectDelete = async (
     return response
   } catch (error) {
     objectDeletionError(objectTypeName, objectName)
-  }
-}
-
-const refreshToken = async () => {
-  try {
-    return await apiClient
-      .post(TOKEN_REFRESH_ENDPOINT, {
-        refresh: localStorage.getItem('refresh_token')
-      })
-      .then((response) => {
-        const { setAccessToken } = useStore.getState()
-        setAccessToken(response.data.access)
-        axios.defaults.headers.common['Authorization'] =
-          `Bearer ${response.data.access}`
-      })
-  } catch (error) {
-    console.log('Refresh token failed, error: ', error)
   }
 }
 
@@ -179,7 +153,6 @@ const usePutObject = (objectName: string): DataCreateUpdate => {
 export {
   logout,
   login,
-  refreshToken,
   objectDelete,
   useEffectOnceWrapper,
   usePostObject,

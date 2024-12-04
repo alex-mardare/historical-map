@@ -1,8 +1,11 @@
 import axios from 'axios'
 
-import { DEV_BASE_URL } from '../components/models/constants/urls'
-import { refreshToken } from '../components/utils/hooks/generalHooks'
-import useStore from './globalStore'
+import {
+  AUTH_CHECK_ENDPOINT,
+  DEV_BASE_URL,
+  LOGIN_ENDPOINT
+} from '../components/models/constants/urls'
+import { checkAuth } from './auth'
 
 const apiClient = axios.create({
   baseURL: DEV_BASE_URL,
@@ -12,33 +15,26 @@ const apiClient = axios.create({
   withCredentials: true
 })
 
-apiClient.interceptors.request.use(
-  (config) => {
-    const { accessToken } = useStore.getState()
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`
-    }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
-
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-    const { accessToken } = useStore.getState()
+
+    if (originalRequest.url.includes(AUTH_CHECK_ENDPOINT)) {
+      return Promise.reject(error)
+    }
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
-      await refreshToken()
-      originalRequest.headers['Authorization'] = `Bearer ${accessToken}`
-      return await axios(originalRequest)
-    }
+      const isAuthenticated = await checkAuth()
 
-    return Promise.reject(error)
+      if (!isAuthenticated) {
+        window.location.href = LOGIN_ENDPOINT
+        return Promise.reject(error)
+      }
+
+      return apiClient(originalRequest)
+    }
   }
 )
 
