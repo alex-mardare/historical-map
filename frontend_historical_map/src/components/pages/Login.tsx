@@ -7,6 +7,7 @@ import { login } from '../utils/hooks/generalHooks'
 
 import '../../assets/styling/login.css'
 import useStore from '../../config/globalStore'
+import { menuKeysRouteMap } from '../config/menu/menuConfig'
 
 export default function Login() {
   const { isAuthenticated } = useStore()
@@ -26,7 +27,9 @@ export default function Login() {
   const onFinish = async () => {
     await login(username, password)
       .then(() => {
-        navigate('/')
+        const { lastMenuKey } = useStore.getState()
+        const route = menuKeysRouteMap[lastMenuKey] || '/'
+        navigate(route)
       })
       .catch(() => {
         setError('Invalid credentials.')

@@ -2,6 +2,14 @@ import type { MenuProps } from 'antd'
 import React from 'react'
 
 import {
+  EVENT_CATEGORIES_SECTION,
+  HISTORICAL_EVENTS_SECTION,
+  HISTORICAL_FIGURES_SECTION,
+  HISTORICAL_FIGURE_ROLES_SECTION,
+  HISTORICAL_STATES_SECTION,
+  PRESENT_COUNTRIES_SECTION
+} from '../../models/constants/urls'
+import {
   CountriesMenuItem,
   EventCategoriesSubItem,
   EventPropertiesMenuItem,
@@ -57,6 +65,16 @@ const menuItemsNoAccount: MenuItem[] = [
   getItem('Historical Events', '1', <EventsMenuItemNoAccount />)
 ]
 
+const menuKeysRouteMap: Record<string, string> = {
+  '1.1': '',
+  '1.2': HISTORICAL_EVENTS_SECTION,
+  '2.1': HISTORICAL_FIGURES_SECTION,
+  '3.1': HISTORICAL_STATES_SECTION,
+  '3.2': PRESENT_COUNTRIES_SECTION,
+  '4.1': EVENT_CATEGORIES_SECTION,
+  '5.1': HISTORICAL_FIGURE_ROLES_SECTION
+}
+
 const rootMenuKeys = ['1', '2', '3', '4', '5']
 
-export { menuItemsLoggedIn, menuItemsNoAccount, rootMenuKeys }
+export { menuItemsLoggedIn, menuItemsNoAccount, menuKeysRouteMap, rootMenuKeys }

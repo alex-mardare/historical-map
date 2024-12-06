@@ -39,13 +39,12 @@ import '../src/assets/styling/App.css'
 const { Content, Header, Sider } = Layout
 
 function App() {
-  const { isAuthenticated, setIsAuthenticated } = useStore()
+  const { isAuthenticated, lastMenuKey, setIsAuthenticated, setLastMenuKey } =
+    useStore()
 
   const [collapsed, setCollapsed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [openKeys, setOpenKeys] = useState(['0'])
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
-  console.log('selectedKeys', selectedKeys)
 
   useEffect(() => {
     const initAuth = async () => {
@@ -56,7 +55,7 @@ function App() {
 
   const onMenuItemClick: MenuProps['onClick'] = (e) => {
     if (isAuthenticated) {
-      setSelectedKeys([e.key as string])
+      setLastMenuKey(e.key)
     }
   }
   const onOpenChangeMenu: MenuProps['onOpenChange'] = (menuKeys) => {
@@ -95,7 +94,7 @@ function App() {
               onClick={onMenuItemClick}
               onOpenChange={onOpenChangeMenu}
               openKeys={openKeys}
-              selectedKeys={selectedKeys}
+              selectedKeys={[lastMenuKey]}
               theme="dark"
             />
           </Sider>
