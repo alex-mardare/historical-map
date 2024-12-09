@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { checkAuth } from '../../config/auth'
 import useStore from '../../config/globalStore'
-import { LOGIN_ENDPOINT } from '../models/constants/urls'
+import { LOGIN_SECTION } from '../models/constants/urls'
 
 type ProtectedRouteProps = {
   isAuthenticated: boolean
@@ -21,7 +21,7 @@ function ProtectedRoute(props: ProtectedRouteProps): any {
     verifyAuth()
   })
 
-  return props.isAuthenticated ? <Outlet /> : <Navigate to={LOGIN_ENDPOINT} />
+  return props.isAuthenticated ? <Outlet /> : <Navigate to={LOGIN_SECTION} />
 }
 
 export default ProtectedRoute

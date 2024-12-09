@@ -3,7 +3,7 @@ import { Avatar, Dropdown } from 'antd'
 import React from 'react'
 import { useNavigate } from 'react-router'
 
-import { LOGIN_ENDPOINT } from '../../models/constants/urls'
+import { LOGIN_SECTION } from '../../models/constants/urls'
 import { logout } from '../../utils/hooks/generalHooks'
 
 export default function UserProfileDropdown() {
@@ -11,7 +11,7 @@ export default function UserProfileDropdown() {
 
   const onLogoutClick = () => {
     logout()
-    navigate(LOGIN_ENDPOINT)
+    navigate(LOGIN_SECTION)
   }
 
   const menuItemsUserProfile = {

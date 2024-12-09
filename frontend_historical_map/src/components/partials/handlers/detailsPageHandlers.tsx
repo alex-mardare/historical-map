@@ -51,7 +51,7 @@ export const useDetailPageHandlers = ({
 
       if (response?.status === HttpStatusCode.NoContent) {
         setTimeout(() => {
-          if (window.location.href.endsWith(`/${returnPage}`)) {
+          if (window.location.href.endsWith(`${returnPage}`)) {
             window.location.reload()
           }
           handleGoBack()
@@ -97,7 +97,7 @@ export const useDetailPageHandlers = ({
 
   //#region HANDLERS NAVIGATION
   const handleGoBack = () => {
-    navigate(`/${returnPage}`)
+    navigate(`${returnPage}`)
   }
   //#endregion
 

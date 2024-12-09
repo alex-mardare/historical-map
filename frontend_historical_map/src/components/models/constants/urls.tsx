@@ -6,6 +6,7 @@ const HISTORICAL_FIGURE_ROLES_SECTION = '/figure-roles'
 const HISTORICAL_FIGURES_SECTION = '/figures'
 const HISTORICAL_STATES_SECTION = '/historical-states'
 const PRESENT_COUNTRIES_SECTION = '/present-countries'
+const LOGIN_SECTION = '/login'
 
 const AUTH_CHECK_ENDPOINT = '/api-auth/check/'
 const EVENT_CATEGORIES_ENDPOINT = '/api/events/event-categories/'
@@ -33,6 +34,7 @@ export {
   HISTORICAL_STATES_ENDPOINT,
   HISTORICAL_STATES_SECTION,
   LOGIN_ENDPOINT,
+  LOGIN_SECTION,
   LOGOUT_ENDPOINT,
   PRESENT_COUNTRIES_ENDPOINT,
   PRESENT_COUNTRIES_SECTION,
