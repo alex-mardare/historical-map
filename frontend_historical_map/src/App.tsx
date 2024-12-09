@@ -67,10 +67,6 @@ function App() {
     }
   }
 
-  if (isLoading) {
-    return <Spinner />
-  }
-
   return (
     <Router>
       <div className="App">
@@ -99,6 +95,7 @@ function App() {
             />
           </Sider>
           <Content>
+            {isLoading && <Spinner />}
             <Routes>
               <Route element={<Login />} path={LOGIN_ENDPOINT} />
               <Route
