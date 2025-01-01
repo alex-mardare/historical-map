@@ -1,0 +1,16 @@
+img.stateFlag {
+  height: auto;
+  max-width: 350px;
+  width: 50%;
+}
+
+img.present-country-period-flag {
+  max-height: 30px;
+  max-width: 30px;
+}
+
+.historical-state-card-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}

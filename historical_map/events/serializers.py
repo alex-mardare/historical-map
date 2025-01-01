@@ -27,12 +27,13 @@ class PresentCountryPropertySerializer(serializers.ModelSerializer):
 
 #region HISTORICAL STATE PRESENT COUNTRY PERIOD SERIALIZERS
 class HistoricalStatePresentCountryPeriodGetSerializer(serializers.ModelSerializer):
+    flagUrl = serializers.CharField(source='presentCountry.flagUrl', read_only=True)
     id = serializers.IntegerField(source='presentCountry.id', read_only=True)
     name = serializers.CharField(source='presentCountry.name', read_only=True)
 
     class Meta:
         model = HistoricalStatePresentCountryPeriod
-        fields = ['dateFrom', 'dateTo', 'id', 'name']
+        fields = ['dateFrom', 'dateTo', 'flagUrl', 'id', 'name']
 
 class HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(serializers.ModelSerializer):
     presentCountry = serializers.PrimaryKeyRelatedField(queryset=PresentCountry.objects.all())
