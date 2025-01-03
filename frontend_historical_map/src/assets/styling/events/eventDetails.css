@@ -1,21 +1,21 @@
-#eventDetailsMap {
-    height: 57vh;
+#event-details-map {
+  height: 57vh;
 }
 
-#eventDetailsCard {
-    height: 43vh;
+#event-details-card {
+  height: 43vh;
 }
 
 .card-header {
-    align-items: center;
-    display: flex;
+  align-items: center;
+  display: flex;
 }
 
 .card-title-div {
-    flex-grow: 1;
-    text-align: center;
+  flex-grow: 1;
+  text-align: center;
 }
 
 .card-title-header {
-    margin-left: -100px;
+  margin-left: -100px;
 }

@@ -18,7 +18,7 @@ export default function PresentCountryDetails({
         {presentCountry.flagUrl && (
           <img
             alt={`${presentCountry.name} flag`}
-            className="presentCountryTileFlag"
+            className="present-country-tile-flag"
             src={`${presentCountry.flagUrl}`}
           />
         )}

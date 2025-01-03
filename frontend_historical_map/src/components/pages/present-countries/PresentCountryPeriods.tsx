@@ -14,7 +14,7 @@ export default function PresentCountryPeriods({
   presentCountries
 }: PresentCountryPeriodsProps) {
   return (
-    <div className="tableDiv">
+    <div className="table-div">
       <Table
         columns={columnsConfig}
         dataSource={presentCountries}

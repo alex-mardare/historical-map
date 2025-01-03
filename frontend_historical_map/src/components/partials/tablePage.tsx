@@ -45,8 +45,8 @@ const TableComponent: React.FC<TablePageProps> = ({
   }
 
   return (
-    <div className="mainDivListPage">
-      <div className="topBarListPage">
+    <div className="main-div-list-page">
+      <div className="top-bar-list-page">
         <SearchBar {...{ handleSearch }} />
         {isAuthenticated && (
           <CreateButton
@@ -62,7 +62,7 @@ const TableComponent: React.FC<TablePageProps> = ({
           />
         )}
       </div>
-      <div className="tableDiv">
+      <div className="table-div">
         <Table
           columns={columnsConfig}
           dataSource={filteredTableObjectsList}

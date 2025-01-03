@@ -68,7 +68,7 @@ export default function EventDetails() {
       return createSinglePointMapContainer(
         coordinates,
         event,
-        'eventDetailsMap'
+        'event-details-map'
       )
     }
   }
@@ -89,7 +89,7 @@ export default function EventDetails() {
           <EditOutlined key="edit" onClick={openObjectEditModal} />,
           <DeleteOutlined key="delete" onClick={openObjectDeleteModal} />
         ]}
-        id="eventDetailsCard"
+        id="event-details-card"
         loading={event == null}
         title={displayTitleSection(event)}
       >

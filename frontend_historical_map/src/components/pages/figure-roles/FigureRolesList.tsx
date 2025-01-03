@@ -40,8 +40,8 @@ export default function FigureRolesList() {
   }
 
   return (
-    <div className="mainDivListPage">
-      <div className="topBarListPage">
+    <div className="main-div-list-page">
+      <div className="top-bar-list-page">
         <SearchBar {...{ handleSearch }} />
         <CreateButton
           formComponent={
@@ -61,7 +61,7 @@ export default function FigureRolesList() {
           }}
         />
       </div>
-      <div className="tableDiv">
+      <div className="table-div">
         <List
           dataSource={filteredTableObjectsList}
           grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }}

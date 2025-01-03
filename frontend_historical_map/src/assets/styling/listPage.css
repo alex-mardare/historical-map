@@ -1,12 +1,12 @@
 @import 'variables.css';
 
-.mainDivListPage {
+.main-div-list-page {
   display: flex;
   flex-direction: column;
   height: var(--main-div-height);
 }
 
-.topBarListPage {
+.top-bar-list-page {
   align-items: center;
   display: flex;
   justify-content: flex-end;
