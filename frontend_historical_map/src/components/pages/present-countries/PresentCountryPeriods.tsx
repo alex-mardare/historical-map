@@ -10,14 +10,14 @@ type PresentCountryPeriodsProps = {
   presentCountries: PresentCountry[] | undefined
 }
 
-export default function PresentCountryPeriods(
-  props: PresentCountryPeriodsProps
-) {
+export default function PresentCountryPeriods({
+  presentCountries
+}: PresentCountryPeriodsProps) {
   return (
     <div className="tableDiv">
       <Table
         columns={columnsConfig}
-        dataSource={props.presentCountries}
+        dataSource={presentCountries}
         pagination={{ hideOnSinglePage: true }}
         rowKey={(object) => object.id}
       />

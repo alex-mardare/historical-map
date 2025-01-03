@@ -9,24 +9,28 @@ import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
-type FigurelModalProp = {
+type FigurelModalProps = {
   figure: HistoricalFigure | null
   form: any
   onFinish?: (values: any) => void
 }
 
-export default function FiguresModalForm(props: FigurelModalProp) {
+export default function FiguresModalForm({
+  figure,
+  form,
+  onFinish
+}: FigurelModalProps) {
   const [birthHistoricalStateOption, setBirthHistoricalStateOption] = useState(
-    props.figure?.birthHistoricalState?.id
+    figure?.birthHistoricalState?.id
   )
   const [birthPresentCountryOption, setBirthPresentCountryOption] = useState(
-    props.figure?.birthPresentCountry?.id
+    figure?.birthPresentCountry?.id
   )
   const [deathHistoricalStateOption, setDeathHistoricalStateOption] = useState(
-    props.figure?.deathHistoricalState?.id
+    figure?.deathHistoricalState?.id
   )
   const [deathPresentCountryOption, setDeathPresentCountryOption] = useState(
-    props.figure?.deathPresentCountry?.id
+    figure?.deathPresentCountry?.id
   )
 
   const { historicalStates } = useGetHistoricalStatesOptions()
@@ -40,12 +44,7 @@ export default function FiguresModalForm(props: FigurelModalProp) {
   const displayIdFormItem = (figure: HistoricalFigure | null) => {
     if (figure !== null) {
       return (
-        <Form.Item
-          hidden={true}
-          initialValue={props.figure?.id}
-          label="Id"
-          name="id"
-        >
+        <Form.Item hidden={true} initialValue={figure?.id} label="Id" name="id">
           <Input />
         </Form.Item>
       )
@@ -53,23 +52,23 @@ export default function FiguresModalForm(props: FigurelModalProp) {
   }
 
   const handleSubmit = (values: any) => {
-    if (props.onFinish) {
-      props.onFinish(values)
+    if (onFinish) {
+      onFinish(values)
     }
   }
 
   return (
     <div>
       <Form
-        form={props.form}
+        form={form}
         labelCol={{ span: 6 }}
         onFinish={handleSubmit}
         validateMessages={formValidationMessages}
         wrapperCol={{ span: 16 }}
       >
-        {displayIdFormItem(props.figure)}
+        {displayIdFormItem(figure)}
         <Form.Item
-          initialValue={props.figure?.name}
+          initialValue={figure?.name}
           label="Name"
           name="name"
           rules={[{ required: true }]}
@@ -79,7 +78,7 @@ export default function FiguresModalForm(props: FigurelModalProp) {
 
         <h4 style={{ paddingLeft: '75px' }}>Birth</h4>
         <Form.Item
-          initialValue={props.figure?.birthDate}
+          initialValue={figure?.birthDate}
           label="Date"
           name="birthDate"
           rules={[{ required: true }, { validator: dateFieldValidator }]}
@@ -93,7 +92,7 @@ export default function FiguresModalForm(props: FigurelModalProp) {
           rules={[{ required: true }]}
         >
           <HistoricalStatesDropdown
-            form={props.form}
+            form={form}
             presentCountryFormName="birthPresentCountryId"
             selectedValue={birthHistoricalStateOption}
             selectId={'birthHistoricalStateId'}
@@ -109,7 +108,7 @@ export default function FiguresModalForm(props: FigurelModalProp) {
           rules={[{ required: true }]}
         >
           <PresentCountriesDropdown
-            form={props.form}
+            form={form}
             presentCountries={birthPresentCountries}
             selectedValue={birthPresentCountryOption}
             selectId={'birthPresentCountryId'}
@@ -119,7 +118,7 @@ export default function FiguresModalForm(props: FigurelModalProp) {
 
         <h4 style={{ paddingLeft: '75px' }}>Death</h4>
         <Form.Item
-          initialValue={props.figure?.deathDate}
+          initialValue={figure?.deathDate}
           label="Date"
           name="deathDate"
           rules={[{ validator: dateFieldValidator }]}
@@ -132,7 +131,7 @@ export default function FiguresModalForm(props: FigurelModalProp) {
           name="deathHistoricalStateId"
         >
           <HistoricalStatesDropdown
-            form={props.form}
+            form={form}
             presentCountryFormName="deathPresentCountryId"
             selectedValue={deathHistoricalStateOption}
             selectId={'deathHistoricalStateId'}
@@ -147,7 +146,7 @@ export default function FiguresModalForm(props: FigurelModalProp) {
           name="deathPresentCountryId"
         >
           <PresentCountriesDropdown
-            form={props.form}
+            form={form}
             presentCountries={deathPresentCountries}
             selectedValue={deathPresentCountryOption}
             selectId={'deathPresentCountryId'}

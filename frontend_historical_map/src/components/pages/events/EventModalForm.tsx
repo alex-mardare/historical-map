@@ -13,7 +13,7 @@ import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
-type EventModalProp = {
+type EventModalProps = {
   event: HistoricalEvent | null
   form: any
   onFinish?: (values: any) => void
@@ -23,7 +23,7 @@ export default function EventModalForm({
   event,
   form,
   onFinish
-}: EventModalProp) {
+}: EventModalProps) {
   const [historicalStateOption, setHistoricalStateOption] = useState(
     event?.historicalState?.id
   )

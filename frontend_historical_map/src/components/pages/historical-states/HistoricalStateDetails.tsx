@@ -21,7 +21,7 @@ export default function HistoricalStateDetails() {
   const { historicalStateId } = useParams()
   let historicalState = useGetHistoricalState(historicalStateId)
 
-  const useDetailPageHandlersProps = {
+  const detailPageHandlerObj = {
     detailsPageObject: historicalState,
     objectDeleteHook: objectDelete,
     objectTypeName: HISTORICAL_STATE_NAME,
@@ -42,7 +42,7 @@ export default function HistoricalStateDetails() {
     openDelete,
     openEdit,
     openObjectDeleteModal
-  } = useDetailPageHandlers(useDetailPageHandlersProps)
+  } = useDetailPageHandlers(detailPageHandlerObj)
 
   //#region DISPLAY FUNCTIONALITY
   const displayTitleSection = (historicalState: HistoricalState | null) => {

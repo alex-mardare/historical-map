@@ -14,19 +14,15 @@ type HistoricalStatesDropdownProps = {
   setPresentCountryOption: (value: any) => void
 }
 
-export const HistoricalStatesDropdown = (
-  props: HistoricalStatesDropdownProps
-) => {
-  const {
-    form,
-    historicalStates,
-    presentCountryFormName,
-    selectedValue,
-    selectId,
-    setHistoricalStateOption,
-    setPresentCountryOption
-  } = props
-
+export const HistoricalStatesDropdown = ({
+  form,
+  historicalStates,
+  presentCountryFormName,
+  selectedValue,
+  selectId,
+  setHistoricalStateOption,
+  setPresentCountryOption
+}: HistoricalStatesDropdownProps) => {
   const onChangeHistoricalState = (value: any) => {
     setHistoricalStateOption(value)
     setPresentCountryOption(undefined)

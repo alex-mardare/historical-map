@@ -10,7 +10,7 @@ import FiguresModalForm from './FiguresModalForm'
 export default function FiguresList() {
   const { figures, refreshFunction } = useGetFigures()
 
-  const useModalsHandlersProps = {
+  const modalHandlerObj = {
     objectName: HISTORICAL_FIGURE_NAME,
     refreshFunction: refreshFunction,
     tableObjects: figures
@@ -23,7 +23,7 @@ export default function FiguresList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useModalsHandlers(useModalsHandlersProps)
+  } = useModalsHandlers(modalHandlerObj)
 
   const figuresModalForm = () => {
     return (

@@ -17,7 +17,7 @@ interface FigureRoleDetailsProps {
 export default function FigureRoleDetails({
   figureRole
 }: FigureRoleDetailsProps) {
-  const useDetailPageHandlersProps = {
+  const detailPageHandlerObj = {
     detailsPageObject: figureRole,
     objectDeleteHook: objectDelete,
     objectTypeName: HISTORICAL_FIGURE_ROLE_NAME,
@@ -37,7 +37,7 @@ export default function FigureRoleDetails({
     openEdit,
     openObjectEditModal,
     openObjectDeleteModal
-  } = useDetailPageHandlers(useDetailPageHandlersProps)
+  } = useDetailPageHandlers(detailPageHandlerObj)
 
   return (
     <List.Item>

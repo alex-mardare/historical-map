@@ -19,7 +19,7 @@ export default function FigureDetails() {
   const { figureId } = useParams()
   let figure = useGetFigure(figureId)
 
-  const useDetailPageHandlersProps = {
+  const detailPageHandlerObj = {
     detailsPageObject: figure,
     objectDeleteHook: objectDelete,
     objectTypeName: HISTORICAL_FIGURE_NAME,
@@ -40,7 +40,7 @@ export default function FigureDetails() {
     openDelete,
     openEdit,
     openObjectDeleteModal
-  } = useDetailPageHandlers(useDetailPageHandlersProps)
+  } = useDetailPageHandlers(detailPageHandlerObj)
 
   //#region DISPLAY FUNCTIONALITY
   const displayTitleSection = (figure: HistoricalFigure | null) => {

@@ -9,19 +9,19 @@ type ProtectedRouteProps = {
   isAuthenticated: boolean
 }
 
-function ProtectedRoute(props: ProtectedRouteProps): any {
+function ProtectedRoute({ isAuthenticated }: ProtectedRouteProps): any {
   const { setIsAuthenticated } = useStore()
 
   useEffect(() => {
     const verifyAuth = async () => {
-      if (!props.isAuthenticated) {
+      if (!isAuthenticated) {
         setIsAuthenticated(await checkAuth())
       }
     }
     verifyAuth()
   })
 
-  return props.isAuthenticated ? <Outlet /> : <Navigate to={LOGIN_SECTION} />
+  return isAuthenticated ? <Outlet /> : <Navigate to={LOGIN_SECTION} />
 }
 
 export default ProtectedRoute

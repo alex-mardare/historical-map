@@ -16,7 +16,7 @@ export default function FigureRolesList() {
   const { figureRoles, refreshFunction } = useGetFigureRoles()
   const [searchText, setSearchText] = useState('')
 
-  const useModalsHandlersProps = {
+  const modalHandlerObj = {
     objectName: HISTORICAL_FIGURE_ROLE_NAME,
     refreshFunction,
     tableObjects: figureRoles
@@ -29,7 +29,7 @@ export default function FigureRolesList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useModalsHandlers(useModalsHandlersProps)
+  } = useModalsHandlers(modalHandlerObj)
 
   let filteredTableObjectsList = figureRoles?.filter((figureRoles) => {
     return searchFiltering(figureRoles, searchText)

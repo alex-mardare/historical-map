@@ -11,17 +11,13 @@ type PresentCountriesDropdownProps = {
   setPresentCountryOption: (value: any) => void
 }
 
-export const PresentCountriesDropdown = (
-  props: PresentCountriesDropdownProps
-) => {
-  const {
-    form,
-    presentCountries,
-    selectedValue,
-    selectId,
-    setPresentCountryOption
-  } = props
-
+export const PresentCountriesDropdown = ({
+  form,
+  presentCountries,
+  selectedValue,
+  selectId,
+  setPresentCountryOption
+}: PresentCountriesDropdownProps) => {
   const onChangePresentCountry = (value: any) => {
     setPresentCountryOption(value)
 

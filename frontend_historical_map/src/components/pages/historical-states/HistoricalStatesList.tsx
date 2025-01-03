@@ -10,7 +10,7 @@ import HistoricalStateModalForm from './HistoricalStateModalForm'
 export default function HistoricalStatesList() {
   const { historicalStates, refreshFunction } = useGetHistoricalStates()
 
-  const useModalsHandlersProps = {
+  const modalHandlerObj = {
     objectName: HISTORICAL_STATE_NAME,
     refreshFunction,
     tableObjects: historicalStates
@@ -23,7 +23,7 @@ export default function HistoricalStatesList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useModalsHandlers(useModalsHandlersProps)
+  } = useModalsHandlers(modalHandlerObj)
 
   const historicalStatesModalForm = () => {
     return (

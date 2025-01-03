@@ -16,7 +16,7 @@ export default function EventCategoriesList() {
   const { eventCategories, refreshFunction } = useGetEventCategories()
   const [searchText, setSearchText] = useState('')
 
-  const useModalsHandlersProps = {
+  const modalHandlerObj = {
     objectName: EVENT_CATEGORY_NAME,
     refreshFunction,
     tableObjects: eventCategories
@@ -29,7 +29,7 @@ export default function EventCategoriesList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useModalsHandlers(useModalsHandlersProps)
+  } = useModalsHandlers(modalHandlerObj)
 
   let filteredTableObjectsList = eventCategories?.filter((eventCategory) => {
     return searchFiltering(eventCategory, searchText)

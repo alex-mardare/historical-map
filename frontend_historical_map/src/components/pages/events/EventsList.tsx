@@ -10,7 +10,7 @@ import EventModalForm from './EventModalForm'
 export default function EventsList() {
   const { events, refreshFunction } = useGetEvents()
 
-  const useModalsHandlersProps = {
+  const modalHandlerObj = {
     objectName: EVENT_NAME,
     refreshFunction,
     tableObjects: events
@@ -23,7 +23,7 @@ export default function EventsList() {
     onFormSubmit,
     openModal,
     showModal
-  } = useModalsHandlers(useModalsHandlersProps)
+  } = useModalsHandlers(modalHandlerObj)
 
   const eventsModalForm = () => {
     return <EventModalForm event={null} onFinish={onFormSubmit} {...{ form }} />

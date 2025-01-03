@@ -17,7 +17,7 @@ interface EventCategoryDetailsProps {
 export default function EventCategoryDetails({
   eventCategory
 }: EventCategoryDetailsProps) {
-  const useDetailPageHandlersProps = {
+  const detailPageHandlerObj = {
     detailsPageObject: eventCategory,
     objectDeleteHook: objectDelete,
     objectTypeName: EVENT_CATEGORY_NAME,
@@ -37,7 +37,7 @@ export default function EventCategoryDetails({
     openEdit,
     openObjectEditModal,
     openObjectDeleteModal
-  } = useDetailPageHandlers(useDetailPageHandlersProps)
+  } = useDetailPageHandlers(detailPageHandlerObj)
 
   return (
     <List.Item>
