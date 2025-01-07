@@ -15,11 +15,11 @@ export default function PresentCountryDetails({
   const cardTile = (presentCountry: PresentCountry): JSX.Element => {
     return (
       <div>
-        {presentCountry.flagUrl && (
+        {presentCountry.flag_url && (
           <img
             alt={`${presentCountry.name} flag`}
             className="present-country-tile-flag"
-            src={`${presentCountry.flagUrl}`}
+            src={`${presentCountry.flag_url}`}
           />
         )}
         {presentCountry.name}

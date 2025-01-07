@@ -16,7 +16,7 @@ class EventCategorySerializer(serializers.ModelSerializer):
 class PresentCountryGetAllSerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentCountry
-        fields = ['code', 'flagUrl', 'id', 'name']
+        fields = ['code', 'flag_url', 'id', 'name']
 
 class PresentCountryPropertySerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,68 +27,68 @@ class PresentCountryPropertySerializer(serializers.ModelSerializer):
 
 #region HISTORICAL STATE PRESENT COUNTRY PERIOD SERIALIZERS
 class HistoricalStatePresentCountryPeriodGetSerializer(serializers.ModelSerializer):
-    flagUrl = serializers.CharField(source='presentCountry.flagUrl', read_only=True)
-    id = serializers.IntegerField(source='presentCountry.id', read_only=True)
-    name = serializers.CharField(source='presentCountry.name', read_only=True)
+    flag_url = serializers.CharField(source='present_country.flag_url', read_only=True)
+    id = serializers.IntegerField(source='present_country.id', read_only=True)
+    name = serializers.CharField(source='present_country.name', read_only=True)
 
     class Meta:
         model = HistoricalStatePresentCountryPeriod
-        fields = ['dateFrom', 'dateTo', 'flagUrl', 'id', 'name']
+        fields = ['start_date', 'end_date', 'flag_url', 'id', 'name']
 
 class HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(serializers.ModelSerializer):
-    presentCountry = serializers.PrimaryKeyRelatedField(queryset=PresentCountry.objects.all())
+    present_country = serializers.PrimaryKeyRelatedField(queryset=PresentCountry.objects.all())
 
     class Meta:
         model = HistoricalStatePresentCountryPeriod
-        fields = ['dateFrom', 'dateTo', 'presentCountry']
+        fields = ['start_date', 'end_date', 'present_country']
 #endregion
 
 
 #region HISTORICAL STATE SERIALIZERS
 class HistoricalStateDeletePostUpdateSerializer(serializers.ModelSerializer):
-    presentCountries = HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(many=True, source='historicalstatepresentcountryperiod_set')
+    present_countries = HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(many=True, source='historicalstatepresentcountryperiod_set')
 
     class Meta:
         model = HistoricalState
-        exclude = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
+        exclude = ['created_at', 'created_by', 'updated_at', 'updated_by']
 
     def create(self, validated_data):
         present_countries = validated_data.pop('historicalstatepresentcountryperiod_set')
         historical_state = HistoricalState.objects.create(**validated_data)
 
         for present_country in present_countries:
-            HistoricalStatePresentCountryPeriod.objects.create(historicalState=historical_state, presentCountry=present_country['presentCountry'], 
-                                                               dateFrom=present_country['dateFrom'], dateTo=present_country['dateTo'])
+            HistoricalStatePresentCountryPeriod.objects.create(historical_state=historical_state, present_country=present_country['present_country'], 
+                                                               start_date=present_country['start_date'], end_date=present_country['end_date'])
 
         return historical_state
     
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.dateFrom = validated_data.get('dateFrom', instance.dateFrom)
-        instance.dateTo = validated_data.get('dateTo', instance.dateTo)
-        instance.flagUrl = validated_data.get('flagUrl', instance.flagUrl)
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.flag_url = validated_data.get('flag_url', instance.flag_url)
 
         present_countries = validated_data.pop('historicalstatepresentcountryperiod_set')
 
         for present_country in present_countries:
-            present_country_instance = instance.historicalstatepresentcountryperiod_set.filter(presentCountry=present_country['presentCountry']).first()
+            present_country_instance = instance.historicalstatepresentcountryperiod_set.filter(present_country=present_country['present_country']).first()
             if present_country_instance is None:
-                HistoricalStatePresentCountryPeriod.objects.create(historicalState=instance, presentCountry=present_country['presentCountry'], 
-                                                               dateFrom=present_country['dateFrom'], dateTo=present_country['dateTo'])
+                HistoricalStatePresentCountryPeriod.objects.create(historical_state=instance, present_country=present_country['present_country'], 
+                                                                   start_date=present_country['start_date'], end_date=present_country['end_date'])
             else:
-                present_country_instance.dateFrom = present_country['dateFrom']
-                present_country_instance.dateTo = present_country['dateTo']
+                present_country_instance.start_date = present_country['start_date']
+                present_country_instance.end_date = present_country['end_date']
                 present_country_instance.save()        
        
         instance.save()
         return instance
 
 class HistoricalStateGetSerializer(serializers.ModelSerializer):
-    presentCountries = HistoricalStatePresentCountryPeriodGetSerializer(many=True, source='historicalstatepresentcountryperiod_set')
+    present_countries = HistoricalStatePresentCountryPeriodGetSerializer(many=True, source='historicalstatepresentcountryperiod_set')
 
     class Meta:
         model = HistoricalState
-        exclude = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
+        exclude = ['created_at', 'created_by', 'updated_at', 'updated_by']
 
 class HistoricalStatePropertySerializer(serializers.ModelSerializer):
     class Meta:
@@ -101,13 +101,13 @@ class HistoricalStatePropertySerializer(serializers.ModelSerializer):
 class HistoricalEventDeletePostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalEvent
-        exclude = ['createdAt', 'createdBy', 'updatedAt', 'updatedBy']
+        exclude = ['created_at', 'created_by', 'updated_at', 'updated_by']
 
     def create(self, data):
         try:
             historicalEvent = HistoricalEvent.objects.create(**data)
             if historicalEvent.latitude and historicalEvent.longitude:
-                historicalEvent.approximateRealLocation = True
+                historicalEvent.approximate_location = True
             historicalEvent.save()
 
             return historicalEvent
@@ -115,13 +115,13 @@ class HistoricalEventDeletePostUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(e)
         
 class HistoricalEventGetSerializer(serializers.ModelSerializer):
-    eventCategory = EventCategorySerializer(many=False, source='eventCategoryId')
-    historicalState = HistoricalStatePropertySerializer(many=False, source='historicalStateId')
-    presentCountry = PresentCountryPropertySerializer(many=False, source='presentCountryId')
+    event_category = EventCategorySerializer(many=False)
+    historical_state = HistoricalStatePropertySerializer(many=False)
+    present_country = PresentCountryPropertySerializer(many=False)
 
     class Meta:
         model = HistoricalEvent
-        fields = ['approximateRealLocation', 'date', 'description', 'eventCategory', 'historicalState', 'id', 'latitude', 'longitude', 'name', 'presentCountry', 'time']
+        fields = ['approximate_location', 'date', 'description', 'event_category', 'historical_state', 'id', 'latitude', 'longitude', 'name', 'present_country', 'time']
 #endregion
 
 
@@ -142,15 +142,15 @@ class HistoricalFigureRolePropertySerializer(serializers.ModelSerializer):
 class HistoricalFigureDeletePostUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HistoricalFigure
-        fields = ['birthDate', 'birthHistoricalStateId', 'birthPresentCountryId', 'deathDate', 'deathHistoricalStateId', 'deathPresentCountryId', 'name']
+        fields = ['birth_date', 'birth_historical_state', 'birth_present_country', 'death_date', 'death_historical_state', 'death_present_country', 'name']
 
 class HistoricalFigureGetSerializer(serializers.ModelSerializer):
-    birthHistoricalState = HistoricalStatePropertySerializer(many=False, source='birthHistoricalStateId')
-    birthPresentCountry = PresentCountryPropertySerializer(many=False, source='birthPresentCountryId')
-    deathHistoricalState = HistoricalStatePropertySerializer(many=False, source='deathHistoricalStateId')
-    deathPresentCountry = PresentCountryPropertySerializer(many=False, source='deathPresentCountryId')
+    birth_historical_state = HistoricalStatePropertySerializer(many=False)
+    birth_present_country = PresentCountryPropertySerializer(many=False)
+    death_historical_state = HistoricalStatePropertySerializer(many=False)
+    death_present_country = PresentCountryPropertySerializer(many=False)
 
     class Meta:
         model = HistoricalFigure
-        fields = ['birthDate', 'birthHistoricalState', 'birthPresentCountry', 'deathDate', 'deathHistoricalState', 'deathPresentCountry', 'id', 'name']
+        fields = ['birth_date', 'birth_historical_state', 'birth_present_country', 'death_date', 'death_historical_state', 'death_present_country', 'id', 'name']
 #endregion

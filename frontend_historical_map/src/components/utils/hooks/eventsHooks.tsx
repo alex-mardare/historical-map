@@ -17,7 +17,7 @@ function useEventCoordinates(event: HistoricalEvent | null) {
 
   useEffect(() => {
     if (event) {
-      if (event.approximateRealLocation) {
+      if (event.approximate_location) {
         setCoordinates([event.latitude, event.longitude])
       } else {
         returnMapCoordinatesByPresentCountryName(event).then((arrResult) => {

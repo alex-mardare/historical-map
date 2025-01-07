@@ -1,7 +1,7 @@
 export interface PresentCountry {
-  dateFrom: string
-  dateTo: string
-  flagUrl: string
+  end_date: string
+  flag_url: string
   id: number
   name: string
+  start_date: string
 }

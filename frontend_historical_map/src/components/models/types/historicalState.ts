@@ -1,12 +1,12 @@
 import { PresentCountry } from './presentCountry'
 
 export interface HistoricalState {
-  dateFrom: string | null
-  dateTo: string | null
-  flagUrl: string | null
+  end_date: string | null
+  flag_url: string | null
   id: number
   name: string
-  presentCountries: PresentCountry[]
+  present_countries: PresentCountry[]
+  start_date: string | null
 }
 
 export interface HistoricalStateOption {

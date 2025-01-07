@@ -48,24 +48,24 @@ export default function FigureDetails() {
   }
 
   const displayDeathSection = (figure: HistoricalFigure | null) => {
-    if (figure && figure.deathDate) {
+    if (figure && figure.death_date) {
       return (
         <>
           <h2>Death</h2>
           <div>
-            {figure.deathDate && (
+            {figure.death_date && (
               <p>
-                <b>Date:</b> {figure?.deathDate}
+                <b>Date:</b> {figure?.death_date}
               </p>
             )}
-            {figure.deathHistoricalState && (
+            {figure.death_historical_state && (
               <p>
-                <b>Historical State:</b> {figure?.deathHistoricalState.name}
+                <b>Historical State:</b> {figure?.death_historical_state.name}
               </p>
             )}
-            {figure.deathPresentCountry && (
+            {figure.death_present_country && (
               <p>
-                <b>Present Country:</b> {figure?.deathPresentCountry.name}
+                <b>Present Country:</b> {figure?.death_present_country.name}
               </p>
             )}
           </div>
@@ -91,13 +91,13 @@ export default function FigureDetails() {
       >
         <h2>Birth</h2>
         <p>
-          <b>Date:</b> {figure?.birthDate}
+          <b>Date:</b> {figure?.birth_date}
         </p>
         <p>
-          <b>Historical State:</b> {figure?.birthHistoricalState.name}
+          <b>Historical State:</b> {figure?.birth_historical_state.name}
         </p>
         <p>
-          <b>Present Country:</b> {figure?.birthPresentCountry.name}
+          <b>Present Country:</b> {figure?.birth_present_country.name}
         </p>
         {displayDeathSection(figure)}
       </Card>

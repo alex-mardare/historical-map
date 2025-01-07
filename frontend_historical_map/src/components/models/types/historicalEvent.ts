@@ -1,19 +1,19 @@
-import { EventCategory } from "./eventCategory"
-import { HistoricalState } from "./historicalState"
-import { PresentCountry } from "./presentCountry"
+import { EventCategory } from './eventCategory'
+import { HistoricalState } from './historicalState'
+import { PresentCountry } from './presentCountry'
 
 export interface HistoricalEvent {
-    approximateRealLocation: boolean,
-    date: string,
-    description: string,
-    eventCategory: EventCategory,
-    historicalState: HistoricalState,
-    id: number,
-    latitude: number,
-    longitude: number,
-    name: string,
-    presentCountry: PresentCountry,
-    time: Date
+  approximate_location: boolean
+  date: string
+  description: string
+  event_category: EventCategory
+  historical_state: HistoricalState
+  id: number
+  latitude: number
+  longitude: number
+  name: string
+  present_country: PresentCountry
+  time: Date
 }
 
-export type HistoricalEvents = HistoricalEvent[];
+export type HistoricalEvents = HistoricalEvent[]

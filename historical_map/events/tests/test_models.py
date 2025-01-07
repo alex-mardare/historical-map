@@ -54,14 +54,14 @@ class EventCategoryModelTestClass(BaseModelTestClass):
         self.assertEqual(EventCategory._meta.verbose_name_plural, 'event categories')
 
     def test_auto_add_timestamp_creation(self):
-        self.assertEqual(self.mocked_time, self.event_category.createdAt)
+        self.assertEqual(self.mocked_time, self.event_category.created_at)
 
     def test_auto_add_timestamp_update(self):
         self.event_category.name = 'new name'
         # wait 1 second before storing the data to the database
         time.sleep(self.sleep_time)
         self.event_category.save()
-        self.assertLess(self.event_category.createdAt, self.event_category.updatedAt)
+        self.assertLess(self.event_category.created_at, self.event_category.updated_at)
         
 
 class HistoricalStateModelTestClass(BaseModelTestClass):
@@ -72,8 +72,8 @@ class HistoricalStateModelTestClass(BaseModelTestClass):
             self.present_country_a = self.data_provider.create_present_country(code='AA', name='A country', user_profile=self.user_profile)
             self.present_country_b = self.data_provider.create_present_country(code='BB', name='B country', user_profile=self.user_profile)
 
-            self.historical_state = self.data_provider.create_historical_state(dateTo='2345-06-07', name='Historical state', user_profile=self.user_profile)
-            self.historical_state_no_dateTo = self.data_provider.create_historical_state(name='Historical state', user_profile=self.user_profile)
+            self.historical_state = self.data_provider.create_historical_state(end_date='2345-06-07', name='Historical state', user_profile=self.user_profile)
+            self.historical_state_no_end_date = self.data_provider.create_historical_state(name='Historical state', user_profile=self.user_profile)
 
             self.data_provider.create_historical_state_present_country_period(historical_state=self.historical_state, present_country=self.present_country_a, 
                                                                               user_profile=self.user_profile)
@@ -81,32 +81,32 @@ class HistoricalStateModelTestClass(BaseModelTestClass):
                                                                               user_profile=self.user_profile)
 
     def test_max_length_columns(self):
-        self.assertEqual(15, HistoricalState._meta.get_field('dateFrom').max_length)
-        self.assertEqual(15, HistoricalState._meta.get_field('dateTo').max_length)
-        self.assertEqual(255, HistoricalState._meta.get_field('flagUrl').max_length)
+        self.assertEqual(15, HistoricalState._meta.get_field('start_date').max_length)
+        self.assertEqual(15, HistoricalState._meta.get_field('end_date').max_length)
+        self.assertEqual(255, HistoricalState._meta.get_field('flag_url').max_length)
         self.assertEqual(255, HistoricalState._meta.get_field('name').max_length)
 
     def test_display_method_date_from_present(self):
-        expected_name = self.historical_state.name + " (" + dateFormatter(self.historical_state.dateFrom) + " -> " + dateFormatter(self.historical_state.dateTo) + ')'
+        expected_name = self.historical_state.name + " (" + dateFormatter(self.historical_state.start_date) + " -> " + dateFormatter(self.historical_state.end_date) + ')'
         self.assertEqual(str(self.historical_state), expected_name)
 
     def test_display_method_date_from_not_present(self):
-        self.assertEqual(str(self.historical_state_no_dateTo), self.historical_state_no_dateTo.name)
+        self.assertEqual(str(self.historical_state_no_end_date), self.historical_state_no_end_date.name)
 
     def test_auto_add_timestamp_creation(self):
-        self.assertEqual(self.mocked_time, self.historical_state.createdAt)
+        self.assertEqual(self.mocked_time, self.historical_state.created_at)
 
     def test_auto_add_timestamp_update(self):
         self.historical_state.name = 'new name'
         # wait 1 second before storing the data to the database
         time.sleep(self.sleep_time)
         self.historical_state.save()
-        self.assertLess(self.historical_state.createdAt, self.historical_state.updatedAt)
+        self.assertLess(self.historical_state.created_at, self.historical_state.updated_at)
 
     def test_present_countries(self):
-        self.assertTrue(self.historical_state.presentCountries.contains(self.present_country_a))
-        self.assertTrue(self.historical_state.presentCountries.contains(self.present_country_b))
-        self.assertEqual(self.historical_state.presentCountries.count(), PresentCountry.objects.count())
+        self.assertTrue(self.historical_state.present_countries.contains(self.present_country_a))
+        self.assertTrue(self.historical_state.present_countries.contains(self.present_country_b))
+        self.assertEqual(self.historical_state.present_countries.count(), PresentCountry.objects.count())
 
 
 class PresentCountryModelTestClass(BaseModelTestClass):
@@ -118,7 +118,7 @@ class PresentCountryModelTestClass(BaseModelTestClass):
 
     def test_max_length_columns(self):
         self.assertEqual(5, PresentCountry._meta.get_field('code').max_length)
-        self.assertEqual(255, PresentCountry._meta.get_field('flagUrl').max_length)
+        self.assertEqual(255, PresentCountry._meta.get_field('flag_url').max_length)
         self.assertEqual(255, PresentCountry._meta.get_field('name').max_length)
 
     def test_display_method(self):
@@ -128,14 +128,14 @@ class PresentCountryModelTestClass(BaseModelTestClass):
         self.assertEqual(PresentCountry._meta.verbose_name_plural, 'present countries')
 
     def test_auto_add_timestamp_creation(self):
-        self.assertEqual(self.mocked_time, self.present_country.createdAt)
+        self.assertEqual(self.mocked_time, self.present_country.created_at)
 
     def test_auto_add_timestamp_update(self):
         self.present_country.name = 'new name'
         # wait 1 second before storing the data to the database
         time.sleep(self.sleep_time)
         self.present_country.save()
-        self.assertLess(self.present_country.createdAt, self.present_country.updatedAt)
+        self.assertLess(self.present_country.created_at, self.present_country.updated_at)
 
 
 class HistoricalStatePresentCountryPeriod(BaseModelTestClass):
@@ -144,39 +144,39 @@ class HistoricalStatePresentCountryPeriod(BaseModelTestClass):
         self.user_profile = self.data_provider.create_user()
         with mock.patch('django.utils.timezone.now', mock.Mock(return_value=self.mocked_time)):
             self.present_country = self.data_provider.create_present_country(code='AA', name='A country', user_profile=self.user_profile)
-            self.historical_state = self.data_provider.create_historical_state(dateTo='2345-06-07', name='Historical state', user_profile=self.user_profile)
-            self.historical_state_period = self.data_provider.create_historical_state_present_country_period(dateFrom=self.historical_state.dateFrom, 
-                                                                                                             dateTo=self.historical_state.dateTo, 
-                                                                                                             historical_state=self.historical_state, 
-                                                                                                             present_country=self.present_country, 
+            self.historical_state = self.data_provider.create_historical_state(end_date='2345-06-07', name='Historical state', user_profile=self.user_profile)
+            self.historical_state_period = self.data_provider.create_historical_state_present_country_period(end_date=self.historical_state.end_date,
+                                                                                                             historical_state=self.historical_state,
+                                                                                                             present_country=self.present_country,
+                                                                                                             start_date=self.historical_state.start_date,
                                                                                                              user_profile=self.user_profile)
 
     def test_max_length_columns(self):
-        self.assertEqual(15, HistoricalState._meta.get_field('dateFrom').max_length)
-        self.assertEqual(15, HistoricalState._meta.get_field('dateTo').max_length)
+        self.assertEqual(15, HistoricalState._meta.get_field('start_date').max_length)
+        self.assertEqual(15, HistoricalState._meta.get_field('end_date').max_length)
 
     def test_foreign_keys(self):
-        self.assertEqual(self.historical_state_period.historicalState, self.historical_state)
-        self.assertEqual(self.historical_state_period.presentCountry, self.present_country)
+        self.assertEqual(self.historical_state_period.historical_state, self.historical_state)
+        self.assertEqual(self.historical_state_period.present_country, self.present_country)
 
     def test_uniqueness_constraint(self):
         with self.assertRaises(ValidationError) as constraint_error:
-            self.data_provider.create_historical_state_present_country_period(dateFrom=self.historical_state.dateFrom, dateTo=self.historical_state.dateTo, 
-                                                                              historical_state=self.historical_state, present_country=self.present_country, 
+            self.data_provider.create_historical_state_present_country_period(end_date=self.historical_state.end_date, historical_state=self.historical_state, 
+                                                                              present_country=self.present_country, start_date=self.historical_state.start_date, 
                                                                               user_profile=self.user_profile)
         self.assertEqual(constraint_error.exception.message, f'There is an overlapping entry for {self.historical_state.name} and {self.present_country.name} ' + 
-                                  f'for the period {self.historical_state.dateFrom} - {self.historical_state.dateTo}.')
+                                  f'for the period {self.historical_state.start_date} - {self.historical_state.end_date}.')
         
     def test_no_date_present(self):
         with self.assertRaises(ValidationError) as constraint_error:
-            self.data_provider.create_historical_state_present_country_period(dateFrom=None, dateTo=None, historical_state=self.historical_state, 
-                                                                              present_country=self.present_country, user_profile=self.user_profile)
+            self.data_provider.create_historical_state_present_country_period(end_date=None, historical_state=self.historical_state, present_country=self.present_country, 
+                                                                              start_date=None, user_profile=self.user_profile)
         self.assertEqual(constraint_error.exception.message, 'At least one fo the dates must be specified.')
 
     def test_date_from_before_date_to(self):
         with self.assertRaises(ValidationError) as constraint_error:
-            self.data_provider.create_historical_state_present_country_period(dateFrom=self.historical_state.dateTo, dateTo=self.historical_state.dateFrom, 
-                                                                              historical_state=self.historical_state, present_country=self.present_country, 
+            self.data_provider.create_historical_state_present_country_period(end_date=self.historical_state.start_date, historical_state=self.historical_state, 
+                                                                              present_country=self.present_country, start_date=self.historical_state.end_date,
                                                                               user_profile=self.user_profile)
         self.assertEqual(constraint_error.exception.message, 'Starting date must be before the end date.')
 
@@ -197,37 +197,37 @@ class HistoricalFigureModelTestClass(BaseModelTestClass):
                                                                                  death_present_country=self.death_present_country, user_profile=self.user_profile)
         
     def test_max_length_columns(self):
-        self.assertEqual(15, HistoricalFigure._meta.get_field('birthDate').max_length)
-        self.assertEqual(15, HistoricalFigure._meta.get_field('deathDate').max_length)
+        self.assertEqual(15, HistoricalFigure._meta.get_field('birth_date').max_length)
+        self.assertEqual(15, HistoricalFigure._meta.get_field('death_date').max_length)
         self.assertEqual(255, HistoricalFigure._meta.get_field('name').max_length)
 
     def test_display_method(self):
         self.assertEqual(str(self.historical_figure), self.historical_figure.name)
 
     def test_auto_add_timestamp_creation(self):
-        self.assertEqual(self.mocked_time, self.historical_figure.createdAt)
+        self.assertEqual(self.mocked_time, self.historical_figure.created_at)
 
     def test_auto_add_timestamp_update(self):
         self.historical_figure.name = 'new name'
         # wait 1 second before storing the data to the database
         time.sleep(self.sleep_time)
         self.historical_figure.save()
-        self.assertLess(self.historical_figure.createdAt, self.historical_figure.updatedAt)
+        self.assertLess(self.historical_figure.created_at, self.historical_figure.updated_at)
 
     def test_birth_foreign_keys(self):
-        self.assertEqual(self.historical_figure.birthHistoricalStateId, self.birth_historical_state)
-        self.assertEqual(self.historical_figure.birthPresentCountryId, self.birth_present_country)
+        self.assertEqual(self.historical_figure.birth_historical_state, self.birth_historical_state)
+        self.assertEqual(self.historical_figure.birth_present_country, self.birth_present_country)
 
     def test_death_foreign_keys(self):
-        self.assertEqual(self.historical_figure.deathHistoricalStateId, self.death_historical_state)
-        self.assertEqual(self.historical_figure.deathPresentCountryId, self.death_present_country)
+        self.assertEqual(self.historical_figure.death_historical_state, self.death_historical_state)
+        self.assertEqual(self.historical_figure.death_present_country, self.death_present_country)
 
     def test_allow_death_columns_empty(self):
-        self.historical_figure.deathHistoricalStateId = None
-        self.historical_figure.deathPresentCountryId = None
+        self.historical_figure.death_historical_state = None
+        self.historical_figure.death_present_country = None
         self.historical_figure.save()
-        self.assertIsNone(self.historical_figure.deathHistoricalStateId)
-        self.assertIsNone(self.historical_figure.deathPresentCountryId)
+        self.assertIsNone(self.historical_figure.death_historical_state)
+        self.assertIsNone(self.historical_figure.death_present_country)
 
 
 class HistoricalFigureRoleModelTestClass(BaseModelTestClass):
@@ -244,14 +244,14 @@ class HistoricalFigureRoleModelTestClass(BaseModelTestClass):
         self.assertEqual(str(self.historical_figure_role), self.historical_figure_role.name)
 
     def test_auto_add_timestamp_creation(self):
-        self.assertEqual(self.mocked_time, self.historical_figure_role.createdAt)
+        self.assertEqual(self.mocked_time, self.historical_figure_role.created_at)
 
     def test_auto_add_timestamp_update(self):
         self.historical_figure_role.name = 'new name'
         # wait 1 second before storing the data to the database
         time.sleep(self.sleep_time)
         self.historical_figure_role.save()
-        self.assertLess(self.historical_figure_role.createdAt, self.historical_figure_role.updatedAt)
+        self.assertLess(self.historical_figure_role.created_at, self.historical_figure_role.updated_at)
 
 
 class HistoricalEventModelTestClass(BaseModelTestClass):
@@ -274,19 +274,19 @@ class HistoricalEventModelTestClass(BaseModelTestClass):
         self.assertEqual(str(self.historical_event), self.historical_event.name)
 
     def test_auto_add_timestamp_creation(self):
-        self.assertEqual(self.mocked_time, self.historical_event.createdAt)
+        self.assertEqual(self.mocked_time, self.historical_event.created_at)
 
     def test_auto_add_timestamp_update(self):
         self.historical_event.name = 'new name'
         # wait 1 second before storing the data to the database
         time.sleep(self.sleep_time)
         self.historical_event.save()
-        self.assertLess(self.historical_event.createdAt, self.historical_event.updatedAt)
+        self.assertLess(self.historical_event.created_at, self.historical_event.updated_at)
 
     def test_foreign_keys(self):
-        self.assertEqual(self.historical_event.eventCategoryId, self.event_category)
-        self.assertEqual(self.historical_event.historicalStateId, self.historical_state)
-        self.assertEqual(self.historical_event.presentCountryId, self.present_country)
+        self.assertEqual(self.historical_event.event_category, self.event_category)
+        self.assertEqual(self.historical_event.historical_state, self.historical_state)
+        self.assertEqual(self.historical_event.present_country, self.present_country)
 
     def test_outside_range_latitude_longitude_values(self):
         self.historical_event.latitude = 200
@@ -309,8 +309,8 @@ class HistoricalEventModelTestClass(BaseModelTestClass):
         self.assertEqual(self.historical_event.latitude, None)
         self.assertEqual(self.historical_event.longitude, None)
 
-    def test_approximateRealLocation_not_editable(self):
-        self.historical_event.approximateRealLocation = True
+    def test_approximate_location_not_editable(self):
+        self.historical_event.approximate_location = True
         with self.assertRaises(ValidationError):
             self.historical_event.full_clean()
 

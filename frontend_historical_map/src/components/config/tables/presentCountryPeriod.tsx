@@ -14,14 +14,14 @@ export const columnsConfig: ColumnsType<PresentCountry> = [
     width: '30%'
   },
   {
-    dataIndex: 'flagUrl',
-    key: 'flagUrl',
+    dataIndex: 'flag_url',
+    key: 'flag_url',
     render: (_, presentCountry) => {
       return (
         <img
           alt={`${presentCountry.name} flag`}
           className="present-country-period-flag"
-          src={`${presentCountry.flagUrl}`}
+          src={`${presentCountry.flag_url}`}
         />
       )
     },
@@ -35,7 +35,7 @@ export const columnsConfig: ColumnsType<PresentCountry> = [
       return (
         <div>
           <Tag color="blue" key={presentCountry.id}>
-            {`${displayHumanReadableDate(presentCountry.dateFrom)} -> ${displayHumanReadableDate(presentCountry.dateTo)}`}
+            {`${displayHumanReadableDate(presentCountry.start_date)} -> ${displayHumanReadableDate(presentCountry.end_date)}`}
           </Tag>
         </div>
       )

@@ -25,10 +25,10 @@ export default function EventModalForm({
   onFinish
 }: EventModalProps) {
   const [historicalStateOption, setHistoricalStateOption] = useState(
-    event?.historicalState?.id
+    event?.historical_state?.id
   )
   const [presentCountryOption, setPresentCountryOption] = useState(
-    event?.presentCountry?.id
+    event?.present_country?.id
   )
 
   const { eventCategories } = useGetEventCategories()
@@ -117,9 +117,9 @@ export default function EventModalForm({
           />
         </Form.Item>
         <Form.Item
-          initialValue={event?.eventCategory.id}
+          initialValue={event?.event_category.id}
           label="Event Category"
-          name="eventCategoryId"
+          name="event_category"
           rules={[{ required: true }]}
         >
           <Select
@@ -135,14 +135,14 @@ export default function EventModalForm({
         <Form.Item
           initialValue={historicalStateOption}
           label="Historical State"
-          name="historicalStateId"
+          name="historical_state"
           rules={[{ required: true }]}
         >
           <HistoricalStatesDropdown
             form={form}
-            presentCountryFormName="presentCountryId"
+            presentCountryFormName="present_country"
             selectedValue={historicalStateOption}
-            selectId={'historicalStateId'}
+            selectId={'historical_state'}
             {...{
               historicalStates,
               setHistoricalStateOption,
@@ -153,13 +153,13 @@ export default function EventModalForm({
         <Form.Item
           initialValue={presentCountryOption}
           label="Present Country"
-          name="presentCountryId"
+          name="present_country"
           rules={[{ required: true }]}
         >
           <PresentCountriesDropdown
             form={form}
             selectedValue={presentCountryOption}
-            selectId={'presentCountryId'}
+            selectId={'present_country'}
             {...{ presentCountries, setPresentCountryOption }}
           />
         </Form.Item>

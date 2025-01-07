@@ -53,7 +53,7 @@ export default function EventDetails() {
 
   //#region DISPLAY FUNCTIONALITY
   const displayCoordinates = (event: HistoricalEvent | null) => {
-    if (event?.approximateRealLocation) {
+    if (event?.approximate_location) {
       return (
         displayLatitudeDMS(event.latitude * 1) +
         displayLongitudeDMS(event.longitude * 1)
@@ -101,19 +101,19 @@ export default function EventDetails() {
         </p>
         <p>
           <b>Real Location:</b>{' '}
-          {displayBooleanValues(event?.approximateRealLocation)}
+          {displayBooleanValues(event?.approximate_location)}
         </p>
         <p>
           <b>Coordinates:</b> {displayCoordinates(event)}
         </p>
         <p>
-          <b>Event Category:</b> {event?.eventCategory.name}
+          <b>Event Category:</b> {event?.event_category.name}
         </p>
         <p>
-          <b>Present Country:</b> {event?.presentCountry.name}
+          <b>Present Country:</b> {event?.present_country.name}
         </p>
         <p>
-          <b>Historical State:</b> {event?.historicalState.name}
+          <b>Historical State:</b> {event?.historical_state.name}
         </p>
       </Card>
       <div className="eventLocation">{displayMap(event)}</div>

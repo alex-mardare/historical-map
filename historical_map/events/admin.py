@@ -20,7 +20,7 @@ class HistoricalStateCountryPeriodInline(admin.StackedInline):
 @admin.register(HistoricalState)
 class HistoricalStateAdmin(admin.ModelAdmin):
     inlines = [HistoricalStateCountryPeriodInline]
-    list_display = ['name', 'dateFrom', 'dateTo']
+    list_display = ['name', 'start_date', 'end_date']
     search_fields = ['name']
 #endregion
 

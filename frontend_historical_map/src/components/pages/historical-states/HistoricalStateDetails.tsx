@@ -73,16 +73,16 @@ export default function HistoricalStateDetails() {
         <div className="historical-state-card-content">
           <h2>
             Foundation Date:{' '}
-            {displayHumanReadableDate(historicalState?.dateFrom)}
+            {displayHumanReadableDate(historicalState?.start_date)}
           </h2>
           <h2>
             Dissolution Date:{' '}
-            {displayHumanReadableDate(historicalState?.dateTo)}
+            {displayHumanReadableDate(historicalState?.end_date)}
           </h2>
         </div>
         <h2>Present Countries</h2>
         <PresentCountryPeriods
-          presentCountries={historicalState?.presentCountries}
+          presentCountries={historicalState?.present_countries}
         />
       </Card>
 

@@ -21,16 +21,16 @@ export default function FiguresModalForm({
   onFinish
 }: FigurelModalProps) {
   const [birthHistoricalStateOption, setBirthHistoricalStateOption] = useState(
-    figure?.birthHistoricalState?.id
+    figure?.birth_historical_state?.id
   )
   const [birthPresentCountryOption, setBirthPresentCountryOption] = useState(
-    figure?.birthPresentCountry?.id
+    figure?.birth_present_country?.id
   )
   const [deathHistoricalStateOption, setDeathHistoricalStateOption] = useState(
-    figure?.deathHistoricalState?.id
+    figure?.death_historical_state?.id
   )
   const [deathPresentCountryOption, setDeathPresentCountryOption] = useState(
-    figure?.deathPresentCountry?.id
+    figure?.death_present_country?.id
   )
 
   const { historicalStates } = useGetHistoricalStatesOptions()
@@ -78,9 +78,9 @@ export default function FiguresModalForm({
 
         <h4 style={{ paddingLeft: '75px' }}>Birth</h4>
         <Form.Item
-          initialValue={figure?.birthDate}
+          initialValue={figure?.birth_date}
           label="Date"
-          name="birthDate"
+          name="birth_date"
           rules={[{ required: true }, { validator: dateFieldValidator }]}
         >
           <Input />
@@ -88,14 +88,14 @@ export default function FiguresModalForm({
         <Form.Item
           initialValue={birthHistoricalStateOption}
           label="Historical State"
-          name="birthHistoricalStateId"
+          name="birth_historical_state"
           rules={[{ required: true }]}
         >
           <HistoricalStatesDropdown
             form={form}
-            presentCountryFormName="birthPresentCountryId"
+            presentCountryFormName="birth_present_country"
             selectedValue={birthHistoricalStateOption}
-            selectId={'birthHistoricalStateId'}
+            selectId={'birth_historical_state'}
             setHistoricalStateOption={setBirthHistoricalStateOption}
             setPresentCountryOption={setBirthPresentCountryOption}
             {...{ historicalStates }}
@@ -104,23 +104,23 @@ export default function FiguresModalForm({
         <Form.Item
           initialValue={birthPresentCountryOption}
           label="Present Country"
-          name="birthPresentCountryId"
+          name="birth_present_country"
           rules={[{ required: true }]}
         >
           <PresentCountriesDropdown
             form={form}
             presentCountries={birthPresentCountries}
             selectedValue={birthPresentCountryOption}
-            selectId={'birthPresentCountryId'}
+            selectId={'birth_present_country'}
             setPresentCountryOption={setBirthPresentCountryOption}
           />
         </Form.Item>
 
         <h4 style={{ paddingLeft: '75px' }}>Death</h4>
         <Form.Item
-          initialValue={figure?.deathDate}
+          initialValue={figure?.death_date}
           label="Date"
-          name="deathDate"
+          name="death_date"
           rules={[{ validator: dateFieldValidator }]}
         >
           <Input />
@@ -128,13 +128,13 @@ export default function FiguresModalForm({
         <Form.Item
           initialValue={deathHistoricalStateOption}
           label="Historical State"
-          name="deathHistoricalStateId"
+          name="death_historical_state"
         >
           <HistoricalStatesDropdown
             form={form}
-            presentCountryFormName="deathPresentCountryId"
+            presentCountryFormName="death_present_country"
             selectedValue={deathHistoricalStateOption}
-            selectId={'deathHistoricalStateId'}
+            selectId={'death_historical_state'}
             setHistoricalStateOption={setDeathHistoricalStateOption}
             setPresentCountryOption={setDeathPresentCountryOption}
             {...{ historicalStates }}
@@ -143,13 +143,13 @@ export default function FiguresModalForm({
         <Form.Item
           initialValue={deathPresentCountryOption}
           label="Present Country"
-          name="deathPresentCountryId"
+          name="death_present_country"
         >
           <PresentCountriesDropdown
             form={form}
             presentCountries={deathPresentCountries}
             selectedValue={deathPresentCountryOption}
-            selectId={'deathPresentCountryId'}
+            selectId={'death_present_country'}
             setPresentCountryOption={setDeathPresentCountryOption}
           />
         </Form.Item>

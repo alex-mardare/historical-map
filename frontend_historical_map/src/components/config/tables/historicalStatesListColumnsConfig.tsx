@@ -30,22 +30,22 @@ export const columnsConfig: ColumnsType<HistoricalState> = [
     width: 200
   },
   {
-    dataIndex: 'dateFrom',
-    key: 'dateFrom',
+    dataIndex: 'start_date',
+    key: 'start_date',
     sortDirections: ['ascend', 'descend', 'ascend'],
     render(_, historicalState) {
-      return <div>{historicalState.dateFrom}</div>
+      return <div>{historicalState.start_date}</div>
     },
     sorter: (a, b) => {
-      const firstDate = convertDateToString(a.dateFrom)
-      const secondDate = convertDateToString(b.dateFrom)
+      const firstDate = convertDateToString(a.start_date)
+      const secondDate = convertDateToString(b.start_date)
 
       const firstDateObject: HistoricalDateObject = {
-        date: a.dateFrom,
+        date: a.start_date,
         time: null
       }
       const secondDateObject: HistoricalDateObject = {
-        date: b.dateFrom,
+        date: b.start_date,
         time: null
       }
 
@@ -60,22 +60,22 @@ export const columnsConfig: ColumnsType<HistoricalState> = [
     width: 70
   },
   {
-    dataIndex: 'dateTo',
-    key: 'dateTo',
+    dataIndex: 'end_date',
+    key: 'end_date',
     sortDirections: ['ascend', 'descend', 'ascend'],
     render(_, historicalState) {
-      return <div>{historicalState.dateTo}</div>
+      return <div>{historicalState.end_date}</div>
     },
     sorter: (a, b) => {
-      const firstDate = convertDateToString(a.dateTo)
-      const secondDate = convertDateToString(b.dateTo)
+      const firstDate = convertDateToString(a.end_date)
+      const secondDate = convertDateToString(b.end_date)
 
       const firstDateObject: HistoricalDateObject = {
-        date: a.dateFrom,
+        date: a.start_date,
         time: null
       }
       const secondDateObject: HistoricalDateObject = {
-        date: b.dateFrom,
+        date: b.start_date,
         time: null
       }
 
@@ -90,12 +90,12 @@ export const columnsConfig: ColumnsType<HistoricalState> = [
     width: 70
   },
   {
-    dataIndex: 'presentCountries',
-    key: 'presentCountries',
+    dataIndex: 'present_countries',
+    key: 'present_countries',
     render: (text, historicalState) => {
       return (
         <div>
-          {historicalState.presentCountries.map((presentCountry) => (
+          {historicalState.present_countries.map((presentCountry) => (
             <Tag color="blue" key={presentCountry.id}>
               <a
                 href={`${PRESENT_COUNTRIES_SECTION + '/' + presentCountry.id}`}

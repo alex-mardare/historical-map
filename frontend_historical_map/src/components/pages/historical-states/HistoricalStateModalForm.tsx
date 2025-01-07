@@ -59,25 +59,25 @@ export default function HistoricalStateModalForm({
           <Input />
         </Form.Item>
         <Form.Item
-          initialValue={historicalState?.dateFrom}
+          initialValue={historicalState?.start_date}
           label="Foundation Date"
-          name="dateFrom"
+          name="start_date"
           rules={[{ required: true }, { validator: dateFieldValidator }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          initialValue={historicalState?.dateTo}
+          initialValue={historicalState?.end_date}
           label="Dissolution Date"
-          name="dateTo"
+          name="end_date"
           rules={[{ required: true }, { validator: dateFieldValidator }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          initialValue={historicalState?.presentCountries.map((hs) => hs.id)}
+          initialValue={historicalState?.present_countries.map((hs) => hs.id)}
           label="Present Countries"
-          name="presentCountries"
+          name="present_countries"
           rules={[{ required: true }]}
         >
           <Select
