@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator, ValidationError
+from django.core.validators import ValidationError
 from django.db import models
 from django.db.models import Q
 
+from .fields import CoordinateField, CustomDateField
 from .middleware import get_current_user
-from .validators import dateFormatter, regexDateValidator
+from .validators import dateFormatter
 
 
 class AuditableModel(models.Model):
@@ -43,8 +44,8 @@ class EventCategory(AuditableModel):
 
 class HistoricalState(AuditableModel):
     name = models.CharField(max_length=255)
-    start_date = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
-    end_date = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    start_date = CustomDateField(blank_value=True, null_value=True)
+    end_date = CustomDateField(blank_value=True, null_value=True)
     flag_url = models.CharField(blank=True, max_length=255, null=True)
     present_countries = models.ManyToManyField('events.PresentCountry', related_name='present_countries', through='events.HistoricalStatePresentCountryPeriod')
 
@@ -76,8 +77,8 @@ class PresentCountry(AuditableModel):
 class HistoricalStatePresentCountryPeriod(AuditableModel):
     historical_state = models.ForeignKey(HistoricalState, on_delete=models.CASCADE)
     present_country = models.ForeignKey(PresentCountry, on_delete=models.CASCADE)
-    start_date = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
-    end_date = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    start_date = CustomDateField(blank_value=True, null_value=True)
+    end_date = CustomDateField(blank_value=True, null_value=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['historical_state', 'present_country', 'start_date', 'end_date'], 
@@ -106,8 +107,8 @@ class HistoricalFigure(AuditableModel):
     name = models.CharField(max_length=255)
     birth_historical_state = models.ForeignKey(HistoricalState, on_delete=models.PROTECT, related_name='birth_historical_state')
     birth_present_country = models.ForeignKey(PresentCountry, on_delete=models.PROTECT, related_name='birth_present_country')
-    birth_date = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
-    death_date = models.CharField(blank=True, max_length=15, null=True, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    birth_date = CustomDateField()
+    death_date = CustomDateField(blank_value=True, null_value=True)
     death_historical_state = models.ForeignKey(HistoricalState, blank=True, null=True, on_delete=models.PROTECT, related_name='death_historical_state')
     death_present_country = models.ForeignKey(PresentCountry, blank=True, null=True, on_delete=models.PROTECT, related_name='death_present_country')
 
@@ -131,11 +132,11 @@ class HistoricalFigureRole(AuditableModel):
 
 class HistoricalEvent(AuditableModel):
     name = models.CharField(max_length=255)
-    date = models.CharField(max_length=15, validators=[RegexValidator(regexDateValidator()[0], message=regexDateValidator()[1])])
+    date = CustomDateField()
     time = models.TimeField(null=True, blank=True)
     description = models.CharField(max_length=1000)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, validators=[MinValueValidator(-180), MaxValueValidator(180)])
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, validators=[MinValueValidator(-180), MaxValueValidator(180)])
+    latitude = CoordinateField()
+    longitude = CoordinateField()
     event_category = models.ForeignKey(EventCategory, on_delete=models.PROTECT)
     present_country = models.ForeignKey(PresentCountry, on_delete=models.PROTECT)
     approximate_location = models.BooleanField(default=False, editable=False)
