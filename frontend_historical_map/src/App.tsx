@@ -27,6 +27,7 @@ import HistoricalStatesList from './components/pages/historical-states/Historica
 import Home from './components/pages/Home'
 import Login from './components/pages/Login'
 import PresentCountriesList from './components/pages/present-countries/PresentCountriesList'
+import PresentCountryDetails from './components/pages/present-countries/PresentCountryDetails'
 import ProtectedRoute from './components/pages/ProtectedRoute'
 import Spinner from './components/pages/Spinner'
 import { LoginButton } from './components/partials/buttons/LoginButton'
@@ -136,6 +137,10 @@ function App() {
                 <Route
                   element={<PresentCountriesList />}
                   path={PRESENT_COUNTRIES_SECTION}
+                />
+                <Route
+                  element={<PresentCountryDetails />}
+                  path={PRESENT_COUNTRIES_SECTION + '/:presentCountryId'}
                 />
               </Route>
             </Routes>

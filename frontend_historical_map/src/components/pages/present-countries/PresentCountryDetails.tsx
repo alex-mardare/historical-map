@@ -1,39 +1,41 @@
-import { Card, List } from 'antd'
+import { Card } from 'antd'
 import React from 'react'
+import { useParams } from 'react-router'
 
-import { PresentCountry } from '../../models/types/presentCountry'
+import { PRESENT_COUNTRY_NAME } from '../../models/constants/constants'
+import { PRESENT_COUNTRIES_SECTION } from '../../models/constants/urls'
+import { antCardHeaderBasic } from '../../partials/antdCardHeader'
+import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
+import { useGetPresentCountry } from '../../utils/hooks/presentCountriesHooks'
+import HistoricalStatePeriodList from '../historical-states/HistoricalStatePeriodList'
 
-import '../../../assets/styling/present-countries/detailsPage.css'
+export default function PresentCountryDetails() {
+  const { presentCountryId } = useParams()
+  let presentCountry = useGetPresentCountry(presentCountryId)
 
-interface PresentCountryDetailsProps {
-  presentCountry: PresentCountry
-}
-
-export default function PresentCountryDetails({
-  presentCountry
-}: PresentCountryDetailsProps) {
-  const cardTile = (presentCountry: PresentCountry): JSX.Element => {
-    return (
-      <div>
-        {presentCountry.flag_url && (
-          <img
-            alt={`${presentCountry.name} flag`}
-            className="present-country-tile-flag"
-            src={`${presentCountry.flag_url}`}
-          />
-        )}
-        {presentCountry.name}
-      </div>
-    )
+  const detailPageHandlerObj = {
+    detailsPageObject: presentCountry,
+    objectTypeName: PRESENT_COUNTRY_NAME,
+    returnPage: PRESENT_COUNTRIES_SECTION
   }
 
+  const { handleGoBack } = useDetailPageHandlers(detailPageHandlerObj)
+
+  //#region DISPLAY FUNCTIONALITY
+  const displayTitleSection = (presentCountryName: string | undefined) => {
+    return antCardHeaderBasic(handleGoBack, presentCountryName)
+  }
+  //#endregion
+
   return (
-    <List.Item>
-      <Card
-        hoverable={true}
-        key={presentCountry.id}
-        title={cardTile(presentCountry)}
+    <Card
+      loading={presentCountry == null}
+      title={displayTitleSection(presentCountry?.name)}
+    >
+      <h2>Historical States</h2>
+      <HistoricalStatePeriodList
+        historicalStates={presentCountry?.historical_states}
       />
-    </List.Item>
+    </Card>
   )
 }

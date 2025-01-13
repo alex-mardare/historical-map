@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { HISTORICAL_FIGURE_NAME } from '../../models/constants/constants'
 import { HISTORICAL_FIGURES_SECTION } from '../../models/constants/urls'
 import { HistoricalFigure } from '../../models/types/historicalFigure'
-import { antCardHeaderFigure } from '../../partials/antdCardHeader'
+import { antCardHeaderBasic } from '../../partials/antdCardHeader'
 import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
 import { DeleteModal, FormModal } from '../../partials/modals'
 import { useGetFigure } from '../../utils/hooks/figuresHooks'
@@ -43,8 +43,8 @@ export default function FigureDetails() {
   } = useDetailPageHandlers(detailPageHandlerObj)
 
   //#region DISPLAY FUNCTIONALITY
-  const displayTitleSection = (figure: HistoricalFigure | null) => {
-    return antCardHeaderFigure(figure, handleGoBack)
+  const displayTitleSection = (figureName: string | undefined) => {
+    return antCardHeaderBasic(handleGoBack, figureName)
   }
 
   const displayDeathSection = (figure: HistoricalFigure | null) => {
@@ -87,7 +87,7 @@ export default function FigureDetails() {
           <DeleteOutlined key="delete" onClick={openObjectDeleteModal} />
         ]}
         loading={figure == null}
-        title={displayTitleSection(figure)}
+        title={displayTitleSection(figure?.name)}
       >
         <h2>Birth</h2>
         <p>

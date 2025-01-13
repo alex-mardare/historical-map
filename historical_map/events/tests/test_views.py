@@ -223,7 +223,7 @@ class PresentCountryViewTestClass(BaseViewTestClass):
         self.assertNotIn('previous', response.data)
         
         present_country_list = PresentCountry.objects.all()
-        serializer = PresentCountryGetAllSerializer(present_country_list, many=True)
+        serializer = PresentCountriesSerializer(present_country_list, many=True)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(len(response.data), 2)
 
@@ -233,7 +233,7 @@ class PresentCountryViewTestClass(BaseViewTestClass):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         linked_present_country_list = PresentCountry.objects.filter(id=self.present_country.pk)
-        serializer = PresentCountryGetAllSerializer(linked_present_country_list, many=True)
+        serializer = PresentCountriesSerializer(linked_present_country_list, many=True)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(len(response.data), 1)
 

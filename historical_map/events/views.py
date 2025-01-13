@@ -110,11 +110,16 @@ class HistoricalStateItem(generics.RetrieveUpdateDestroyAPIView):
 
 
 #region PRESENT COUNTRY ENDPOINTS
+class PresentCountryItem(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = PresentCountry.objects.all()
+    serializer_class = PresentCountrySerializer
+
 class PresentCountryList(generics.ListAPIView):
     pagination_class = NoPagination
     permission_classes = [IsAuthenticated]
     queryset = PresentCountry.objects.all()
-    serializer_class = PresentCountryGetAllSerializer
+    serializer_class = PresentCountriesSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()

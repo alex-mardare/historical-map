@@ -8,7 +8,7 @@ import { usePutObject } from '../../utils/hooks/generalHooks'
 
 interface DetailsPageHandlersProps {
   detailsPageObject: any
-  objectDeleteHook: (
+  objectDeleteHook?: (
     objectId: number,
     objectName: string,
     objectTypeName: string
@@ -43,7 +43,7 @@ export const useDetailPageHandlers = ({
       setIsLoadingDeleteButton(true)
       setConfirmLoadingDelete(true)
       setOpenDelete(false)
-      const response = await objectDeleteHook(
+      const response = await objectDeleteHook?.(
         detailsPageObject.id,
         detailsPageObject.name,
         objectTypeName

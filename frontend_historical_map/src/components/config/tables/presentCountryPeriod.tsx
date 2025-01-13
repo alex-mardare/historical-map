@@ -1,7 +1,7 @@
+import { Tag } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import React from 'react'
 
-import { Tag } from 'antd'
 import { PresentCountry } from '../../models/types/presentCountry'
 import { displayHumanReadableDate } from '../../utils/display/displayDates'
 

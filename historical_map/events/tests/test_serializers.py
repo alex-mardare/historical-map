@@ -144,45 +144,41 @@ class HistoricalStateSerializerTestClass(BaseModelTestClass):
 #endregion
         
 
-class PresentCountrySerializerTestClass(BaseModelTestClass):
+class PresentCountriesSerializerTestClass(BaseModelTestClass):
     @classmethod
     def setUp(self):
         self.user_profile = self.data_provider.create_user()
 
-#region PresentCountryGetAllSerializer
+#region PresentCountriesSerializer
     def test_serialization_get_all(self):
         present_country = self.data_provider.create_present_country(code='PC', name='Present country', user_profile=self.user_profile)
-        serializer = PresentCountryGetAllSerializer(present_country)
-        expected_data = {'code': present_country.code, 'flag_url': present_country.flag_url, 'id': present_country.pk, 'name': present_country.name}
+        serializer = PresentCountriesSerializer(present_country)
+        expected_data = {'flag_url': present_country.flag_url, 'id': present_country.pk, 'name': present_country.name}
 
         self.assertEqual(serializer.data, expected_data)
 
     def test_serialization_valid_data_get_all(self):
         valid_present_country = {'code':'PC', 'flag_url': 'link', 'name': 'Present country'}
-        serializer = PresentCountryGetAllSerializer(data=valid_present_country)
+        serializer = PresentCountriesSerializer(data=valid_present_country)
 
         self.assertTrue(serializer.is_valid())
 
     def test_validation_properties_exceed_max_length(self):
-        invalid_present_country = {'code':'PC'*3, 'flag_url': 'f' * 256, 'name': 'P'*256}
-        serializer = PresentCountryGetAllSerializer(data=invalid_present_country)
+        invalid_present_country = {'flag_url': 'f' * 256, 'name': 'P'*256}
+        serializer = PresentCountriesSerializer(data=invalid_present_country)
 
         self.assertFalse(serializer.is_valid())
-        self.assertIn('code', serializer.errors)
         self.assertIn('flag_url', serializer.errors)
         self.assertIn('name', serializer.errors)
-        self.assertTrue(any('max_length' in error.code for error in serializer.errors['code']))
         self.assertTrue(any('max_length' in error.code for error in serializer.errors['flag_url']))
         self.assertTrue(any('max_length' in error.code for error in serializer.errors['name']))
 
     def test_validation_properties_not_present(self):
         invalid_present_country = {}
-        serializer = PresentCountryGetAllSerializer(data=invalid_present_country)
+        serializer = PresentCountriesSerializer(data=invalid_present_country)
 
         self.assertFalse(serializer.is_valid())
-        self.assertIn('code', serializer.errors)
         self.assertIn('name', serializer.errors)
-        self.assertTrue(any('required' in error.code for error in serializer.errors['code']))
         self.assertTrue(any('required' in error.code for error in serializer.errors['name']))
 #endregion
         
@@ -522,17 +518,17 @@ class HistoricalStatePresentCountryPeriodSerializersTestClass(BaseModelTestClass
         self.historical_state_period = self.data_provider.create_historical_state_present_country_period(historical_state=self.historical_state, 
                                                                                                          present_country=self.present_country, 
                                                                                                          user_profile=self.user_profile)
-#region HistoricalStatePresentCountryPeriodGetSerializer        
+#region PresentCountryPeriodGetSerializer        
     def test_serializer_get(self):
-        serializer = HistoricalStatePresentCountryPeriodGetSerializer(self.historical_state_period)
+        serializer = PresentCountryPeriodGetSerializer(self.historical_state_period)
         expected_data = {'start_date': self.historical_state_period.start_date, 'flag_url': self.present_country.flag_url, 
                          'end_date': self.historical_state_period.end_date, 'id': self.present_country.pk, 'name': self.present_country.name}
         self.assertEqual(serializer.data, expected_data)
 #endregion
 
-#region HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer
+#region PresentCountryPeriodDeletePostUpdateSerializer
     def test_serializer_delete_post_update(self):
-        serializer = HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(self.historical_state_period)
+        serializer = PresentCountryPeriodDeletePostUpdateSerializer(self.historical_state_period)
         expected_data = {'start_date': self.historical_state_period.start_date, 'end_date': self.historical_state_period.end_date, 
                          'present_country': self.present_country.pk}
         self.assertEqual(serializer.data, expected_data)

@@ -20,4 +20,5 @@ urlpatterns = [
     path('historical-states/<int:pk>', views.HistoricalStateItem.as_view(), name='historical-state-item'),
 
     path('present-countries/', views.PresentCountryList.as_view(), name='present-country-list'),
+    path('present-countries/<int:pk>', views.PresentCountryItem.as_view(), name='present-country-item'),
 ]

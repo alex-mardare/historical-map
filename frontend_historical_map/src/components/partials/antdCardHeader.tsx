@@ -4,8 +4,6 @@ import React from 'react'
 
 import { EVENT_TOOLTIP_TEXT } from '../models/constants/constants'
 import { HistoricalEvent } from '../models/types/historicalEvent'
-import { HistoricalFigure } from '../models/types/historicalFigure'
-import { HistoricalState } from '../models/types/historicalState'
 
 function returnToolTip(tooltipText: string) {
   return (
@@ -14,6 +12,22 @@ function returnToolTip(tooltipText: string) {
         <InfoCircleOutlined />
       </span>
     </Tooltip>
+  )
+}
+
+function antCardHeaderBasic(
+  handleGoBack: () => void,
+  headerText: string | undefined
+) {
+  return (
+    <div className="card-header">
+      <Button onClick={handleGoBack} type="primary">
+        Go Back
+      </Button>
+      <div className="card-title-div">
+        <h1 className="card-title-header">{headerText}</h1>
+      </div>
+    </div>
   )
 }
 
@@ -36,36 +50,4 @@ function antCardHeaderEvent(
   )
 }
 
-function antCardHeaderFigure(
-  figure: HistoricalFigure | null,
-  handleGoBack: () => void
-) {
-  return (
-    <div className="card-header">
-      <Button onClick={handleGoBack} type="primary">
-        Go Back
-      </Button>
-      <div className="card-title-div">
-        <h1 className="card-title-header">{figure?.name}</h1>
-      </div>
-    </div>
-  )
-}
-
-function antCardHeaderHistoricalState(
-  historicalState: HistoricalState | null,
-  handleGoBack: () => void
-) {
-  return (
-    <div className="card-header">
-      <Button onClick={handleGoBack} type="primary">
-        Go Back
-      </Button>
-      <div className="card-title-div">
-        <h1 className="card-title-header">{historicalState?.name}</h1>
-      </div>
-    </div>
-  )
-}
-
-export { antCardHeaderEvent, antCardHeaderFigure, antCardHeaderHistoricalState }
+export { antCardHeaderBasic, antCardHeaderEvent }

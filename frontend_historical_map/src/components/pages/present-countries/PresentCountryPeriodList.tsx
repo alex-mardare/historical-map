@@ -6,13 +6,13 @@ import { PresentCountry } from '../../models/types/presentCountry'
 
 import '../../../assets/styling/tablePage.css'
 
-type PresentCountryPeriodsProps = {
+type propType = {
   presentCountries: PresentCountry[] | undefined
 }
 
-export default function PresentCountryPeriods({
+export default function PresentCountryPeriodList({
   presentCountries
-}: PresentCountryPeriodsProps) {
+}: propType) {
   return (
     <div className="table-div">
       <Table

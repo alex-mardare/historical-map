@@ -5,14 +5,13 @@ import { useParams } from 'react-router'
 
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
 import { HISTORICAL_STATES_SECTION } from '../../models/constants/urls'
-import { HistoricalState } from '../../models/types/historicalState'
-import { antCardHeaderHistoricalState } from '../../partials/antdCardHeader'
+import { antCardHeaderBasic } from '../../partials/antdCardHeader'
 import { useDetailPageHandlers } from '../../partials/handlers/detailsPageHandlers'
 import { DeleteModal, FormModal } from '../../partials/modals'
 import { displayHumanReadableDate } from '../../utils/display/displayDates'
 import { objectDelete } from '../../utils/hooks/generalHooks'
 import { useGetHistoricalState } from '../../utils/hooks/historicalStatesHooks'
-import PresentCountryPeriods from '../present-countries/PresentCountryPeriods'
+import PresentCountryPeriodList from '../present-countries/PresentCountryPeriodList'
 import HistoricalStateModalForm from './HistoricalStateModalForm'
 
 import '../../../assets/styling/historical-states/detailsPage.css'
@@ -45,8 +44,8 @@ export default function HistoricalStateDetails() {
   } = useDetailPageHandlers(detailPageHandlerObj)
 
   //#region DISPLAY FUNCTIONALITY
-  const displayTitleSection = (historicalState: HistoricalState | null) => {
-    return antCardHeaderHistoricalState(historicalState, handleGoBack)
+  const displayTitleSection = (historicalStateName: string | undefined) => {
+    return antCardHeaderBasic(handleGoBack, historicalStateName)
   }
   //#endregion
 
@@ -68,7 +67,7 @@ export default function HistoricalStateDetails() {
           <DeleteOutlined key="delete" onClick={openObjectDeleteModal} />
         ]}
         loading={historicalState == null}
-        title={displayTitleSection(historicalState)}
+        title={displayTitleSection(historicalState?.name)}
       >
         <div className="historical-state-card-content">
           <h2>
@@ -81,7 +80,7 @@ export default function HistoricalStateDetails() {
           </h2>
         </div>
         <h2>Present Countries</h2>
-        <PresentCountryPeriods
+        <PresentCountryPeriodList
           presentCountries={historicalState?.present_countries}
         />
       </Card>

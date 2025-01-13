@@ -12,21 +12,16 @@ class EventCategorySerializer(serializers.ModelSerializer):
 #endregion
 
 
-#region PRESENT COUNTRY SERIALIZERS
-class PresentCountryGetAllSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PresentCountry
-        fields = ['code', 'flag_url', 'id', 'name']
-
-class PresentCountryPropertySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PresentCountry
-        fields = ['id', 'name']
-#endregion
-
-
 #region HISTORICAL STATE PRESENT COUNTRY PERIOD SERIALIZERS
-class HistoricalStatePresentCountryPeriodGetSerializer(serializers.ModelSerializer):
+class HistoricalStatePeriodSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='historical_state.id', read_only=True)
+    name = serializers.CharField(source='historical_state.name', read_only=True)
+
+    class Meta:
+        model = HistoricalStatePresentCountryPeriod
+        fields = ['id', 'name', 'start_date', 'end_date']
+
+class PresentCountryPeriodGetSerializer(serializers.ModelSerializer):
     flag_url = serializers.CharField(source='present_country.flag_url', read_only=True)
     id = serializers.IntegerField(source='present_country.id', read_only=True)
     name = serializers.CharField(source='present_country.name', read_only=True)
@@ -35,7 +30,7 @@ class HistoricalStatePresentCountryPeriodGetSerializer(serializers.ModelSerializ
         model = HistoricalStatePresentCountryPeriod
         fields = ['start_date', 'end_date', 'flag_url', 'id', 'name']
 
-class HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(serializers.ModelSerializer):
+class PresentCountryPeriodDeletePostUpdateSerializer(serializers.ModelSerializer):
     present_country = serializers.PrimaryKeyRelatedField(queryset=PresentCountry.objects.all())
 
     class Meta:
@@ -44,9 +39,29 @@ class HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(serializers.
 #endregion
 
 
+#region PRESENT COUNTRY SERIALIZERS
+class PresentCountriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PresentCountry
+        fields = ['flag_url', 'id', 'name']
+
+class PresentCountrySerializer(serializers.ModelSerializer):
+    historical_states = HistoricalStatePeriodSerializer(many=True, source='historicalstatepresentcountryperiod_set')
+
+    class Meta:
+        model = PresentCountry
+        fields = ['flag_url', 'historical_states', 'id', 'name']
+
+class PresentCountryPropertySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PresentCountry
+        fields = ['id', 'name']
+#endregion
+
+
 #region HISTORICAL STATE SERIALIZERS
 class HistoricalStateDeletePostUpdateSerializer(serializers.ModelSerializer):
-    present_countries = HistoricalStatePresentCountryPeriodDeletePostUpdateSerializer(many=True, source='historicalstatepresentcountryperiod_set')
+    present_countries = PresentCountryPeriodDeletePostUpdateSerializer(many=True, source='historicalstatepresentcountryperiod_set')
 
     class Meta:
         model = HistoricalState
@@ -84,7 +99,7 @@ class HistoricalStateDeletePostUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 class HistoricalStateGetSerializer(serializers.ModelSerializer):
-    present_countries = HistoricalStatePresentCountryPeriodGetSerializer(many=True, source='historicalstatepresentcountryperiod_set')
+    present_countries = PresentCountryPeriodGetSerializer(many=True, source='historicalstatepresentcountryperiod_set')
 
     class Meta:
         model = HistoricalState

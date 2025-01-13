@@ -4,7 +4,12 @@ import apiClient from '../../../config/axiosSetup'
 import { PRESENT_COUNTRY_NAME } from '../../models/constants/constants'
 import { PRESENT_COUNTRIES_ENDPOINT } from '../../models/constants/urls'
 import { DataGetPresentCountries } from '../../models/types/hooksDataTypes'
-import { objectListLoadingError } from '../../partials/notifications'
+import { PresentCountry } from '../../models/types/presentCountry'
+import {
+  objectListLoadingError,
+  objectLoadingError
+} from '../../partials/notifications'
+import { useEffectOnceWrapper } from './generalHooks'
 
 function useGetPresentCountries(
   histStateId: number | undefined | null
@@ -35,4 +40,27 @@ function useGetPresentCountries(
   }
 }
 
-export { useGetPresentCountries }
+function useGetPresentCountry(
+  presentCountryId: string | undefined
+): PresentCountry | null {
+  const [presentCountry, setPresentCountry] = useState(null)
+
+  useEffectOnceWrapper(() => {
+    async function fetchData() {
+      try {
+        const response = await apiClient.get(
+          PRESENT_COUNTRIES_ENDPOINT + presentCountryId
+        )
+        setPresentCountry(response.data)
+      } catch (error) {
+        objectLoadingError(PRESENT_COUNTRY_NAME)
+      }
+    }
+
+    fetchData()
+  })
+
+  return presentCountry
+}
+
+export { useGetPresentCountries, useGetPresentCountry }
