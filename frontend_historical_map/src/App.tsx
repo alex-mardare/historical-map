@@ -30,7 +30,7 @@ import PresentCountriesList from './components/pages/present-countries/PresentCo
 import PresentCountryDetails from './components/pages/present-countries/PresentCountryDetails'
 import ProtectedRoute from './components/pages/ProtectedRoute'
 import Spinner from './components/pages/Spinner'
-import { LoginButton } from './components/partials/buttons/LoginButton'
+import LoginButton from './components/partials/buttons/LoginButton'
 import UserProfileDropdown from './components/partials/dropdowns/UserProfileDropdown'
 import { initialiseAuth } from './config/auth'
 import useStore from './config/globalStore'

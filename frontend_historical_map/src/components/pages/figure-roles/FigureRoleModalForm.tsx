@@ -5,7 +5,7 @@ import TextArea from 'antd/es/input/TextArea'
 import { HistoricalFigureRole } from '../../models/types/historicalFigureRole'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
-type FigureRoleModalProps = {
+type propType = {
   figureRole: HistoricalFigureRole | null
   form: any
   onFinish?: (values: any) => void
@@ -15,7 +15,7 @@ export default function FigureRoleModalForm({
   figureRole,
   form,
   onFinish
-}: FigureRoleModalProps) {
+}: propType) {
   const displayIdFormItem = (figureRole: HistoricalFigureRole | null) => {
     if (figureRole !== null) {
       return (

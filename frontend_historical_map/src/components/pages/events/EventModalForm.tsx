@@ -5,25 +5,21 @@ import React, { useState } from 'react'
 
 import { TIME_FORMAT } from '../../models/constants/constants'
 import { HistoricalEvent } from '../../models/types/historicalEvent'
-import { HistoricalStatesDropdown } from '../../partials/dropdowns/HistoricalStatesDropdown'
-import { PresentCountriesDropdown } from '../../partials/dropdowns/PresentCountriesDropdown'
+import HistoricalStatesDropdown from '../../partials/dropdowns/HistoricalStatesDropdown'
+import PresentCountriesDropdown from '../../partials/dropdowns/PresentCountriesDropdown'
 import { useGetEventCategories } from '../../utils/hooks/eventCategoriesHooks'
 import { useGetHistoricalStatesOptions } from '../../utils/hooks/historicalStatesHooks'
 import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
-type EventModalProps = {
+type propType = {
   event: HistoricalEvent | null
   form: any
   onFinish?: (values: any) => void
 }
 
-export default function EventModalForm({
-  event,
-  form,
-  onFinish
-}: EventModalProps) {
+export default function EventModalForm({ event, form, onFinish }: propType) {
   const [historicalStateOption, setHistoricalStateOption] = useState(
     event?.historical_state?.id
   )

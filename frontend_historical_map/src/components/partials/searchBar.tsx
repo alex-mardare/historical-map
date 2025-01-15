@@ -1,11 +1,11 @@
 import Search from 'antd/es/input/Search'
 import React from 'react'
 
-interface SearchBarProps {
+type propType = {
   handleSearch: (value: string) => void
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ handleSearch }) => {
+export default function SearchBar({ handleSearch }: propType) {
   return (
     <Search
       allowClear
@@ -16,5 +16,3 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleSearch }) => {
     />
   )
 }
-
-export { SearchBar }

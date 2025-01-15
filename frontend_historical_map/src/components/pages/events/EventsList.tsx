@@ -3,7 +3,7 @@ import React from 'react'
 import { columnsConfig } from '../../config/tables/eventsListColumnsConfig'
 import { EVENT_NAME } from '../../models/constants/constants'
 import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
-import { TableComponent } from '../../partials/TablePage'
+import TableComponent from '../../partials/TablePage'
 import { useGetEvents } from '../../utils/hooks/eventsHooks'
 import EventModalForm from './EventModalForm'
 

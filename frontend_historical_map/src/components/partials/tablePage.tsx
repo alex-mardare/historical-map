@@ -4,13 +4,13 @@ import React, { ReactElement, useState } from 'react'
 
 import useStore from '../../config/globalStore'
 import { searchFiltering } from '../utils/searchFiltering'
-import { CreateButton } from './buttons/CreateButton'
-import { SearchBar } from './searchBar'
+import CreateButton from './buttons/CreateButton'
+import SearchBar from './SearchBar'
 
 import '../../assets/styling/listPage.css'
 import '../../assets/styling/tablePage.css'
 
-interface TablePageProps {
+type propType = {
   closeObjectModal: () => void
   columnsConfig: ColumnsType<any>
   confirmLoading: boolean
@@ -22,7 +22,7 @@ interface TablePageProps {
   tableObjectsList: any[] | undefined
 }
 
-const TableComponent: React.FC<TablePageProps> = ({
+export default function TableComponent({
   closeObjectModal,
   columnsConfig,
   confirmLoading,
@@ -32,7 +32,7 @@ const TableComponent: React.FC<TablePageProps> = ({
   objectName,
   openModal,
   showModal
-}) => {
+}: propType) {
   const { isAuthenticated } = useStore()
 
   const [searchText, setSearchText] = useState('')
@@ -74,5 +74,3 @@ const TableComponent: React.FC<TablePageProps> = ({
     </div>
   )
 }
-
-export { TableComponent }

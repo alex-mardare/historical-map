@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
 import { usePutObject } from '../../utils/hooks/generalHooks'
 
-interface DetailsPageHandlersProps {
+type propType = {
   detailsPageObject: any
   objectDeleteHook?: (
     objectId: number,
@@ -22,7 +22,7 @@ export const useDetailPageHandlers = ({
   objectDeleteHook,
   objectTypeName,
   returnPage
-}: DetailsPageHandlersProps) => {
+}: propType) => {
   const [confirmLoadingDelete, setConfirmLoadingDelete] = useState(false)
   const [confirmLoadingEdit, setConfirmLoadingEdit] = useState(false)
   const [isLoadingDeleteButton, setIsLoadingDeleteButton] = useState(false)

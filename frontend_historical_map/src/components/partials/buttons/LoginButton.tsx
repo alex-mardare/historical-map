@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { LOGIN_SECTION } from '../../models/constants/urls'
 
-const LoginButton: React.FC = () => {
+export default function LoginButton() {
   const navigate = useNavigate()
 
   const onLoginButtonClick = () => {
@@ -17,5 +17,3 @@ const LoginButton: React.FC = () => {
     </Button>
   )
 }
-
-export { LoginButton }

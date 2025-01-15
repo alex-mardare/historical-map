@@ -4,7 +4,7 @@ import React from 'react'
 import { DefaultOptionType } from 'antd/es/select'
 import { HistoricalStateOption } from '../../models/types/historicalState'
 
-type HistoricalStatesDropdownProps = {
+type propType = {
   form: any
   historicalStates: HistoricalStateOption[]
   presentCountryFormName: string
@@ -14,7 +14,7 @@ type HistoricalStatesDropdownProps = {
   setPresentCountryOption: (value: any) => void
 }
 
-export const HistoricalStatesDropdown = ({
+export default function HistoricalStatesDropdown({
   form,
   historicalStates,
   presentCountryFormName,
@@ -22,7 +22,7 @@ export const HistoricalStatesDropdown = ({
   selectId,
   setHistoricalStateOption,
   setPresentCountryOption
-}: HistoricalStatesDropdownProps) => {
+}: propType) {
   const onChangeHistoricalState = (value: any) => {
     setHistoricalStateOption(value)
     setPresentCountryOption(undefined)

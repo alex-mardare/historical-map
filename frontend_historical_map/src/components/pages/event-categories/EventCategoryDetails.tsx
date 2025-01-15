@@ -10,13 +10,11 @@ import { DeleteModal, FormModal } from '../../partials/modals'
 import { objectDelete } from '../../utils/hooks/generalHooks'
 import EventCategoryModalForm from './EventCategoryModalForm'
 
-interface EventCategoryDetailsProps {
+interface propType {
   eventCategory: EventCategory
 }
 
-export default function EventCategoryDetails({
-  eventCategory
-}: EventCategoryDetailsProps) {
+export default function EventCategoryDetails({ eventCategory }: propType) {
   const detailPageHandlerObj = {
     detailsPageObject: eventCategory,
     objectDeleteHook: objectDelete,

@@ -2,24 +2,20 @@ import { Form, Input } from 'antd'
 import React, { useState } from 'react'
 
 import { HistoricalFigure } from '../../models/types/historicalFigure'
-import { HistoricalStatesDropdown } from '../../partials/dropdowns/HistoricalStatesDropdown'
-import { PresentCountriesDropdown } from '../../partials/dropdowns/PresentCountriesDropdown'
+import HistoricalStatesDropdown from '../../partials/dropdowns/HistoricalStatesDropdown'
+import PresentCountriesDropdown from '../../partials/dropdowns/PresentCountriesDropdown'
 import { useGetHistoricalStatesOptions } from '../../utils/hooks/historicalStatesHooks'
 import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
-type FigurelModalProps = {
+type propType = {
   figure: HistoricalFigure | null
   form: any
   onFinish?: (values: any) => void
 }
 
-export default function FiguresModalForm({
-  figure,
-  form,
-  onFinish
-}: FigurelModalProps) {
+export default function FiguresModalForm({ figure, form, onFinish }: propType) {
   const [birthHistoricalStateOption, setBirthHistoricalStateOption] = useState(
     figure?.birth_historical_state?.id
   )

@@ -7,13 +7,11 @@ import { PresentCountry } from '../../models/types/presentCountry'
 
 import '../../../assets/styling/present-countries/cardPage.css'
 
-interface PresentCountryCardProps {
+interface propType {
   presentCountry: PresentCountry
 }
 
-export default function PresentCountryCard({
-  presentCountry
-}: PresentCountryCardProps) {
+export default function PresentCountryCard({ presentCountry }: propType) {
   const cardTile = (presentCountry: PresentCountry): JSX.Element => {
     return (
       <div>

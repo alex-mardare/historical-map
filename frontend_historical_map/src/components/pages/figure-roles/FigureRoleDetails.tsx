@@ -10,13 +10,11 @@ import { DeleteModal, FormModal } from '../../partials/modals'
 import { objectDelete } from '../../utils/hooks/generalHooks'
 import FigureRoleModalForm from './FigureRoleModalForm'
 
-interface FigureRoleDetailsProps {
+interface propType {
   figureRole: HistoricalFigureRole
 }
 
-export default function FigureRoleDetails({
-  figureRole
-}: FigureRoleDetailsProps) {
+export default function FigureRoleDetails({ figureRole }: propType) {
   const detailPageHandlerObj = {
     detailsPageObject: figureRole,
     objectDeleteHook: objectDelete,

@@ -6,7 +6,7 @@ import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { dateFieldValidator } from '../../utils/validators/dateValidator'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
-type HistoricalStateModalProps = {
+type propType = {
   form: any
   historicalState: HistoricalState | null
   onFinish?: (values: any) => void
@@ -16,7 +16,7 @@ export default function HistoricalStateModalForm({
   form,
   historicalState,
   onFinish
-}: HistoricalStateModalProps) {
+}: propType) {
   const { presentCountries } = useGetPresentCountries(null)
 
   const displayIdFormItem = (historicalState: HistoricalState | null) => {

@@ -1,7 +1,7 @@
 import { List } from 'antd'
 import React, { useState } from 'react'
 
-import { SearchBar } from '../../partials/searchBar'
+import SearchBar from '../../partials/SearchBar'
 import { useGetPresentCountries } from '../../utils/hooks/presentCountriesHooks'
 import { searchFiltering } from '../../utils/searchFiltering'
 import PresentCountryCard from './PresentCountryCard'

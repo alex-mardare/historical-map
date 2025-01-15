@@ -2,7 +2,7 @@ import { Button } from 'antd'
 import React, { ReactElement } from 'react'
 import { FormModal } from '../modals'
 
-interface CreateButtonProps {
+type propType = {
   closeObjectModal: () => void
   confirmLoading: boolean
   formComponent: ReactElement
@@ -12,7 +12,7 @@ interface CreateButtonProps {
   showModal: () => void
 }
 
-const CreateButton: React.FC<CreateButtonProps> = ({
+export default function CreateButton({
   closeObjectModal,
   confirmLoading,
   formComponent,
@@ -20,7 +20,7 @@ const CreateButton: React.FC<CreateButtonProps> = ({
   objectName,
   openModal,
   showModal
-}) => {
+}: propType) {
   return (
     <div>
       <Button onClick={showModal} type="primary">
@@ -40,5 +40,3 @@ const CreateButton: React.FC<CreateButtonProps> = ({
     </div>
   )
 }
-
-export { CreateButton }

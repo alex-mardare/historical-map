@@ -5,11 +5,11 @@ import { checkAuth } from '../../config/auth'
 import useStore from '../../config/globalStore'
 import { LOGIN_SECTION } from '../models/constants/urls'
 
-type ProtectedRouteProps = {
+type propType = {
   isAuthenticated: boolean
 }
 
-function ProtectedRoute({ isAuthenticated }: ProtectedRouteProps): any {
+function ProtectedRoute({ isAuthenticated }: propType): any {
   const { setIsAuthenticated } = useStore()
 
   useEffect(() => {

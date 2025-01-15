@@ -4,7 +4,7 @@ import React from 'react'
 import { EventCategory } from '../../models/types/eventCategory'
 import { formValidationMessages } from '../../utils/validators/formValidator'
 
-type EventCategoryModalProps = {
+type propType = {
   eventCategory: EventCategory | null
   form: any
   onFinish?: (values: any) => void
@@ -14,7 +14,7 @@ export default function EventCategoryModalForm({
   eventCategory,
   form,
   onFinish
-}: EventCategoryModalProps) {
+}: propType) {
   const displayIdFormItem = (eventCategory: EventCategory | null) => {
     if (eventCategory !== null) {
       return (

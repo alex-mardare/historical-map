@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { handleFormSubmission } from '../../utils/forms/formSubmission'
 import { usePostObject } from '../../utils/hooks/generalHooks'
 
-interface ModalsHandlersProps {
+type propType = {
   objectName: string
   refreshFunction: () => void
 }
@@ -12,7 +12,7 @@ interface ModalsHandlersProps {
 export const useModalsHandlers = ({
   objectName,
   refreshFunction
-}: ModalsHandlersProps) => {
+}: propType) => {
   const [confirmLoading, setConfirmLoading] = useState(false)
   const [openModal, setOpenModal] = useState(false)
 

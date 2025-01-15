@@ -3,7 +3,7 @@ import React from 'react'
 import { columnsConfig } from '../../config/tables/historicalStatesListColumnsConfig'
 import { HISTORICAL_STATE_NAME } from '../../models/constants/constants'
 import { useModalsHandlers } from '../../partials/handlers/modalsHandlers'
-import { TableComponent } from '../../partials/TablePage'
+import TableComponent from '../../partials/TablePage'
 import { useGetHistoricalStates } from '../../utils/hooks/historicalStatesHooks'
 import HistoricalStateModalForm from './HistoricalStateModalForm'
 
