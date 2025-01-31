@@ -5,7 +5,8 @@ const displayHumanReadableDate = (date: string | null | undefined) => {
   return new Date(date).toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   })
 }
 

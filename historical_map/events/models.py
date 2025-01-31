@@ -85,9 +85,6 @@ class HistoricalStatePresentCountryPeriod(AuditableModel):
                                                name='unique_historical_state_present_country_period')]
 
     def save(self, *args, **kwargs):
-        if not self.start_date and not self.end_date:
-            raise ValidationError('At least one fo the dates must be specified.')
-
         if self.start_date and self.end_date and self.start_date > self.end_date:
             raise ValidationError('Starting date must be before the end date.')
 

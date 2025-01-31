@@ -166,12 +166,6 @@ class HistoricalStatePresentCountryPeriod(BaseModelTestClass):
                                                                               user_profile=self.user_profile)
         self.assertEqual(constraint_error.exception.message, f'There is an overlapping entry for {self.historical_state.name} and {self.present_country.name} ' + 
                                   f'for the period {self.historical_state.start_date} - {self.historical_state.end_date}.')
-        
-    def test_no_date_present(self):
-        with self.assertRaises(ValidationError) as constraint_error:
-            self.data_provider.create_historical_state_present_country_period(end_date=None, historical_state=self.historical_state, present_country=self.present_country, 
-                                                                              start_date=None, user_profile=self.user_profile)
-        self.assertEqual(constraint_error.exception.message, 'At least one fo the dates must be specified.')
 
     def test_date_from_before_date_to(self):
         with self.assertRaises(ValidationError) as constraint_error:

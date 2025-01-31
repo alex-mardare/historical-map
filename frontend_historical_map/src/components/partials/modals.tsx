@@ -17,7 +17,7 @@ interface FormModalProps {
   confirmLoading: any
   formComponent: ReactElement
   closeObjectModal: any
-  handleModalOk: any
+  handleModalOk: () => void
   modalTitle: string
   objectName: string
   openModal: any
@@ -30,36 +30,38 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   isLoadingDeleteButton,
   objectName,
   openDelete
-}) => (
-  <Modal
-    confirmLoading={confirmLoadingDelete}
-    footer={[
-      <Button key="cancel" onClick={closeObjectDeleteModal}>
-        Cancel
-      </Button>,
-      <Button
-        danger
-        key="delete"
-        loading={isLoadingDeleteButton}
-        onClick={handleDeleteModalOk}
-        type="primary"
-      >
-        Delete
-      </Button>
-    ]}
-    onCancel={closeObjectDeleteModal}
-    onOk={handleDeleteModalOk}
-    open={openDelete}
-    title={`Delete ${capitaliseText(entitiesDictionary[objectName])}`}
-  >
-    {
-      <h2>
-        Are you sure you want to remove this{' '}
-        {`${entitiesDictionary[objectName]}`}?
-      </h2>
-    }
-  </Modal>
-)
+}) => {
+  return (
+    <Modal
+      confirmLoading={confirmLoadingDelete}
+      footer={[
+        <Button key="cancel" onClick={closeObjectDeleteModal}>
+          Cancel
+        </Button>,
+        <Button
+          danger
+          key="delete"
+          loading={isLoadingDeleteButton}
+          onClick={handleDeleteModalOk}
+          type="primary"
+        >
+          Delete
+        </Button>
+      ]}
+      onCancel={closeObjectDeleteModal}
+      onOk={handleDeleteModalOk}
+      open={openDelete}
+      title={`Delete ${capitaliseText(entitiesDictionary[objectName])}`}
+    >
+      {
+        <h2>
+          Are you sure you want to remove this{' '}
+          {`${entitiesDictionary[objectName]}`}?
+        </h2>
+      }
+    </Modal>
+  )
+}
 
 const FormModal: React.FC<FormModalProps> = ({
   confirmLoading,
@@ -69,17 +71,19 @@ const FormModal: React.FC<FormModalProps> = ({
   modalTitle,
   objectName,
   openModal
-}) => (
-  <Modal
-    okText="Save"
-    onCancel={closeObjectModal}
-    onOk={handleModalOk}
-    open={openModal}
-    title={`${modalTitle + ' ' + capitaliseText(entitiesDictionary[objectName])}`}
-    {...{ confirmLoading }}
-  >
-    {formComponent}
-  </Modal>
-)
+}) => {
+  return (
+    <Modal
+      okText="Save"
+      onCancel={closeObjectModal}
+      onOk={handleModalOk}
+      open={openModal}
+      title={`${modalTitle + ' ' + capitaliseText(entitiesDictionary[objectName])}`}
+      {...{ confirmLoading }}
+    >
+      {formComponent}
+    </Modal>
+  )
+}
 
 export { DeleteModal, FormModal }
