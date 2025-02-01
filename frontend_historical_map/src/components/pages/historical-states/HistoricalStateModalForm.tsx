@@ -12,6 +12,12 @@ type propType = {
   onFinish?: (values: any) => void
 }
 
+interface PresentCountryPeriod {
+  end_date: null
+  present_country: number
+  start_date: null
+}
+
 export default function HistoricalStateModalForm({
   form,
   historicalState,
@@ -35,8 +41,20 @@ export default function HistoricalStateModalForm({
   }
 
   const handleSubmit = (values: any) => {
+    const presentCountriesList: PresentCountryPeriod[] = []
+    values.present_countries.forEach((presentCountry: any) => {
+      presentCountriesList.push({
+        end_date: null,
+        present_country: presentCountry,
+        start_date: null
+      })
+    })
+
     if (onFinish) {
-      onFinish(values)
+      onFinish({
+        ...values,
+        present_countries: presentCountriesList
+      })
     }
   }
 
@@ -44,6 +62,7 @@ export default function HistoricalStateModalForm({
     <div>
       <Form
         form={form}
+        id="modalForm"
         labelCol={{ span: 7 }}
         onFinish={handleSubmit}
         validateMessages={formValidationMessages}

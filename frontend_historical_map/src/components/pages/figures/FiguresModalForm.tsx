@@ -57,6 +57,7 @@ export default function FiguresModalForm({ figure, form, onFinish }: propType) {
     <div>
       <Form
         form={form}
+        id="modalForm"
         labelCol={{ span: 6 }}
         onFinish={handleSubmit}
         validateMessages={formValidationMessages}

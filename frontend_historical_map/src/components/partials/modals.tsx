@@ -74,7 +74,20 @@ const FormModal: React.FC<FormModalProps> = ({
 }) => {
   return (
     <Modal
-      okText="Save"
+      footer={[
+        <Button key="cancel" onClick={closeObjectModal}>
+          Cancel
+        </Button>,
+        <Button
+          form="modalForm"
+          htmlType="submit"
+          key="submit"
+          onClick={handleModalOk}
+          type="primary"
+        >
+          Save
+        </Button>
+      ]}
       onCancel={closeObjectModal}
       onOk={handleModalOk}
       open={openModal}

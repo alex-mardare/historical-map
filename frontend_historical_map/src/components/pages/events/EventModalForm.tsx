@@ -51,6 +51,7 @@ export default function EventModalForm({ event, form, onFinish }: propType) {
     <div>
       <Form
         form={form}
+        id="modalForm"
         labelCol={{ span: 6 }}
         onFinish={handleSubmit}
         validateMessages={formValidationMessages}

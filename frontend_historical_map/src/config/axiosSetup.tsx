@@ -10,7 +10,11 @@ import { checkAuth } from './auth'
 const apiClient = axios.create({
   baseURL: DEV_BASE_URL,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'X-CSRFToken': document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('csrftoken='))
+      ?.split('=')[1]
   },
   withCredentials: true
 })

@@ -86,26 +86,25 @@ const usePostObject = (objectName: string): DataCreateUpdate => {
   ): Promise<any> => {
     setError(null)
 
-    try {
-      setConfirmLoading(true)
-      const response = await apiClient.post(
-        urlsPostDictionary[objectName],
-        formData
-      )
+    await apiClient
+      .post(urlsPostDictionary[objectName], formData)
+      .then((response) => {
+        if (!response.data) {
+          throw Error()
+        }
+        setConfirmLoading(false)
+        setOpen(false)
 
-      setConfirmLoading(false)
-      setOpen(false)
+        objectCreationSuccess(objectName, formData.name)
+        return response.data
+      })
+      .catch((error) => {
+        setConfirmLoading(false)
+        setOpen(true)
 
-      objectCreationSuccess(objectName, formData.name)
-      return response.data
-    } catch (error) {
-      setConfirmLoading(false)
-      setOpen(true)
-
-      setError(error as AxiosError<any>)
-      objectCreationError(objectName)
-      throw error
-    }
+        setError(error as AxiosError<any>)
+        objectCreationError(objectName)
+      })
   }
 
   return { submitData, error }

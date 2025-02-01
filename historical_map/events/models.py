@@ -88,9 +88,12 @@ class HistoricalStatePresentCountryPeriod(AuditableModel):
         if self.start_date and self.end_date and self.start_date > self.end_date:
             raise ValidationError('Starting date must be before the end date.')
 
-        relatedEntries = HistoricalStatePresentCountryPeriod.objects.filter(
-            Q(historical_state=self.historical_state) & Q(present_country=self.present_country) & Q(start_date__lt=self.end_date) & Q(end_date__gt=self.start_date)
-        )
+        relatedEntries = HistoricalStatePresentCountryPeriod.objects.filter(Q(historical_state=self.historical_state) & Q(present_country=self.present_country))
+        if self.start_date:
+            relatedEntries = relatedEntries.filter(Q(start_date__lt=self.end_date))
+        if self.end_date:
+            relatedEntries = relatedEntries.filter(Q(end_date__gt=self.start_date))
+
         if self.pk:
             relatedEntries = relatedEntries.exclude(pk=self.pk)
         if relatedEntries.exists():

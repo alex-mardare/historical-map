@@ -1,7 +1,6 @@
 import { Form } from 'antd'
 import { useState } from 'react'
 
-import { handleFormSubmission } from '../../utils/forms/formSubmission'
 import { usePostObject } from '../../utils/hooks/generalHooks'
 
 type propType = {
@@ -25,16 +24,25 @@ export const useModalsHandlers = ({
   }
 
   const handleModalOk = () => {
-    handleFormSubmission(form, onFormSubmit, setConfirmLoading)
+    setConfirmLoading(true)
   }
 
   const onFormSubmit = async (values: any) => {
     try {
-      await submitData(values, setConfirmLoading, setOpenModal)
-      refreshFunction()
+      await form
+        .validateFields()
+        .then(() => {
+          submitData(values, setConfirmLoading, setOpenModal)
+          refreshFunction()
+        })
+        .catch((error) => {
+          console.log('There was an issue submitting the form.')
+          console.log(error.errorFields)
+        })
     } catch (error) {
       console.log(error)
     }
+    setConfirmLoading(false)
   }
 
   const showModal = () => {

@@ -39,6 +39,7 @@ export default function EventCategoryModalForm({
   return (
     <div>
       <Form
+        id="modalForm"
         labelCol={{ span: 7 }}
         onFinish={handleSubmit}
         validateMessages={formValidationMessages}
